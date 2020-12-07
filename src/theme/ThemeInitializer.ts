@@ -1,5 +1,6 @@
-import {nestedStringsArrays} from "./customTypes";
-import {FileManager} from "./FileManager";
+import {nestedStringsArrays} from "../types/customTypes";
+import { FileReader } from "../files/FileReader";
+import { FileWriter } from "../files/FileWriter";
 import {Theme} from "./Theme";
 import {ThemeWriter} from "./ThemeWriter";
 
