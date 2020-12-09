@@ -17,10 +17,10 @@
     },
     "homepage": "https://github.com/Linch1/WPThemeManager#readme",
     "devDependencies": {
-        "@types/node": "^14.14.10"
+        "@types/node": "^14.14.10",
+        "prettier": "^2.2.1"
     },
     "dependencies": {
-        "@types/prettier": "^2.1.5",
-        "prettier": "^2.2.1"
+        "@types/prettier": "^2.1.5"
     }
 }

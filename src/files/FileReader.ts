@@ -1,10 +1,24 @@
 import * as fs from "fs";
 import { nestedStringsArrays } from "../types/customTypes";
+import { FileWriter } from "./FileWriter";
 
 class FileReader {
-
   static readonly NoFunctionFoundErr =
     "NO FUNCTION FOUND: no function was found with the given name";
+
+  static concatenatePaths(...paths: string[]): string {
+    let completePath: string = "";
+    completePath += paths[0].startsWith("/") ? "/" : "";
+    for (let path of paths) {
+      path = path.startsWith("/") ? path.substr(1) : path;
+      path = path.endsWith("/") ? path : path + "/";
+      completePath += path;
+    }
+    completePath = completePath.endsWith("/")
+      ? completePath.substring(0, completePath.length - 1)
+      : completePath;
+    return completePath;
+  }
 
   // @desc: recursively get the passed folder tree
   static readFolderTree(
@@ -72,10 +86,7 @@ class FileReader {
       .map((dirent) => dirent.name);
   }
 
-  static readFunctionBody(
-    filePath: string,
-    functionName: string
-  ): string {
+  static readFunctionBody(filePath: string, functionName: string): string {
     let fileText: string = FileReader.readFile(filePath);
     let functions: string[] = fileText.split("function"); // get all the texts between the function words
     let functionBody: string = "";
@@ -93,6 +104,8 @@ class FileReader {
     }
     throw new Error(this.NoFunctionFoundErr);
   }
+
+
 }
 
 export { FileReader };

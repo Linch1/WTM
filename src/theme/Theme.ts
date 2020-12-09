@@ -9,6 +9,7 @@ class Theme {
   public readonly IMPORT_FONTS_FUNCTION_NAME: string = "add_fonts";
   public readonly IMPORT_SCRIPTS_FUNCTION_NAME: string = "add_scripts";
   public readonly IMPORT_FILE_PATH: string = "assets/functions/imports.php";
+  public readonly FUNCTIONS_FILE: string = "functions.php";
 
   constructor(public ThemeFolder: string) {
     this.themeStructure = FileReader.readFolderTree(ThemeFolder);
