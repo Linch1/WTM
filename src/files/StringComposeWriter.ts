@@ -149,6 +149,14 @@ class StringComposeWriter {
       prettier.format(fileContent, { semi: false, parser: lang })
     );
   }
+
+  /**
+   * @description add at the given word an initial '/' if it doesn't have it
+   * @param word the word to analyze
+   */
+  static addInitialSlash(word: string) {
+    return word.startsWith("/") ? word : "/" + word;
+  }
 }
 
 export { StringComposeWriter };

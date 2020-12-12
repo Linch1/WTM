@@ -7,7 +7,8 @@ import { StringComposeReader } from "./files/StringComposeReader";
 import { Theme } from "./theme/Theme";
 import { ThemeReader } from "./theme/ThemeReader";
 import { ThemeWriter } from "./theme/ThemeWriter";
-import { CustomPostType } from "./custom-post-types/CustomPostType";
+import { PostType } from "./custom-theme-parts/PostType";
+import { WidgetArea } from "./custom-theme-parts/WidgetArea";
 import { CommentsIdentifiers } from "./comments-identifiers/CommentsIdentifiers";
 import * as prettier from "prettier";
 
@@ -26,8 +27,13 @@ let writer: ThemeWriter = new ThemeWriter(themePath);
 // let path: string = FileReader.concatenatePaths("/home/pero", "Scrivania", "nonloSo/file.php/")
 // console.log(path);
 
-// let PTImage = new CustomPostType(themePath, "images", "Images", "image");
-// PTImage.create();
+let PTImage = new PostType(themePath, "images", "Images", "image");
+PTImage.create(true);
+writer.importPostType(PTImage);
+
+let widgetArea: WidgetArea = new WidgetArea(themePath, "footer");
+widgetArea.create(true);
+writer.importWidgetArea(widgetArea);
 
 // let stringa: string = `
 // register_post_type( '[WTM-PLACEHOLDER-CPT]',
@@ -62,3 +68,5 @@ let writer: ThemeWriter = new ThemeWriter(themePath);
 //   "THEME-MENU",
 //   "hey\n"
 // );
+
+
