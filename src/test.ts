@@ -1,20 +1,34 @@
 import { read } from "fs";
 import { nestedStringsArrays } from "./types/customTypes";
+
 import { FileReader } from "./files/FileReader";
 import { FileWriter } from "./files/FileWriter";
 import { StringComposeWriter } from "./files/StringComposeWriter";
 import { StringComposeReader } from "./files/StringComposeReader";
+
 import { Theme } from "./theme/Theme";
+import { ThemeInitializer } from "./theme/ThemeInitializer";
 import { ThemeReader } from "./theme/ThemeReader";
 import { ThemeWriter } from "./theme/ThemeWriter";
+import { ThemeComposer } from "./theme/ThemeComposer";
+
 import { PostType } from "./custom-theme-parts/PostType";
 import { WidgetArea } from "./custom-theme-parts/WidgetArea";
+import { Menu } from "./custom-theme-parts/Menu";
+
 import { CommentsIdentifiers } from "./comments-identifiers/CommentsIdentifiers";
 import * as prettier from "prettier";
 
 let themePath: string = "/home/pero/Scrivania/blankslate1";
-let reader: ThemeReader = new ThemeReader(themePath);
-let writer: ThemeWriter = new ThemeWriter(themePath);
+let initalizer: ThemeInitializer = new ThemeInitializer(themePath);
+let reader: ThemeReader = initalizer.reader;
+let writer: ThemeWriter = initalizer.writer;
+let composer: ThemeComposer = initalizer.composer;
+
+
+
+// writer.pushPostType(composer.buildPostType("images", "Images", "image"));
+// writer.pushWidgetArea(composer.buildWidgetArea("footer"));
 
 // let folderTree = FileReader.readFolderTree("/home/pero/Scrivania/blankslate1");
 // FileReader.printFolderTree(folderTree);
@@ -27,13 +41,17 @@ let writer: ThemeWriter = new ThemeWriter(themePath);
 // let path: string = FileReader.concatenatePaths("/home/pero", "Scrivania", "nonloSo/file.php/")
 // console.log(path);
 
-let PTImage = new PostType(themePath, "images", "Images", "image");
-PTImage.create(true);
-writer.importPostType(PTImage);
+// let PTImage = new PostType(StringComposeWriter.concatenatePaths(themePath, writer.ASSETS_PATH), "images", "Images", "image");
+// PTImage.create(true);
+// writer.importPostType(PTImage);
 
-let widgetArea: WidgetArea = new WidgetArea(themePath, "footer");
-widgetArea.create(true);
-writer.importWidgetArea(widgetArea);
+// let widgetArea: WidgetArea = new WidgetArea(StringComposeWriter.concatenatePaths(themePath, writer.ASSETS_PATH), "footer");
+// widgetArea.create(true);
+// writer.importWidgetArea(widgetArea);
+
+let menu: Menu = new Menu(StringComposeWriter.concatenatePaths(themePath, writer.ASSETS_PATH));
+menu.createMainPage("myMenu", "Main Menu Name", "browser-title");
+menu.createSubPage("sub-page", "Sub Page Name", "browser-title")
 
 // let stringa: string = `
 // register_post_type( '[WTM-PLACEHOLDER-CPT]',
@@ -68,5 +86,3 @@ writer.importWidgetArea(widgetArea);
 //   "THEME-MENU",
 //   "hey\n"
 // );
-
-

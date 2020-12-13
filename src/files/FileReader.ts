@@ -6,20 +6,6 @@ class FileReader {
   static readonly NoFunctionFoundErr =
     "NO FUNCTION FOUND: no function was found with the given name";
 
-  static concatenatePaths(...paths: string[]): string {
-    let completePath: string = "";
-    completePath += paths[0].startsWith("/") ? "/" : "";
-    for (let path of paths) {
-      path = path.startsWith("/") ? path.substr(1) : path;
-      path = path.endsWith("/") ? path : path + "/";
-      completePath += path;
-    }
-    completePath = completePath.endsWith("/")
-      ? completePath.substring(0, completePath.length - 1)
-      : completePath;
-    return completePath;
-  }
-
   // @desc: recursively get the passed folder tree
   static readFolderTree(
     path: string,

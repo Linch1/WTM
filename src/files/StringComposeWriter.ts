@@ -6,6 +6,24 @@ import { StringComposeReader } from "./StringComposeReader";
 
 class StringComposeWriter {
   /**
+   * @description conncatenate into a valid path the given strings
+   * @param paths an array of strings to concatenate
+   */
+  static concatenatePaths(...paths: string[]): string {
+    let completePath: string = "";
+    completePath += paths[0].startsWith("/") ? "/" : "";
+    for (let path of paths) {
+      path = path.startsWith("/") ? path.substr(1) : path;
+      path = path.endsWith("/") ? path : path + "/";
+      completePath += path;
+    }
+    completePath = completePath.endsWith("/")
+      ? completePath.substring(0, completePath.length - 1)
+      : completePath;
+    return completePath;
+  }
+
+  /**
    * @description 
    * add spaces and new-lines following the oldText format of a string ( usually called after StringComposeWriter.removeSpacesAndNewLines(text))
    * @param oldFormatText the text pre-singleLine transofrmation

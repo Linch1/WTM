@@ -2,24 +2,26 @@ import { nestedStringsArrays } from "../types/customTypes";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
+import { StringComposeWriter } from "../files/StringComposeWriter";
 
 class WidgetArea {
 
   public readonly ALREADY_PRESENT =
     "ERROR: The custom widget area already exists";
-  public readonly PATH = "assets/functions/custom-widget-areas/";
-  public readonly DEFAULT_BUILD = this.PATH + "default.php";
+  public readonly PATH = "custom-widget-areas/";
+  public readonly DEFAULT_BUILD_PATH = this.PATH + "default.php";
   public readonly IDENTIFIER_NAME = "WIDGET-AREA";
 
-  constructor(public themePath: string, public readonly widgetAreaName: string) {}
+  constructor(public themeAssetsPath: string, public readonly widgetAreaName: string) {}
 
   /**
-   * @description create the file of the given custom post type ( and populate it with the default params ) if not exists
+   * @description create the file of the given widget area if not exists ( and populate it with the default params ) 
+   * @skipIfExists it's a boolean value that prevent to throw an error if the given widget area already exists
    */
   public create(skipIfExists: boolean = false): void {
-    /* get the post type path*/
-    let widgetAreaPath: string = FileReader.concatenatePaths(
-      this.themePath,
+
+    let widgetAreaPath: string = StringComposeWriter.concatenatePaths(
+      this.themeAssetsPath,
       this.PATH,
       `${this.widgetAreaName}.php`
     );
@@ -28,7 +30,7 @@ class WidgetArea {
       throw new Error(this.ALREADY_PRESENT);
 
     let defaultContent: string = FileReader.readFile(
-      FileReader.concatenatePaths(this.themePath, this.DEFAULT_BUILD)
+      StringComposeWriter.concatenatePaths(this.themeAssetsPath, this.DEFAULT_BUILD_PATH)
     );
     let newContent: string = defaultContent;
     newContent = newContent

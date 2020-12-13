@@ -8,8 +8,14 @@ import { WidgetArea } from "../custom-theme-parts/WidgetArea";
 import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 
+/**
+ * This class is used to perform the write actions
+ * like edit/create new files
+ * for example add an import line to functions.php
+ * or create a new custom post type
+ */
 class ThemeWriter extends Theme {
-  public readonly reader: ThemeReader;
+
   public IDENTIFIER_IMPORTED =
     CommentsIdentifiers.IDENTIFIERS["IMPORTED"][
       CommentsIdentifiers.IDENTIFIER_KEYWORD_POS
@@ -17,11 +23,10 @@ class ThemeWriter extends Theme {
 
   constructor(public ThemeFolder: string) {
     super(ThemeFolder);
-    this.reader = new ThemeReader(ThemeFolder);
   }
 
   public getThemePath(location: string): string {
-    return FileReader.concatenatePaths(this.ThemeFolder, location);
+    return StringComposeWriter.concatenatePaths(this.ThemeFolder, location);
   }
   /**
    * @description return the syntax of the function for correctly import a style file in wordpress
@@ -91,11 +96,15 @@ class ThemeWriter extends Theme {
     );
   }
 
+  public pushPostType(postTypeObject: PostType): void{
+    postTypeObject.create();
+    this.importPostType(postTypeObject);
+  }
   public importPostType(postTypeObject: PostType): void {
     StringComposeWriter.appendBeetweenChars(
       this.getThemePath(this.FUNCTIONS_FILE),
       this.requirePhpFile(
-        FileReader.concatenatePaths(
+        StringComposeWriter.concatenatePaths(
           postTypeObject.PATH,
           postTypeObject.postType
         )
@@ -109,11 +118,15 @@ class ThemeWriter extends Theme {
     );
   }
 
+  public pushWidgetArea(widgetArea: WidgetArea) : void{
+    widgetArea.create();
+    this.importWidgetArea(widgetArea);
+  }
   public importWidgetArea(widgetArea: WidgetArea): void {
     StringComposeWriter.appendBeetweenChars(
       this.getThemePath(this.FUNCTIONS_FILE),
       this.requirePhpFile(
-        FileReader.concatenatePaths(
+        StringComposeWriter.concatenatePaths(
           widgetArea.PATH,
           widgetArea.widgetAreaName
         )

@@ -23,9 +23,11 @@ class CommentsIdentifiers {
   /**
    * @description get the comment identifier of the type ID
    * @param element the name of the identifier
+   * @param addInitialSlash if the placeholder has to start with '//'
    */
-  static getIdentifierId(element: string): string{
-    return `//[WTM-ID-${element}]`;
+  static getIdentifierId(element: string, addInitialSlash: boolean=true): string{
+    let identifier = `[WTM-ID-${element}]`;
+    return addInitialSlash ? `//` + identifier: identifier;
   }
   /**
    * @description get the comment identifier of the type ID
