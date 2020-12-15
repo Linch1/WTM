@@ -43,9 +43,9 @@ class FileWriter {
       filePath,
       functionName
     ); // get the import file content
-    let functionBodyNew: string = functionBody.endsWith(";")
-      ? `${functionBody}\n${toAppend}`
-      : `${functionBody};\n${toAppend}`; // add the file importation
+    let functionBodyNew: string = functionBody.endsWith(";") || functionBody.endsWith("/")
+      ? `${functionBody}${toAppend}`
+      : `${functionBody};${toAppend}`; // add the file importation
     this.editFileFunction(filePath, functionBody, functionBodyNew); // edit the file
   }
 

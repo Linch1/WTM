@@ -10,7 +10,7 @@ import { ThemeComposer } from "./ThemeComposer";
 /**
  * Initialize the Theme to manage
  */
-class ThemeInitializer extends Theme {
+class ThemeAux extends Theme {
 
     public reader: ThemeReader; 
     public writer: ThemeWriter;
@@ -26,4 +26,4 @@ class ThemeInitializer extends Theme {
 
 }
 
-export { ThemeInitializer };
+export { ThemeAux };

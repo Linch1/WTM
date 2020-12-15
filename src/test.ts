@@ -7,7 +7,7 @@ import { StringComposeWriter } from "./files/StringComposeWriter";
 import { StringComposeReader } from "./files/StringComposeReader";
 
 import { Theme } from "./theme/Theme";
-import { ThemeInitializer } from "./theme/ThemeInitializer";
+import { ThemeAux } from "./theme/ThemeAux";
 import { ThemeReader } from "./theme/ThemeReader";
 import { ThemeWriter } from "./theme/ThemeWriter";
 import { ThemeComposer } from "./theme/ThemeComposer";
@@ -15,18 +15,19 @@ import { ThemeComposer } from "./theme/ThemeComposer";
 import { PostType } from "./custom-theme-parts/PostType";
 import { WidgetArea } from "./custom-theme-parts/WidgetArea";
 import { Menu } from "./custom-theme-parts/Menu";
+import { SettingsPage } from "./custom-theme-parts/SettingsPage";
 
 import { CommentsIdentifiers } from "./comments-identifiers/CommentsIdentifiers";
 import * as prettier from "prettier";
 
 let themePath: string = "/home/pero/Scrivania/blankslate1";
-let initalizer: ThemeInitializer = new ThemeInitializer(themePath);
+let initalizer: ThemeAux = new ThemeAux(themePath);
 let reader: ThemeReader = initalizer.reader;
 let writer: ThemeWriter = initalizer.writer;
 let composer: ThemeComposer = initalizer.composer;
+let StrCompW = StringComposeWriter;
 
-
-
+console.log(initalizer.ASSETS_IMPORT_FILE_PATH, initalizer.ASSETS_CUSTOM_PATH, initalizer.THEME_FUNCTIONS_FILE);
 // writer.pushPostType(composer.buildPostType("images", "Images", "image"));
 // writer.pushWidgetArea(composer.buildWidgetArea("footer"));
 
@@ -49,9 +50,53 @@ let composer: ThemeComposer = initalizer.composer;
 // widgetArea.create(true);
 // writer.importWidgetArea(widgetArea);
 
-let menu: Menu = new Menu(StringComposeWriter.concatenatePaths(themePath, writer.ASSETS_PATH));
-menu.createMainPage("myMenu", "Main Menu Name", "browser-title");
-menu.createSubPage("sub-page", "Sub Page Name", "browser-title")
+// let menu: Menu = new Menu(
+//   StringComposeWriter.concatenatePaths(themePath, writer.ASSETS_PATH)
+// );
+// let mainPage = "myMenu";
+// let subPag = "sub_page";
+// menu.createMainPage(mainPage, "Main Menu Name", "browser-title");
+// menu.createSubPage(subPag, "Sub Page Name", "browser-title");
+// writer.appendToFunctionBody(
+//   menu.getMainPagePath(mainPage),
+//   menu.importRenderFileFunction(mainPage),
+//   StrCompW.preformatString("include ('./menu-content/default/html.php');")
+// );
+// writer.appendToFunctionBody(
+//   menu.getSubPagePath(subPag),
+//   menu.importRenderFileFunction(subPag),
+//   StrCompW.preformatString("include ('./menu-content/default/html.php');")
+// );
+
+// let settingsPageName: string = "page_Asd";
+// let settingsPage: SettingsPage = new SettingsPage(
+//   StringComposeWriter.concatenatePaths(themePath, writer.ASSETS_PATH)
+// );
+// settingsPage.add(
+//   {
+//     pageName: "page_Asd",
+//     pageDisplayedName: "My Page",
+//     pageBrowserTitle: "title",
+//   },
+//   {
+//     pageName: "page_Asd1",
+//     pageDisplayedName: "My Page",
+//     pageBrowserTitle: "title",
+//   },
+//   {
+//     pageName: "page_Asd2",
+//     pageDisplayedName: "My Page",
+//     pageBrowserTitle: "title",
+//   }
+// );
+// settingsPage.createAll();
+
+
+// writer.appendToFunctionBody(
+//   settingsPage.getSettingsPagePath(settingsPageName),
+//   settingsPage.importRenderFileFunction(settingsPageName),
+//   StrCompW.preformatString("include ('./menu-content/default/html.php');")
+// );
 
 // let stringa: string = `
 // register_post_type( '[WTM-PLACEHOLDER-CPT]',

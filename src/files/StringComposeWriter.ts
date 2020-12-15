@@ -175,6 +175,14 @@ class StringComposeWriter {
   static addInitialSlash(word: string) {
     return word.startsWith("/") ? word : "/" + word;
   }
+
+  /**
+   * @description prepend a '\n\t' and append a '\n'
+   * @param word the word to format
+   */
+  static preformatString(word: string): string{
+    return '\n\t' + word + '\n';
+  }
 }
 
 export { StringComposeWriter };

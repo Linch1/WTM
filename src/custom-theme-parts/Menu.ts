@@ -31,13 +31,49 @@ class Menu {
 
   public MENU_SLUG: string =
     ""; /* populated in this.createMainPage() it's replaced as an id identifier with the menu name */
-  public MENU_NAME: string = "";
+  public MENU_NAME: string = ""; /* populated in this.createMainPage() it's replaceD the menu name passed as param */
 
+  /**
+   * @description intialize the class
+   * @param themeAssetsPath the abs path to the theme's assets folder
+   */
   constructor(public themeAssetsPath: string) {}
 
   /**
-   * @description create the file of the given widget area if not exists ( and populate it with the default params )
+   * @description return the name of the function used to import files of structure(html)/styles(.css) in the given menu page
+   * @param page the menu page where to import the files
+   */
+  public importRenderFileFunction(page: string): string{
+    return `render_file_${page}`;
+  }
+
+  /**
+   * @description returns the absuolute path of the main-page file
+   * @param page the name of the main-page
+   */
+  public getMainPagePath(page: string): string{
+    return StringComposeWriter.concatenatePaths(
+      this.themeAssetsPath,
+      this.PATH,
+      `menu-${page}.php`
+    )
+  }
+  /**
+   * @description return the absolute path of the sub-page file
+   * @param page the name of the sub-page
+   */
+  public getSubPagePath(page: string): string{
+    return StringComposeWriter.concatenatePaths(
+      this.themeAssetsPath,
+      this.PATH,
+      `${this.MENU_NAME}-sub-${page}.php`
+    )
+  }
+
+  /**
+   * @description create the file of the given menu (menu-{menuName}.php) if not exists ( and populate it with the default params )
    * @menuName the name of the menu to create ( the name of the main page is the same as the menu name )
+   * @menuDisplayedName the name of the menu that appears in the admin dashboard
    * @pageBrowserTitle the title of the browser tab when the user visits this page
    * @skipIfExists it's a boolean value that prevent to throw an error if the given widget area already exists
    */
@@ -49,11 +85,7 @@ class Menu {
   ): void {
     this.MENU_SLUG = CommentsIdentifiers.getIdentifierId(menuName, false);
     this.MENU_NAME = menuName;
-    let mainPagePath: string = StringComposeWriter.concatenatePaths(
-      this.themeAssetsPath,
-      this.PATH,
-      `menu-${menuName}.php`
-    );
+    let mainPagePath: string = this.getMainPagePath(menuName);
 
     if (FileReader.existsFile(mainPagePath) && !skipIfExists)
       throw new Error(this.ALREADY_PRESENT);
@@ -99,8 +131,9 @@ class Menu {
   }
 
   /**
-   * @description create the file of the given widget area if not exists ( and populate it with the default params )
+   * @description create the file of the sub page (${this.MENU_NAME}-sub-${pageName}.php) if not exists ( and populate it with the default params )
    * @pageName the name of the menu to create ( the name of the main page is the same as the menu name )
+   * @pageNameDisplayed the name of the page that appears in the admin dashboard
    * @pageBrowserTitle the title of the browser tab when the user visits this page
    * @skipIfExists it's a boolean value that prevent to throw an error if the given widget area already exists
    */
@@ -112,11 +145,7 @@ class Menu {
   ): void {
     if (!this.MENU_SLUG) throw new Error(this.NO_MENU_SLUG_GIVEN);
 
-    let subPagePath: string = StringComposeWriter.concatenatePaths(
-      this.themeAssetsPath,
-      this.PATH,
-      `${this.MENU_NAME}-sub-${pageName}.php`
-    );
+    let subPagePath: string = this.getSubPagePath(pageName);
 
     if (FileReader.existsFile(subPagePath) && !skipIfExists)
       throw new Error(this.ALREADY_PRESENT);
