@@ -14,13 +14,11 @@ class ThemeAux extends Theme {
 
     public reader: ThemeReader; 
     public writer: ThemeWriter;
-    public composer: ThemeComposer;
 
     constructor(public ThemeFolder: string){
         super(ThemeFolder);
         this.reader = new ThemeReader(this.ThemeFolder);
         this.writer = new ThemeWriter(this.ThemeFolder);
-        this.composer = new ThemeComposer(this.ThemeFolder);
     }
 
 

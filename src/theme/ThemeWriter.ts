@@ -1,13 +1,13 @@
-import { nestedStringsArrays } from "../types/customTypes";
+import { widgetAreaParams, postTypeParams, nestedStringsArrays, settingsPageParams } from "../types/customTypes";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { Theme } from "./Theme";
 import { ThemeReader } from "./ThemeReader";
-import { PostType } from "../custom-theme-parts/PostType";
-import { WidgetArea } from "../custom-theme-parts/WidgetArea";
+import { PostType } from "../custom-theme-parts/postTypes/PostType";
+import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
 import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { SettingsPage } from "../custom-theme-parts/SettingsPage";
+import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
 import { WpFunctionComposer } from "../files/WpFunctionComposer"
 
 /**
@@ -60,91 +60,33 @@ class ThemeWriter extends Theme {
       importString // string to append to the function body
     );
   }
+
   /**
-   * @description create and import the postType passed in the theme
+   * @description create and import the given postType in the theme
    * @param postTypeObject the post type to create and import
    */
   public pushPostType(postTypeObject: PostType): void {
     postTypeObject.create();
-    this.importPostType(postTypeObject);
-  }
-  /**
-   * @description import the given post type in the theme
-   * @param postTypeObject the post type to import
-   */
-  public importPostType(postTypeObject: PostType): void {
-    StringComposeWriter.appendBeetweenChars(
-      this.THEME_FUNCTIONS_FILE,
-      WpFunctionComposer.requirePhpFile(
-        StringComposeWriter.concatenatePaths(
-          postTypeObject.PATH,
-          postTypeObject.postType
-        )
-      ),
-      CommentsIdentifiers.getIdentifierImportPair(
-        postTypeObject.IDENTIFIER_NAME
-      )[0],
-      CommentsIdentifiers.getIdentifierImportPair(
-        postTypeObject.IDENTIFIER_NAME
-      )[1]
-    );
+    postTypeObject.import();
   }
 
   /**
-   * @description create and import the postType passed in the theme
+   * @description create and import the given widgeArea in the theme
    * @param postTypeObject the widget area to create and import
    */
   public pushWidgetArea(widgetArea: WidgetArea): void {
     widgetArea.create();
-    this.importWidgetArea(widgetArea);
-  }
-  /**
-   * @description import the given widget area in the theme
-   * @param postTypeObject the widget area to import
-   */
-  public importWidgetArea(widgetArea: WidgetArea): void {
-    StringComposeWriter.appendBeetweenChars(
-      this.THEME_FUNCTIONS_FILE,
-      WpFunctionComposer.requirePhpFile(
-        StringComposeWriter.concatenatePaths(
-          widgetArea.PATH,
-          widgetArea.widgetAreaName
-        )
-      ),
-      CommentsIdentifiers.getIdentifierImportPair(
-        widgetArea.IDENTIFIER_NAME
-      )[0],
-      CommentsIdentifiers.getIdentifierImportPair(widgetArea.IDENTIFIER_NAME)[1]
-    );
+    widgetArea.import();
   }
 
   /**
-   * @description create and import the settings page passed in 
+   * @description create and import the given settings page in the theme
    * @param postTypeObject the settings page to create and import
    */
   public pushSettingsPage(settingsPage: SettingsPage): void {
-    settingsPage.createAll();
-    // this.importSettingsPage(settingsPage);
+    settingsPage.create();
+    settingsPage.import();
   }
-  /**
-   * @description import the given settings page in the Theme
-   * @param postTypeObject the settings page to import
-   */
-  // public importSettingsPage(settingsPage: SettingsPage): void {
-  //   StringComposeWriter.appendBeetweenChars(
-  //     this.getThemePath(this.FUNCTIONS_FILE),
-  //     this.requirePhpFile(
-  //       StringComposeWriter.concatenatePaths(
-  //         settingsPage.PATH,
-  //         widgetArea.widgetAreaName
-  //       )
-  //     ),
-  //     CommentsIdentifiers.getIdentifierImportPair(
-  //       widgetArea.IDENTIFIER_NAME
-  //     )[0],
-  //     CommentsIdentifiers.getIdentifierImportPair(widgetArea.IDENTIFIER_NAME)[1]
-  //   );
-  // }
 
   /**
    * @description add to the given function the given text and prettify the given file

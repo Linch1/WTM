@@ -12,10 +12,10 @@ import { ThemeReader } from "./theme/ThemeReader";
 import { ThemeWriter } from "./theme/ThemeWriter";
 import { ThemeComposer } from "./theme/ThemeComposer";
 
-import { PostType } from "./custom-theme-parts/PostType";
-import { WidgetArea } from "./custom-theme-parts/WidgetArea";
+import { PostTypes } from "./custom-theme-parts/PostTypes";
+import { WidgetAreas } from "./custom-theme-parts/WidgetAreas";
 import { Menu } from "./custom-theme-parts/Menu";
-import { SettingsPage } from "./custom-theme-parts/SettingsPage";
+import { SettingsPages } from "./custom-theme-parts/SettingsPages";
 
 import { CommentsIdentifiers } from "./comments-identifiers/CommentsIdentifiers";
 import * as prettier from "prettier";
@@ -46,7 +46,12 @@ console.log(initalizer.ASSETS_IMPORT_FILE_PATH, initalizer.ASSETS_CUSTOM_PATH, i
 // PTImage.create(true);
 // writer.importPostType(PTImage);
 
-// let widgetArea: WidgetArea = new WidgetArea(StringComposeWriter.concatenatePaths(themePath, writer.ASSETS_PATH), "footer");
+let postTypes: PostTypes = new PostTypes(initalizer);
+postTypes.add({postTypeName: "images", postTypeDisplayName:"Images edu", postTypeNameSingular:"image"});
+
+let widgetAreas: WidgetAreas = new WidgetAreas(initalizer);
+widgetAreas.add({widgetAreaName: "footer"});
+
 // widgetArea.create(true);
 // writer.importWidgetArea(widgetArea);
 

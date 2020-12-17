@@ -17,5 +17,23 @@ type postTypeParams = {
 type widgetAreaParams = {
   widgetAreaName: string;
 };
-
-export { widgetAreaParams, postTypeParams, nestedStringsArrays, settingsPageParams };
+type menuMainPageParams = {
+  menuName: string;
+  menuDisplayedName: string;
+  pageBrowserTitle: string;
+  skipIfExists?: boolean;
+};
+type menuSubPageParams = {
+  pageName: string;
+  pageNameDisplayed: string;
+  pageBrowserTitle: string;
+  skipIfExists?: boolean;
+};
+export {
+  menuMainPageParams,
+  menuSubPageParams,
+  widgetAreaParams,
+  postTypeParams,
+  nestedStringsArrays,
+  settingsPageParams,
+};

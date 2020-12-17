@@ -121,7 +121,7 @@ class FileWriter {
   }
 
   static appendFile(path: string, content: string): void {
-    if (!FileReader.existsFile(path)) return;
+    if (!FileReader.existsPath(path)) return;
     fs.appendFileSync(path, content, "utf8");
   }
 }

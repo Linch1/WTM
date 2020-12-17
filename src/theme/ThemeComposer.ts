@@ -1,60 +1,55 @@
-import { nestedStringsArrays } from "../types/customTypes";
+import {
+  postTypeParams,
+  widgetAreaParams,
+  settingsPageParams,
+} from "../types/customTypes";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 
 import { Theme } from "./Theme";
 import { ThemeWriter } from "./ThemeWriter";
-import { ThemeReader } from "./ThemeReader"
+import { ThemeReader } from "./ThemeReader";
+import { ThemeAux } from "./ThemeAux";
 
-import { PostType } from "../custom-theme-parts/PostType";
-import { WidgetArea } from "../custom-theme-parts/WidgetArea";
+import { PostType } from "../custom-theme-parts/postTypes/PostType";
+import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
+import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
 
 /**
  * This class is used to build objects like a custom post type ( PostType )
  * or a widgetArea and other relative to the Theme
  */
-class ThemeComposer extends Theme {
-
-  
-
-  constructor(public ThemeFolder: string) {
-    super(ThemeFolder);
-  }
+class ThemeComposer {
+  constructor(public themeAux: ThemeAux) {}
 
   /**
-   * @description build a PostType object with the given name, creates it in the theme, and after returns it
-   * @param postTypeName the name of the post type
-   * @param postTypeDisplayName the name of the post type displayed in the admin page
-   * @param postTypeNameSingular the singular name of the post type
+   * @description build a PostType object and after returns it
+   * @param params an object following the type postTypeParams
    */
-  public buildPostType(postTypeName: string, postTypeDisplayName: string, postTypeNameSingular: string): PostType {
-
-    let postType = new PostType(
-      StringComposeWriter.concatenatePaths(this.ThemeFolder, this.ASSETS_PATH),
-      postTypeName,
-      postTypeDisplayName,
-      postTypeNameSingular
-    );
-
+  public buildPostType(params: postTypeParams): PostType {
+    let postType = new PostType(this.themeAux, params);
     return postType;
   }
 
   /**
-   * @description build a WidgetArea object, creates it in the theme, and after returns it
-   * @param widgetAreaName the name of the widgetArea
-   * 
+   * @description build a WidgetArea object and after returns it
+   * @param params an object following the type widgetAreaParams
+   *
    */
-  public buildWidgetArea(widgetAreaName: string): WidgetArea {
-      
-    let widgetArea = new WidgetArea(
-      StringComposeWriter.concatenatePaths(this.ThemeFolder, this.ASSETS_PATH),
-      widgetAreaName
-    );
-
+  public buildWidgetArea(params: widgetAreaParams): WidgetArea {
+    let widgetArea = new WidgetArea(this.themeAux, params);
     return widgetArea;
   }
 
+  /**
+   * @description build a settingsPage object and after returns it
+   * @param params an object following the type settingsPageParams
+   */
+  public buildSettingsPage(params: settingsPageParams): SettingsPage {
+    let settingsPage = new SettingsPage(this.themeAux, params);
+    return settingsPage;
+  }
 }
 
 export { ThemeComposer };

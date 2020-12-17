@@ -48,7 +48,7 @@ class FileReader {
     return fs.readFileSync(path, "utf-8");
   }
 
-  static existsFile(path: string): boolean {
+  static existsPath(path: string): boolean {
     return fs.existsSync(path);
   }
 
