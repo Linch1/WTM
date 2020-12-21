@@ -1,8 +1,9 @@
-import { nestedStringsArrays } from "../types/customTypes";
+import { nestedStringsArrays, replaceAllParams } from "../types/customTypes";
 import { FileReader } from "./FileReader";
 import { FileWriter } from "./FileWriter";
 import * as prettier from "prettier";
 import { StringComposeReader } from "./StringComposeReader";
+import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
 
 class StringComposeWriter {
   /**
@@ -24,7 +25,7 @@ class StringComposeWriter {
   }
 
   /**
-   * @description 
+   * @description
    * add spaces and new-lines following the oldText format of a string ( usually called after StringComposeWriter.removeSpacesAndNewLines(text))
    * @param oldFormatText the text pre-singleLine transofrmation
    * @param singleLineText the text after the single line transformation
@@ -44,7 +45,7 @@ class StringComposeWriter {
    * `
    * singleLineText = `register_post_type(\'[WTM-PLACEHOLDER-CPT]\',*array(*\'labels\'=>array(*\'name\'=>__(\'[WTM-PLACEHOLDER-CPTN]\'),*\'singular_name\'=>__(\'[WTM-PLACEHOLDER-CPTS]\'),*\'supports\'=>array(\'thumbnail\'),*\'hierarchical\'=>false*),`
    * console.log(reinsertSpacesAndNewlines(oldFormatText, singleLineText))
-   * 
+   *
    * `
    * The function
    * will return the single line reformatted following the old formatted text
@@ -59,13 +60,12 @@ class StringComposeWriter {
     let oldFormatTextSpaces: string[] = oldFormatText.split(" ");
     let emptyWordsCount = 0; // check how many consequent empty word there are ( "" )
 
-    // re-add all the spaces and new lines baset on the oldFormat
+    // re-add all the spaces and new lines based on the oldFormat
     for (let maybeSingleWord of oldFormatTextSpaces) {
       let words: string[] = maybeSingleWord.includes("\n")
         ? maybeSingleWord.split("\n").join(" \n ").split(" ")
         : [maybeSingleWord];
       let rep = 0;
-
       while (rep < words.length) {
         let word = words[rep];
         if (!word && words.length == 1) {
@@ -75,15 +75,25 @@ class StringComposeWriter {
           rep++;
           continue;
         }
+        // find the index of the current word in the single line text
         let wordIndex = singleLineTextCopy.indexOf(word);
         if (wordIndex == -1) {
           rep++;
           continue;
         }
+        // find the letter that is right after the current word in the single line text copy
+        // [ the letter is used for have the correct accuracy in re-formatting the text]
         let letter = singleLineTextCopy[wordIndex + word.length];
+        // remove the current word from the single line text copy
         singleLineTextCopy = singleLineTextCopy.replace(word, "");
+        // default char to add is a space becouse the inital split was from spaces
         let toAdd = " ";
-        if (rep + 1 < words.length - 1 && words[rep + 1] == "\n") toAdd = "\n";
+
+        if (rep + 1 < words.length - 1 && words[rep + 1] == "\n") {
+          toAdd = "\n";
+        }
+        // refactor the main single line text with re-build the old format
+
         singleLineText = singleLineText.replace(
           word + letter,
           " ".repeat(emptyWordsCount) + word + toAdd + letter
@@ -104,13 +114,6 @@ class StringComposeWriter {
    * @param startChar: the start character
    * @param endChar: the end character [OPTIONAL]
    * @param specificIdentifier: the specific words that introduce the body to edit [OPTIONAL]
-   *
-   * @ERRORS --> the function will throw an error if the text between the characters is empty
-   * Ex:
-   * function add(){};
-   * function smell(){/*not empty};
-   *
-   * appendBeetweenChars(filePath, "text to add ", "function", specificIdentifier="add()" )
    */
   static appendBeetweenChars(
     filePath: string,
@@ -180,8 +183,51 @@ class StringComposeWriter {
    * @description prepend a '\n\t' and append a '\n'
    * @param word the word to format
    */
-  static preformatString(word: string): string{
-    return '\n\t' + word + '\n';
+  static preformatString(word: string): string {
+    return "\n\t" + word + "\n";
+  }
+
+  /**
+   * @description replace all the occurences of a placeholder identifier with a given word
+   * @param text the text that contains the words to replace
+   * @param params an object with this structure { placholder_identifier_name: new_text_to_put_over_identifier }
+   */
+  static replaceAllIdentifiersPlaceholders(
+    text: string,
+    params: replaceAllParams
+  ): string {
+
+    Object.keys(params).forEach(placeholder => {
+      let newText = params[placeholder];
+      placeholder = CommentsIdentifiers.getIdentifierPlaceholder(
+        placeholder,
+        false
+      );
+      text = text.split(placeholder).join(newText);
+    });
+
+    return text;
+  }
+
+  /**
+   * @description replace all the occurences of a html identifier with a given word
+   * @param text the text that contains the words to replace
+   * @param params an object with this structure { html_identifier_name: new_text_to_put_over_identifier }
+   */
+  static replaceAllIdentifiersHtml(
+    text: string,
+    params: replaceAllParams
+  ): string {
+
+    Object.keys(params).forEach(placeholder => {
+      let newText = params[placeholder];
+      placeholder = CommentsIdentifiers.getIdentifierHtml(
+        placeholder
+      );
+      text = text.split(placeholder).join(newText);
+    });
+
+    return text;
   }
 }
 

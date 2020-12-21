@@ -1,4 +1,4 @@
-import { menuSubPageParams } from "../../types/customTypes";
+import { menuSubPageParams, replaceAllParams } from "../../types/customTypes";
 import { FileReader } from "../../files/FileReader";
 import { FileWriter } from "../../files/FileWriter";
 import { CommentsIdentifiers } from "../../comments-identifiers/CommentsIdentifiers";
@@ -32,11 +32,12 @@ class MenuSubPage {
 
   /**
    * @description intialize the class
-   * @param themeAssetsPath the abs path to the theme's assets folder
+   * @param themeAux 
+   * @param informations the field pageName should be also a valid function name
    */
   constructor(
     public themeAux: ThemeAux,
-    public informations: params = {
+    private informations: params = {
       pageName: "",
       pageNameDisplayed: "",
       pageBrowserTitle: "",
@@ -46,7 +47,7 @@ class MenuSubPage {
   /**
    * @description checks if the post types informations are valid, returns true or false
    */
-  public emptyInformations(): boolean {
+  public validInformations(): boolean {
     if (!this.informations.pageName) return false;
     if (!this.informations.pageNameDisplayed) return false;
     if (!this.informations.pageBrowserTitle) return false;
@@ -78,7 +79,7 @@ class MenuSubPage {
    * @description import the current structure in the theme
    */
   public import() {
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
     StringComposeWriter.appendBeetweenChars(
       this.themeAux.THEME_FUNCTIONS_FILE,
       WpFunctionComposer.requirePhpFile(
@@ -97,7 +98,7 @@ class MenuSubPage {
   public create(skipIfExists: boolean = false): void {
     if (!this.getMenuSlug) throw new Error(this.NO_MENU_SLUG_GIVEN);
     if (!this.getMenuName) throw new Error(this.NO_MENU_NAME);
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
 
     let subPagePath: string = this.getPath();
 
@@ -111,42 +112,15 @@ class MenuSubPage {
       )
     );
 
-    let newContent: string = defaultContent
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_MENU_SLUG,
-          false
-        )
-      )
-      .join(this.getMenuSlug)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_SUB_PAGE_NAME_DISPLAY,
-          false
-        )
-      )
-      .join(this.informations.pageNameDisplayed)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_SUB_PAGE_NAME,
-          false
-        )
-      )
-      .join(this.informations.pageName)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_SUB_PAGE_BROWSER_TITLE,
-          false
-        )
-      )
-      .join(this.informations.pageBrowserTitle)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_SUB_PAGE_SLUG,
-          false
-        )
-      )
-      .join(this.getMenuName + this.informations.pageName);
+    let params: replaceAllParams = {};
+    params[this.IDENTIFIER_SUB_PAGE_NAME_DISPLAY] =  this.getInformations.pageNameDisplayed;
+    params[this.IDENTIFIER_SUB_PAGE_NAME] =  this.getInformations.pageName;
+    params[this.IDENTIFIER_SUB_PAGE_BROWSER_TITLE] =  this.getInformations.pageBrowserTitle;
+    params[this.IDENTIFIER_MENU_SLUG] =  this.getMenuSlug;
+    params[this.IDENTIFIER_SUB_PAGE_SLUG] =  `${this.getMenuName}-${this.informations.pageName}`;
+    
+    let newContent: string = defaultContent;
+    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(newContent, params);
 
     FileWriter.writeFile(subPagePath, newContent);
   }
@@ -154,6 +128,9 @@ class MenuSubPage {
   public get getInformations(): params {
     return this.informations;
   }
+  /**
+   * @param newInformations the field pageName should be also a valid function name
+   */
   public set setInformations(newInformations: params) {
     this.informations = newInformations;
   }

@@ -1,4 +1,4 @@
-import { widgetAreaParams, nestedStringsArrays } from "../../types/customTypes";
+import { widgetAreaParams, nestedStringsArrays, replaceAllParams } from "../../types/customTypes";
 import { FileReader } from "../../files/FileReader";
 import { FileWriter } from "../../files/FileWriter";
 import { CommentsIdentifiers } from "../../comments-identifiers/CommentsIdentifiers";
@@ -17,9 +17,14 @@ class WidgetArea {
   public readonly DEFAULT_BUILD_PATH = this.PATH + "default.php";
   public readonly IDENTIFIER_NAME = "WIDGET-AREA";
 
+  /**
+   * 
+   * @param themeAux 
+   * @param informations the field widgetAreaName should also be a valid function name
+   */
   constructor(
     public themeAux: ThemeAux,
-    public informations: params = {
+    private informations: params = {
       widgetAreaName: "",
     }
   ) {}
@@ -27,13 +32,16 @@ class WidgetArea {
   /**
    * @description checks if the post types informations are valid, returns true or false
    */
-  public emptyInformations(): boolean {
+  public validInformations(): boolean {
     if (!this.informations.widgetAreaName) return false;
     return true;
   }
   public get getInformations(): params {
     return this.informations;
   }
+  /**
+   * @param newInformations the field widgetAreaName should also be a valid function name
+   */
   public set setInformations(newInformations: params) {
     this.informations = newInformations;
   }
@@ -52,7 +60,7 @@ class WidgetArea {
    * @description import the current structure in the theme
    */
   public import() {
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
     StringComposeWriter.appendBeetweenChars(
       this.themeAux.THEME_FUNCTIONS_FILE,
       WpFunctionComposer.requirePhpFile(
@@ -71,7 +79,7 @@ class WidgetArea {
    * @skipIfExists it's a boolean value that prevent to throw an error if the given widget area already exists
    */
   public create(skipIfExists: boolean = false): void {
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
     let widgetAreaPath: string = this.getPath();
 
     if (FileReader.existsPath(widgetAreaPath) && !skipIfExists)
@@ -80,15 +88,13 @@ class WidgetArea {
     let defaultContent: string = FileReader.readFile(
       this.themeAux.getInsideThemeAssetsPath(this.DEFAULT_BUILD_PATH)
     );
+    
+    let params: replaceAllParams = {};
+    params[this.IDENTIFIER_NAME] =  this.getInformations.widgetAreaName;
+    
     let newContent: string = defaultContent;
-    newContent = newContent
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_NAME,
-          false
-        )
-      )
-      .join(this.getInformations.widgetAreaName);
+    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(newContent, params);
+    
     FileWriter.writeFile(widgetAreaPath, newContent);
   }
 }

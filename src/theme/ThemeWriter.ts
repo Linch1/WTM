@@ -3,12 +3,15 @@ import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { Theme } from "./Theme";
 import { ThemeReader } from "./ThemeReader";
-import { PostType } from "../custom-theme-parts/postTypes/PostType";
-import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
+
 import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
 import { StringComposeWriter } from "../files/StringComposeWriter";
+import { WpFunctionComposer } from "../files/WpFunctionComposer";
+
+import { PostType } from "../custom-theme-parts/postTypes/PostType";
+import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
 import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
-import { WpFunctionComposer } from "../files/WpFunctionComposer"
+import { Menu } from "../custom-theme-parts/menus/Menu";
 
 /**
  * This class is used to perform the write actions
@@ -86,6 +89,17 @@ class ThemeWriter extends Theme {
   public pushSettingsPage(settingsPage: SettingsPage): void {
     settingsPage.create();
     settingsPage.import();
+  }
+
+  /**
+   * @description create and import the givenmenu in the theme
+   * @param postTypeObject the menu to create and import
+   */
+  public pushMenu(menu: Menu): void {
+    menu.createMainPage();
+    menu.createSubPages();
+    menu.importMainPage();
+    menu.importSubPages();
   }
 
   /**

@@ -1,5 +1,6 @@
 import {
   nestedStringsArrays,
+  replaceAllParams,
   settingsPageParams,
 } from "../../types/customTypes";
 import { FileReader } from "../../files/FileReader";
@@ -32,12 +33,12 @@ class SettingsPage {
 
   /**
    * @description intialize the class
-   * @param themePath the theme absolute path
-   * @param assetsPath the relative path to the theme's assets folder
+   * @param themeAux
+   * @param informations the field pageName should also be a valid function name
    */
   constructor(
     public themeAux: ThemeAux,
-    public informations: params = {
+    private informations: params = {
       pageName: "",
       pageBrowserTitle: "",
       pageDisplayedName: "",
@@ -47,7 +48,7 @@ class SettingsPage {
   /**
    * @description checks if the post types informations are valid, returns true or false
    */
-  public emptyInformations(): boolean {
+  public validInformations(): boolean {
     if (!this.informations.pageName) return false;
     if (!this.informations.pageBrowserTitle) return false;
     if (!this.informations.pageDisplayedName) return false;
@@ -56,6 +57,9 @@ class SettingsPage {
   public get getInformations(): params {
     return this.informations;
   }
+  /**
+   * @param newInformations the field pageName should also be a valid function name
+   */
   public set setInformations(newInformations: params) {
     this.informations = newInformations;
   }
@@ -82,7 +86,7 @@ class SettingsPage {
    * @description import the current structure in the theme
    */
   public import() {
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
     StringComposeWriter.appendBeetweenChars(
       this.themeAux.THEME_FUNCTIONS_FILE,
       WpFunctionComposer.requirePhpFile(
@@ -101,7 +105,7 @@ class SettingsPage {
    * @skipIfExists it's a boolean value that prevent to throw an error if the given widget area already exists
    */
   public create(skipIfExists: boolean = false): void {
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
     this.SETTINGS_PAGE_SLUG = CommentsIdentifiers.getIdentifierId(
       this.getInformations.pageName,
       false
@@ -115,35 +119,15 @@ class SettingsPage {
       this.themeAux.getInsideThemeAssetsPath(this.DEFAULT_BUILD_PATH)
     );
 
-    let newContent: string = defaultContent
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_SETTINGS_PAGE_NAME,
-          false
-        )
-      )
-      .join(this.getInformations.pageName)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_SETTINGS_PAGE_NAME_DISPLAY,
-          false
-        )
-      )
-      .join(this.getInformations.pageDisplayedName)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_SETTINGS_PAGE_BROWSER_TITLE,
-          false
-        )
-      )
-      .join(this.getInformations.pageBrowserTitle)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_SETTINGS_PAGE_SLUG,
-          false
-        )
-      )
-      .join(this.SETTINGS_PAGE_SLUG);
+    
+    let params: replaceAllParams = {};
+    params[this.IDENTIFIER_SETTINGS_PAGE_NAME] =  this.getInformations.pageName;
+    params[this.IDENTIFIER_SETTINGS_PAGE_NAME_DISPLAY] =  this.getInformations.pageDisplayedName;
+    params[this.IDENTIFIER_SETTINGS_PAGE_BROWSER_TITLE] =  this.getInformations.pageBrowserTitle;
+    params[this.IDENTIFIER_SETTINGS_PAGE_SLUG] =  this.SETTINGS_PAGE_SLUG;
+    
+    let newContent: string = defaultContent;
+    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(newContent, params);
 
     FileWriter.writeFile(settingsPagePath, newContent);
   }

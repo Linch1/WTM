@@ -1,33 +1,18 @@
-import { read } from "fs";
-import { nestedStringsArrays } from "./types/customTypes";
+import { Test } from "./Test";
 
-import { FileReader } from "./files/FileReader";
-import { FileWriter } from "./files/FileWriter";
-import { StringComposeWriter } from "./files/StringComposeWriter";
-import { StringComposeReader } from "./files/StringComposeReader";
 
-import { Theme } from "./theme/Theme";
-import { ThemeAux } from "./theme/ThemeAux";
-import { ThemeReader } from "./theme/ThemeReader";
-import { ThemeWriter } from "./theme/ThemeWriter";
-import { ThemeComposer } from "./theme/ThemeComposer";
 
-import { PostTypes } from "./custom-theme-parts/PostTypes";
-import { WidgetAreas } from "./custom-theme-parts/WidgetAreas";
-import { Menu } from "./custom-theme-parts/Menu";
-import { SettingsPages } from "./custom-theme-parts/SettingsPages";
+/* TEST FOR RENDER CUSTOM THEME PARTES
+Test.createThemePostType();
+Test.createThemeWidgetArea();
+Test.createThemeSettingsPage();
+Test.createThemeMenu(); 
+*/
 
-import { CommentsIdentifiers } from "./comments-identifiers/CommentsIdentifiers";
-import * as prettier from "prettier";
+Test.visualRenderDefault();
 
-let themePath: string = "/home/pero/Scrivania/blankslate1";
-let initalizer: ThemeAux = new ThemeAux(themePath);
-let reader: ThemeReader = initalizer.reader;
-let writer: ThemeWriter = initalizer.writer;
-let composer: ThemeComposer = initalizer.composer;
-let StrCompW = StringComposeWriter;
 
-console.log(initalizer.ASSETS_IMPORT_FILE_PATH, initalizer.ASSETS_CUSTOM_PATH, initalizer.THEME_FUNCTIONS_FILE);
+
 // writer.pushPostType(composer.buildPostType("images", "Images", "image"));
 // writer.pushWidgetArea(composer.buildWidgetArea("footer"));
 
@@ -45,12 +30,6 @@ console.log(initalizer.ASSETS_IMPORT_FILE_PATH, initalizer.ASSETS_CUSTOM_PATH, i
 // let PTImage = new PostType(StringComposeWriter.concatenatePaths(themePath, writer.ASSETS_PATH), "images", "Images", "image");
 // PTImage.create(true);
 // writer.importPostType(PTImage);
-
-let postTypes: PostTypes = new PostTypes(initalizer);
-postTypes.add({postTypeName: "images", postTypeDisplayName:"Images edu", postTypeNameSingular:"image"});
-
-let widgetAreas: WidgetAreas = new WidgetAreas(initalizer);
-widgetAreas.add({widgetAreaName: "footer"});
 
 // widgetArea.create(true);
 // writer.importWidgetArea(widgetArea);
@@ -95,7 +74,6 @@ widgetAreas.add({widgetAreaName: "footer"});
 //   }
 // );
 // settingsPage.createAll();
-
 
 // writer.appendToFunctionBody(
 //   settingsPage.getSettingsPagePath(settingsPageName),

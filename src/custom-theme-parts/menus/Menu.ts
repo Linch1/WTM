@@ -45,7 +45,8 @@ class Menu {
   }
 
   /**
-   * @description create the file of the menu sub-pages (${this.MENU_NAME}/sub-${pageName}.php) if not exists ( and populate it with the default params )
+   * 
+   * @description [call after this.createMainPage ] create the file of the menu sub-pages (${this.MENU_NAME}/sub-${pageName}.php) if not exists ( and populate it with the default params )
    * @skipIfExists it's a boolean value that prevent to throw an error if the given widget area already exists
    */
   public createSubPages(skipIfExists: boolean = false): void {

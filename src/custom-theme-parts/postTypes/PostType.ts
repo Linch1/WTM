@@ -1,4 +1,4 @@
-import { nestedStringsArrays, postTypeParams } from "../../types/customTypes";
+import { nestedStringsArrays, postTypeParams, replaceAllParams } from "../../types/customTypes";
 import { FileReader } from "../../files/FileReader";
 import { FileWriter } from "../../files/FileWriter";
 import { CommentsIdentifiers } from "../../comments-identifiers/CommentsIdentifiers";
@@ -20,9 +20,12 @@ class PostType {
   public readonly IDENTIFIER_NAME_DISPLAYED = "POST-TYPES-DISPLAYED-NAME";
   public readonly IDENTIFIER_NAME_SINGULAR = "POST-TYPES-SINGULAR-NAME";
 
+  /**
+   * @param informations the field postTypeName should be also a valid function name
+   */
   constructor(
     public themeAux: ThemeAux,
-    public informations: params = {
+    private informations: params = {
       postTypeName: "",
       postTypeDisplayName: "",
       postTypeNameSingular: "",
@@ -32,7 +35,7 @@ class PostType {
   /**
    * @description checks if the post types informations are valid, returns true or false
    */
-  public emptyInformations(): boolean {
+  public validInformations(): boolean {
     if (!this.getInformations.postTypeName) return false;
     if (!this.getInformations.postTypeDisplayName) return false;
     if (!this.getInformations.postTypeNameSingular) return false;
@@ -41,6 +44,9 @@ class PostType {
   public get getInformations(): params  {
     return this.informations;
   }
+  /**
+   * @param newInformations the field postTypeName should be also a valid function name
+   */
   public set setInformations(newInformations: params) {
     this.informations = newInformations;
   }
@@ -59,7 +65,7 @@ class PostType {
    * @description import the current structure in the theme
    */
   public import() {
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
     StringComposeWriter.appendBeetweenChars(
       this.themeAux.THEME_FUNCTIONS_FILE,
       WpFunctionComposer.requirePhpFile(
@@ -76,7 +82,7 @@ class PostType {
    */
   public create(): void {
     
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
 
     /* get the post type path*/
     let postTypePath: string = this.getPath();
@@ -86,32 +92,15 @@ class PostType {
     let defaultContent: string = FileReader.readFile(
       this.themeAux.getInsideThemeAssetsPath(this.DEFAULT_BUILD_PATH)
     );
-
+    
+    let params: replaceAllParams = {};
+    params[this.IDENTIFIER_NAME] =  this.getInformations.postTypeName;
+    params[this.IDENTIFIER_NAME_DISPLAYED] =  this.getInformations.postTypeDisplayName;
+    params[this.IDENTIFIER_NAME_SINGULAR] =  this.getInformations.postTypeNameSingular;
+    
     let newContent: string = defaultContent;
-    newContent = newContent
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_NAME,
-          false
-        )
-      )
-      .join(this.getInformations.postTypeName);
-    newContent = newContent
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_NAME_DISPLAYED,
-          false
-        )
-      )
-      .join(this.getInformations.postTypeDisplayName);
-    newContent = newContent
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_NAME_SINGULAR,
-          false
-        )
-      )
-      .join(this.getInformations.postTypeNameSingular);
+    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(newContent, params);
+    
     FileWriter.writeFile(postTypePath, newContent);
   }
 }

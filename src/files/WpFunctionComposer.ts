@@ -20,7 +20,7 @@ class WpFunctionComposer {
     return `wp_enqueue_style( '${fileToImport.replace(
       "/",
       WpFunctionComposer.IDENTIFIER_IMPORTED
-    )}', get_template_directory_uri() . '${fileToImport}', false, '0.0.1', 'all' );\n`;
+    )}',get_template_directory_uri().'${fileToImport}',false,'0.0.1','all');\n`;
   }
   /**
    * @description return the syntax of the function for correctly import a script file in wordpress
@@ -31,7 +31,7 @@ class WpFunctionComposer {
     return `wp_enqueue_script( '${fileToImport.replace(
       "/",
       this.IDENTIFIER_IMPORTED
-    )}', get_template_directory_uri() . '${fileToImport}', array ( 'jquery' ), '0.0.1', true );\n`;
+    )}',get_template_directory_uri().'${fileToImport}',array('jquery'),'0.0.1',true);\n`;
   }
   /**
    * @description return the syntax of the function for correctly require a file in functions.php
@@ -39,7 +39,7 @@ class WpFunctionComposer {
    */
   static requirePhpFile(fileToImport: string): string {
     fileToImport = StringComposeWriter.addInitialSlash(fileToImport);
-    return `require_once( get_template_directory_uri() . '${fileToImport}.php' );\n`;
+    return `require_once(get_template_directory_uri() . '${fileToImport}.php');\n`;
   }
 }
 

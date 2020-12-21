@@ -4,7 +4,7 @@
     "description": "Build and Manage Easily a custom wordpress theme",
     "main": "index.js",
     "scripts": {
-        "test": "node ./dist/test.js"
+        "test": "node ./dist/test-file.js"
     },
     "repository": {
         "type": "git",

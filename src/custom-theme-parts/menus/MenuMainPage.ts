@@ -1,4 +1,4 @@
-import { menuMainPageParams } from "../../types/customTypes";
+import { menuMainPageParams, replaceAllParams } from "../../types/customTypes";
 import { FileReader } from "../../files/FileReader";
 import { FileWriter } from "../../files/FileWriter";
 import { CommentsIdentifiers } from "../../comments-identifiers/CommentsIdentifiers";
@@ -32,10 +32,11 @@ class MenuMainPage {
   /**
    * @description intialize the class
    * @param themeAux
+   * @param informations the field menuName should be also a valid function name
    */
   constructor(
     public themeAux: ThemeAux,
-    public informations: params = {
+    private informations: params = {
       menuName: "",
       menuDisplayedName: "",
       pageBrowserTitle: "",
@@ -45,7 +46,7 @@ class MenuMainPage {
   /**
    * @description checks if the post types informations are valid, returns true or false
    */
-  public emptyInformations(): boolean {
+  public validInformations(): boolean {
     if (!this.informations.menuName) return false;
     if (!this.informations.menuDisplayedName) return false;
     if (!this.informations.pageBrowserTitle) return false;
@@ -54,6 +55,9 @@ class MenuMainPage {
   public get getInformations(): params {
     return this.informations;
   }
+  /**
+   * @param newInformations the field menuName should be also a valid function name
+   */
   public set setInformations(newInformations: params) {
     this.informations = newInformations;
   }
@@ -82,7 +86,7 @@ class MenuMainPage {
    * @description import the current structure in the theme
    */
   public import() {
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
     StringComposeWriter.appendBeetweenChars(
       this.themeAux.THEME_FUNCTIONS_FILE,
       WpFunctionComposer.requirePhpFile(
@@ -103,7 +107,7 @@ class MenuMainPage {
    * @skipIfExists it's a boolean value that prevent to throw an error if the given widget area already exists
    */
   public create(): void {
-    if (this.emptyInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
+    if (!this.validInformations()) throw new Error(this.NO_VALID_INFORMATIONS);
     this.setMenuSlug = CommentsIdentifiers.getIdentifierId(
       this.getInformations.menuName,
       false
@@ -123,35 +127,14 @@ class MenuMainPage {
       )
     );
 
-    let newContent: string = defaultContent
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_MAIN_PAGE_NAME,
-          false
-        )
-      )
-      .join(this.getInformations.menuName)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_MAIN_PAGE_NAME_DISPLAY,
-          false
-        )
-      )
-      .join(this.getInformations.menuDisplayedName)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_MAIN_PAGE_BROWSER_TITLE,
-          false
-        )
-      )
-      .join(this.getInformations.pageBrowserTitle)
-      .split(
-        CommentsIdentifiers.getIdentifierPlaceholder(
-          this.IDENTIFIER_MENU_SLUG,
-          false
-        )
-      )
-      .join(this.getMenuSlug);
+    let params: replaceAllParams = {};
+    params[this.IDENTIFIER_MAIN_PAGE_NAME] =  this.getInformations.menuName;
+    params[this.IDENTIFIER_MAIN_PAGE_NAME_DISPLAY] =  this.getInformations.menuDisplayedName;
+    params[this.IDENTIFIER_MAIN_PAGE_BROWSER_TITLE] =  this.getInformations.pageBrowserTitle;
+    params[this.IDENTIFIER_MENU_SLUG] =  this.getMenuSlug;
+    
+    let newContent: string = defaultContent;
+    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(newContent, params);
 
     FileWriter.writeFile(mainPagePath, newContent);
   }

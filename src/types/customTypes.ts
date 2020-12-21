@@ -29,7 +29,17 @@ type menuSubPageParams = {
   pageBrowserTitle: string;
   skipIfExists?: boolean;
 };
+type replaceAllParams = {
+  [key: string]: string
+}
+
+type visualIdentifiersJson = {
+  HTML: {[key: string]: string}
+}
+
 export {
+  visualIdentifiersJson,
+  replaceAllParams,
   menuMainPageParams,
   menuSubPageParams,
   widgetAreaParams,
