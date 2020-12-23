@@ -129,6 +129,8 @@ class StringComposeWriter {
       endChar,
       specificIdentifier
     );
+    console.log(startChar, endChar)
+    console.log(currentBetweenCharsContent)
     let currentFileContent: string = FileReader.readFile(filePath);
     let currentFileContentSIngleLine: string = StringComposeWriter.removeSpacesAndNewLines(
       currentFileContent

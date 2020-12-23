@@ -98,10 +98,7 @@ class CustomPart<T> implements InterfacecustomPart {
    * @description creates the element directory
    */
   public createDirectory() {
-    let directory = this.themeAux.getInsideThemeAssetsPath(
-      this.PATH,
-      this.CUSTOM_PART_NAME
-    );
+    let directory = this.getDirectory();
     if (!FileReader.existsPath(directory))
       FileWriter.createDirectory(directory);
   }

@@ -37,6 +37,14 @@ class WpFunctionComposer {
     fileToImport = StringComposeWriter.addInitialSlash(fileToImport);
     return `require_once(get_template_directory_uri() . '${fileToImport}.php');\n`;
   }
+
+  /**
+   * @description return the syntax of the function for correctly include a fine in a template/single
+   * @param path the path to include ( relative to the theme dir path )
+   */
+  static includeRelative(path: string): string{
+    return `<?php include(TEMPLATEPATH.'${path}');?>\n`
+  }
 }
 
 export { WpFunctionComposer };

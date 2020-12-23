@@ -1,8 +1,9 @@
-
 import { ThemeAux } from "../ManageTheme/ThemeAux";
 import { ThemeReader } from "../ManageTheme/ThemeReader";
 import { ThemeWriter } from "../ManageTheme/ThemeWriter";
 import { ThemeComposer } from "../ManageTheme/ThemeComposer";
+import { Single } from "../ManageTheme/theme-rendering/Single";
+import { Template } from "../ManageTheme/theme-rendering/Template";
 
 import { PostType } from "../custom-theme-parts/postTypes/PostType";
 import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
@@ -11,12 +12,14 @@ import { MenuMainPage } from "../custom-theme-parts/menus/MenuMainPage";
 import { MenuSubPage } from "../custom-theme-parts/menus/MenuSubPage";
 import { Menu } from "../custom-theme-parts/menus/Menu";
 
-
 let themePath: string = "/home/pero/Scrivania/blankslate1";
 let initalizer: ThemeAux = new ThemeAux(themePath);
 const composer: ThemeComposer = new ThemeComposer(initalizer);
 const reader: ThemeReader = initalizer.reader;
 const writer: ThemeWriter = initalizer.writer;
+
+const single: Single = new Single(initalizer, "Test single");
+const template: Template = new Template(initalizer, "Test template");
 
 /**
  * @description class to perform tests on the lib
@@ -78,6 +81,20 @@ class TestTheme {
     this.log("created menu");
 
     return menu;
+  }
+
+  static createSingle(){
+    single.create();
+  }
+  static includeFileInSingle(){
+    single.includeRelative("BODY", "/partials/ciao")
+  }
+
+  static createTemplate(){
+    template.create();
+  }
+  static includeFileInTemplate(){
+    template.includeRelative("BODY", "/partials/ciao")
   }
 }
 

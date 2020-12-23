@@ -24,11 +24,12 @@ class Theme {
     this.themeStructure = FileReader.readFolderTree(THEME_MAIN_FOLDER);
   }
 
-  public getInsideThemePath(location: string): string {
-    return StringComposeWriter.concatenatePaths(
-      this.THEME_MAIN_FOLDER,
-      location
-    );
+  public getInsideThemePath(...paths: string[]): string {
+    let path = this.THEME_MAIN_FOLDER;
+    for (let subPath of paths) {
+      path = StringComposeWriter.concatenatePaths(path, subPath);
+    }
+    return path;
   }
   public getInsideThemeAssetsPath(...paths: string[]): string {
     let path = this.ASSETS_CUSTOM_PATH;
