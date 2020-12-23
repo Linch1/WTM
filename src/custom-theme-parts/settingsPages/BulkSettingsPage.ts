@@ -1,10 +1,5 @@
-import { nestedStringsArrays, settingsPageParams } from "../../types/customTypes";
-import { FileReader } from "../../files/FileReader";
-import { FileWriter } from "../../files/FileWriter";
-import { CommentsIdentifiers } from "../../comments-identifiers/CommentsIdentifiers";
-import { StringComposeWriter } from "../../files/StringComposeWriter";
-import { ThemeAux } from "../../theme/ThemeAux";
-import { WpFunctionComposer } from "../../files/WpFunctionComposer";
+
+import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { SettingsPage } from "./SettingsPage"
 
 class BulkSettingsPage {

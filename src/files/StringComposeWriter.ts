@@ -1,9 +1,10 @@
-import { nestedStringsArrays, replaceAllParams } from "../types/customTypes";
+
 import { FileReader } from "./FileReader";
 import { FileWriter } from "./FileWriter";
 import * as prettier from "prettier";
 import { StringComposeReader } from "./StringComposeReader";
 import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
+import { replaceAllParams } from "./types/types";
 
 class StringComposeWriter {
   /**

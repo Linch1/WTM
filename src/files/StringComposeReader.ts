@@ -1,14 +1,11 @@
-import { nestedStringsArrays } from "../types/customTypes";
 import { FileReader } from "./FileReader";
-import { FileWriter } from "./FileWriter";
-import {StringComposeWriter} from "./StringComposeWriter";
-import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers"
-import * as prettier from "prettier";
+import { StringComposeWriter } from "./StringComposeWriter";
 
 class StringComposeReader {
   static readonly NoStartCharFound =
     "ERR: The given start char is not present in the file";
-    static readonly NoContentFound = null;
+  static readonly ERR_CANNOT_GET_LAST_ELEM: "ERR: Cannot get the last element of the given Path";
+  static readonly NoContentFound = null;
 
   /**
    * @description read the text contained beetween to chars/phrases ( and that start with a specific text optionally )
@@ -42,23 +39,34 @@ class StringComposeReader {
   ): string {
     // reformat all the texts to single line
     let fileText: string = FileReader.readFile(filePath);
-    let fileTextSingleLine = StringComposeWriter.removeSpacesAndNewLines(fileText);
+    let fileTextSingleLine = StringComposeWriter.removeSpacesAndNewLines(
+      fileText
+    );
     startChar = StringComposeWriter.removeSpacesAndNewLines(startChar);
     endChar = StringComposeWriter.removeSpacesAndNewLines(endChar);
-    
-    specificIdentifier = StringComposeWriter.removeSpacesAndNewLines(specificIdentifier);
+
+    specificIdentifier = StringComposeWriter.removeSpacesAndNewLines(
+      specificIdentifier
+    );
     let startCharSplit: string[] = fileTextSingleLine.split(startChar);
     if (startCharSplit.length <= 1) throw new Error(this.NoStartCharFound);
     let foundContent: string = "";
     for (let i = 0; i < startCharSplit.length; i++) {
       let content: string = startCharSplit[i].trim();
       if (endChar && content.indexOf(endChar) == -1) continue; // check if the end character is contained if not skip
-      if (specificIdentifier && !content.startsWith(specificIdentifier)) continue; // check that is the correct content starts with the given phrase if not skip
+      if (specificIdentifier && !content.startsWith(specificIdentifier))
+        continue; // check that is the correct content starts with the given phrase if not skip
       let endCharSplit: string[] = endChar ? content.split(endChar) : [content];
       foundContent = endCharSplit[0];
       return foundContent;
     }
     return "";
+  }
+
+  static getPathLastElem(path: string): string {
+    let lastElem = path.match(/([^\/]*)\/*$/);
+    if (lastElem == null) throw new Error(this.ERR_CANNOT_GET_LAST_ELEM);
+    else return lastElem[1];
   }
 }
 

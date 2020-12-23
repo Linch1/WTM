@@ -1,17 +1,5 @@
-import {
-  postTypeParams,
-  widgetAreaParams,
-  settingsPageParams,
-  menuMainPageParams,
-  menuSubPageParams
-} from "../types/customTypes";
-import { FileReader } from "../files/FileReader";
-import { FileWriter } from "../files/FileWriter";
-import { StringComposeWriter } from "../files/StringComposeWriter";
 
-import { Theme } from "./Theme";
-import { ThemeWriter } from "./ThemeWriter";
-import { ThemeReader } from "./ThemeReader";
+
 import { ThemeAux } from "./ThemeAux";
 
 import { PostType } from "../custom-theme-parts/postTypes/PostType";
@@ -20,6 +8,10 @@ import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
 import { MenuMainPage } from "../custom-theme-parts/menus/MenuMainPage";
 import { MenuSubPage } from "../custom-theme-parts/menus/MenuSubPage";
 import { Menu } from "../custom-theme-parts/menus/Menu";
+import { postTypeParams } from "../custom-theme-parts/postTypes/types/types";
+import { widgetAreaParams } from "../custom-theme-parts/widgetAreas/types/types";
+import { settingsPageParams } from "../custom-theme-parts/settingsPages/types/types";
+import { menuMainPageParams, menuSubPageParams } from "../custom-theme-parts/menus/types/types";
 /**
  * This class is used to build objects like a custom post type ( PostType )
  * or a widgetArea and other relative to the Theme

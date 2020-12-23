@@ -1,12 +1,16 @@
 import * as fs from "fs";
-import { nestedStringsArrays } from "../types/customTypes";
-import { FileWriter } from "./FileWriter";
+
+import { nestedStringsArrays } from "./types/types";
 
 class FileReader {
   static readonly NoFunctionFoundErr =
     "NO FUNCTION FOUND: no function was found with the given name";
 
-  // @desc: recursively get the passed folder tree
+  /**
+   * @desc: recursively get the passed folder tree
+   * @param path the path to the folder
+   * @param excludedFolders the folders to exclude ( array of strings )
+   */
   static readFolderTree(
     path: string,
     excludedFolders: string[] = []
@@ -33,7 +37,10 @@ class FileReader {
     return folderTree;
   }
 
-  // @desc: print the tree got from the this.readFolderTree method
+  /**
+   * @desc: print the tree got from the this.readFolderTree method
+   * @param folderTree pass to this param the output of the function this.readFolderTree(path, excludedFolders)
+   */
   static printFolderTree(folderTree: nestedStringsArrays, level: number = 0) {
     let print_spaces: number = level - 1 > 0 ? level - 1 : 0;
     let indent_string: string = "|" + "    |".repeat(print_spaces) + "---";
@@ -72,6 +79,11 @@ class FileReader {
       .map((dirent) => dirent.name);
   }
 
+  /**
+   * @description read the body of a function inside a given file
+   * @param filePath the path to the fail that contains the function
+   * @param functionName the function name
+   */
   static readFunctionBody(filePath: string, functionName: string): string {
     let fileText: string = FileReader.readFile(filePath);
     let functions: string[] = fileText.split("function"); // get all the texts between the function words

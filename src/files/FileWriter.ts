@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { nestedStringsArrays } from "../types/customTypes";
+
 import { StringComposeWriter } from "./StringComposeWriter";
 import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
 import { FileReader } from "./FileReader";

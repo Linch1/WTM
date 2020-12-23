@@ -13,11 +13,11 @@ class VisualAux extends Visual {
     public writer: VisualWriter;
     public converter: VisualConverter;
 
-    constructor(public VISUALS_MAIN_FOLDER: string){
-        super(VISUALS_MAIN_FOLDER);
-        this.reader = new VisualReader(this.VISUALS_MAIN_FOLDER);
-        this.writer = new VisualWriter(this.VISUALS_MAIN_FOLDER);
-        this.converter = new VisualConverter(this.VISUALS_MAIN_FOLDER);
+    constructor(public VISUAL_FOLDER: string){
+        super(VISUAL_FOLDER);
+        this.reader = new VisualReader(this.VISUAL_FOLDER);
+        this.writer = new VisualWriter(this.VISUAL_FOLDER);
+        this.converter = new VisualConverter(this.VISUAL_FOLDER);
     }
 
 

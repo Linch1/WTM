@@ -1,10 +1,5 @@
-import { widgetAreaParams, nestedStringsArrays } from "../../types/customTypes";
-import { FileReader } from "../../files/FileReader";
-import { FileWriter } from "../../files/FileWriter";
-import { CommentsIdentifiers } from "../../comments-identifiers/CommentsIdentifiers";
-import { StringComposeWriter } from "../../files/StringComposeWriter";
-import { WpFunctionComposer } from "../../files/WpFunctionComposer";
-import { ThemeAux } from "../../theme/ThemeAux";
+
+import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { WidgetArea } from "./WidgetArea"
 
 class BulkWidgetArea{

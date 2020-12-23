@@ -1,11 +1,8 @@
-import { nestedStringsArrays } from "../types/customTypes";
 import { FileReader } from "../files/FileReader";
-import { FileWriter } from "../files/FileWriter";
+
 import { StringComposeWriter } from "../files/StringComposeWriter";
 
-import { ThemeWriter } from "./ThemeWriter";
-import { ThemeReader } from "./ThemeReader";
-import { ThemeComposer } from "./ThemeComposer";
+import { nestedStringsArrays } from "../files/types/types";
 
 class Theme {
   public themeStructure: nestedStringsArrays = [];
@@ -13,9 +10,15 @@ class Theme {
   public readonly IMPORT_FONTS_FUNCTION_NAME: string = "add_fonts";
   public readonly IMPORT_SCRIPTS_FUNCTION_NAME: string = "add_scripts";
 
-  public readonly ASSETS_CUSTOM_PATH: string = this.getInsideThemePath("assets/functions/");
-  public readonly ASSETS_IMPORT_FILE_PATH: string = this.getInsideThemeAssetsPath( "imports.php" );
-  public readonly THEME_FUNCTIONS_FILE: string = this.getInsideThemePath("functions.php");
+  public readonly ASSETS_CUSTOM_PATH: string = this.getInsideThemePath(
+    "assets/functions/"
+  );
+  public readonly ASSETS_IMPORT_FILE_PATH: string = this.getInsideThemeAssetsPath(
+    "imports.php"
+  );
+  public readonly THEME_FUNCTIONS_FILE: string = this.getInsideThemePath(
+    "functions.php"
+  );
 
   constructor(public THEME_MAIN_FOLDER: string) {
     this.themeStructure = FileReader.readFolderTree(THEME_MAIN_FOLDER);

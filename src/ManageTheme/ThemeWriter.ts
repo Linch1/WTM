@@ -1,11 +1,7 @@
-import { widgetAreaParams, postTypeParams, nestedStringsArrays, settingsPageParams } from "../types/customTypes";
-import { FileReader } from "../files/FileReader";
+
 import { FileWriter } from "../files/FileWriter";
 import { Theme } from "./Theme";
-import { ThemeReader } from "./ThemeReader";
 
-import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
-import { StringComposeWriter } from "../files/StringComposeWriter";
 import { WpFunctionComposer } from "../files/WpFunctionComposer";
 
 import { PostType } from "../custom-theme-parts/postTypes/PostType";

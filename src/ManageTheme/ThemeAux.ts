@@ -1,11 +1,7 @@
-import {nestedStringsArrays} from "../types/customTypes";
-import { FileReader } from "../files/FileReader";
-import { FileWriter } from "../files/FileWriter";
 
 import { Theme } from "./Theme";
 import { ThemeWriter } from "./ThemeWriter";
 import { ThemeReader } from "./ThemeReader";
-import { ThemeComposer } from "./ThemeComposer";
 
 /**
  * Initialize the Theme to manage
