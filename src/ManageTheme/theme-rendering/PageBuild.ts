@@ -7,6 +7,7 @@ import { pageTypes } from "./enums/enums";
 import { defaultJson, informationsJson } from "./types/types";
 import { WpFunctionComposer } from "../../files/WpFunctionComposer";
 import { CommentsIdentifiers } from "../../comments-identifiers/CommentsIdentifiers";
+import { throws } from "assert";
 
 class PageBuild {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -16,6 +17,9 @@ class PageBuild {
   public PAGE_TYPE: pageTypes = pageTypes.PAGE;
   public PATH = "";
   public DEFAULT_BUILD_PATH: string = "";
+  public PAGE_PREFIX: string = "";
+  public JSON_FOLDER_PATH = "";
+  public JSON_FILE_PATH: string = "";
 
   public readonly IDENTIFIERS_HTML_BLOCKS: string[] = ["BODY"]; /* pair */
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = "PAGE-NAME";
@@ -23,82 +27,60 @@ class PageBuild {
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = "PAGE-HEADER";
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = "PAGE-FOOTER";
 
-  public FILE_NAME: string = "WTM-TEMPLATE.php";
-  public JSON_NAME: string = "WTM.json";
+  public JSON_DEFAULT_DIR_PATH = this.themeAux.getInsideWTMPath("theme-rendering");
+  public JSON_DEFAULT_FILE_PATH = this.themeAux.getInsideWTMPath("theme-rendering", "default.json");
+  public JSON_DEFAULT_INFORMATIONS: defaultJson;
 
-  // public JSON_DEFAULT: defaultJson = JSON.parse(
-  //   FileReader.readFile("./default.json")
-  // );
-  public JSON_DEFAULT: defaultJson = {
-    "post": {
-        "header": "",
-        "footer": ""
-    },
-    "page": {
-        "header": "",
-        "footer": ""
-    }
-}
   public JSON_INFORMATIONS: informationsJson = {
-    include: [],
-    blocks: { BODY: { open: "", close: "" } },
+    blocks: { BODY: { open: "", close: "", include: [] } },
     name: "",
   };
 
-  constructor(public themeAux: ThemeAux) {}
-
-  /**
-   * @description creates the single/template directory
-   */
-  public createDirectory() {
-    let directory = this.getDirectory();
-    if (!FileReader.existsPath(directory))
-      FileWriter.createDirectory(directory);
-  }
-  /**
-   * @description get the path to the dircetory that contains the single/template
-   */
-  getDirectory(): string {
-    return this.themeAux.getInsideThemePath(
-      this.PATH,
-      this.PAGE_NAME.toLocaleLowerCase().split(" ").join("-")
+  constructor(public themeAux: ThemeAux) {
+    this.JSON_DEFAULT_INFORMATIONS = JSON.parse(
+      FileReader.readFile(this.JSON_DEFAULT_FILE_PATH)
     );
   }
+  
   /**
-   * @description get the path to a file inside the (single/template)'s directory
-   * @param file the file for which retrive the path
+   * @description create the needed file/directories
    */
-  public getInsideDirectory(file: string): string {
-    return StringComposeWriter.concatenatePaths(this.getDirectory(), file);
+  public initialize(){
+    FileWriter.createDirectory(this.themeAux.getInsideThemePath(this.PATH));
+    FileWriter.createDirectory(this.JSON_FOLDER_PATH);
+    FileWriter.createFile(this.JSON_FILE_PATH, ""); 
   }
-  /**
-   * @description get the absolute path to the main file of the single/template
-   */
-  public getPath(): string {
-    return this.getInsideDirectory(this.FILE_NAME);
-  }
-  /**
-   * @description returns the absolute path of the json file that contains the relevant informations of the single/template
-   */
-  public getJsonPath(): string {
-    return this.getInsideDirectory(this.JSON_NAME);
-  }
+
   /**
    * @description save the informations of the single/template
+   * - the function also **creates it if not exists**
    */
   public saveJson(): void {
-    FileWriter.writeFile(
-      this.getJsonPath(),
-      JSON.stringify(this.JSON_INFORMATIONS)
-    );
+    FileWriter.writeFile(this.JSON_FILE_PATH, JSON.stringify(this.JSON_INFORMATIONS));
+  }
+  public createJson(): void{
+    FileWriter.createDirectory(this.JSON_FOLDER_PATH);
+    FileWriter.createFile(this.JSON_FILE_PATH, ""); 
   }
 
+  /**
+   * @description get the absolute path to the main file of the single/template
+   * - the function also **creates it if not exists**
+   */
+  public getPath(): string {
+    return this.themeAux.getInsideThemePath(
+      this.PATH,
+      this.getFileName()
+    );
+  }
+  public getFileName(): string{
+    return this.PAGE_PREFIX + this.PAGE_NAME.toLocaleLowerCase().split(" ").join("-") + ".php"
+  }
 
   /**
    * @description create the single/template and populate it's header/footer with the default ones
    */
   public create(): void {
-    this.createDirectory();
     let defaultContent: string = FileReader.readFile(
       this.themeAux.getInsideThemePath(this.DEFAULT_BUILD_PATH)
     );
@@ -106,10 +88,10 @@ class PageBuild {
     let params: replaceAllParams = {};
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_NAME] = this.PAGE_NAME;
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_TYPE] = this.PAGE_TYPE;
-    params[this.IDENTIFIER_PLACEHOLDER_PAGE_HEADER] = this.JSON_DEFAULT[
+    params[this.IDENTIFIER_PLACEHOLDER_PAGE_HEADER] = this.JSON_DEFAULT_INFORMATIONS[
       this.PAGE_TYPE
     ].header;
-    params[this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER] = this.JSON_DEFAULT[
+    params[this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER] = this.JSON_DEFAULT_INFORMATIONS[
       this.PAGE_TYPE
     ].footer;
 
@@ -138,8 +120,42 @@ class PageBuild {
       CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[0],
       CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[1]
     );
-    this.JSON_INFORMATIONS.include.push(path);
+    this.JSON_INFORMATIONS.blocks[identifier_name].include.push(path);
     this.saveJson();
   }
+
+  /**
+   * @description add a block in the template/single ( like the BODY block  )
+   * - a block starts and ends with an _HTML comment identifier_
+   * @param identifier_name the parent of the block the create
+   * @param blockName the name of the block
+   * @param open how the block start
+   * @param close how the block end
+   */
+  public addBlock(identifier_name:string, blockName: string, open: string = "", close: string = ""){
+    if (!this.IDENTIFIERS_HTML_BLOCKS.includes(identifier_name))
+      throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
+    
+    let toAdd = `
+${open}
+${CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[0]}   
+${CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[1]}
+${close}
+`
+    StringComposeWriter.appendBeetweenChars(
+      this.getPath(),
+      toAdd,
+      CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[0],
+      CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[1]
+    );
+    this.JSON_INFORMATIONS.blocks[identifier_name].include.push(CommentsIdentifiers.getIdentifierHtml(blockName));
+    this.JSON_INFORMATIONS.blocks[blockName] = {
+      open: open, 
+      close: close,
+      include: []
+    };
+    this.saveJson();
+  }
+  
 }
 export { PageBuild };

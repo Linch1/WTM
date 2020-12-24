@@ -8,6 +8,7 @@ import { widgetAreaParams } from "./types/types";
 import { replaceAllParams } from "../../files/types/types";
 import { InterfacecustomPart } from "../InterfacecustomPart";
 import { CustomPart } from "../CustomPart";
+import { customPartPath, customPartType } from "../enums/enums";
 
 type params = widgetAreaParams;
 class WidgetArea extends CustomPart<params> {
@@ -20,11 +21,16 @@ class WidgetArea extends CustomPart<params> {
   constructor(public themeAux: ThemeAux, protected informations: params) {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.widgetAreaName;
+    this.CUSTOM_PART_TYPE = customPartType.WIDGET_AREA;
     this.FILE_NAME = "WTM-WIDGET-AREA.php";
-    this.JSON_NAME = "WTM.json";
+    
     this.IDENTIFIER_NAME = "WIDGET-AREA";
-    this.PATH = "custom-widget-areas/";
-    this.DEFAULT_BUILD_PATH = this.PATH + "default.php";
+    this.PATH = customPartPath.WIDGET_AREA;
+    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default.php");
+
+    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
+    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.initialize();
   }
 
   /**
@@ -32,7 +38,7 @@ class WidgetArea extends CustomPart<params> {
    */
   public create(skipIfExists: boolean = false): void {
     if (!this.validInformations()) throw new Error(this.ERR_NO_VALID_INFORMATIONS);
-    this.createDirectory();
+    
     let widgetAreaPath: string = this.getPath();
 
     if (

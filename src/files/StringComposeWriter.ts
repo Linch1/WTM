@@ -129,8 +129,7 @@ class StringComposeWriter {
       endChar,
       specificIdentifier
     );
-    console.log(startChar, endChar)
-    console.log(currentBetweenCharsContent)
+
     let currentFileContent: string = FileReader.readFile(filePath);
     let currentFileContentSIngleLine: string = StringComposeWriter.removeSpacesAndNewLines(
       currentFileContent
@@ -140,8 +139,8 @@ class StringComposeWriter {
       StringComposeWriter.reinsertSpacesAndNewlines(
         currentFileContent,
         currentFileContentSIngleLine.replace(
-          currentBetweenCharsContent,
-          currentBetweenCharsContent + text
+          specificIdentifier + startChar + currentBetweenCharsContent + endChar,
+          specificIdentifier + startChar + currentBetweenCharsContent + text + endChar
         )
       )
     );

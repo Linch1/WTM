@@ -8,6 +8,7 @@ import { postTypeParams } from "./types/types";
 import { replaceAllParams } from "../../files/types/types";
 import { InterfacecustomPart } from "../InterfacecustomPart";
 import { CustomPart } from "../CustomPart";
+import { customPartPath, customPartType } from "../enums/enums";
 
 type params = postTypeParams;
 class PostType  extends CustomPart<params> {
@@ -25,11 +26,14 @@ class PostType  extends CustomPart<params> {
   constructor(public themeAux: ThemeAux, protected informations: params) {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.postTypeName;
+    this.CUSTOM_PART_TYPE = customPartType.POST_TYPE;
     this.FILE_NAME = "WTM-POST-TYPE.php";
-    this.JSON_NAME = "WTM.json";
     this.IDENTIFIER_NAME = "POST-TYPES";
-    this.PATH = "custom-post-types/";
-    this.DEFAULT_BUILD_PATH = this.PATH + "default.php";
+    this.PATH = customPartPath.POST_TYPE;
+    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default.php");
+    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
+    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.initialize();
   }
 
   /**
@@ -37,7 +41,6 @@ class PostType  extends CustomPart<params> {
    */
   public create(): void {
     if (!this.validInformations()) throw new Error(this.ERR_NO_VALID_INFORMATIONS);
-    this.createDirectory();
 
     /* get the post type path*/
     let postTypePath: string = this.getPath();

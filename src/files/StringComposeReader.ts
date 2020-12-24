@@ -14,7 +14,7 @@ class StringComposeReader {
    * @param endChar the end character
    * @param specificIdentifier a specific word/phrase that idicate that the found thext is the right one ( in case there are more startChar in the same file )
    *
-   * @return string: the found text
+   * @returns string: the found text 
    *
    * @example
    * `

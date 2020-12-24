@@ -1,19 +1,31 @@
+import { Template } from "./ManageTheme/theme-rendering/Template";
 import { TestTheme } from "./Test/TestTheme";
 import { TestVisual } from "./Test/TestVisual";
 
 
 /* TEST FOR MANAGE THEME SINGLE/TEMPLATE
 */
-TestTheme.createSingle();
-TestTheme.includeFileInSingle();
-TestTheme.createTemplate();
-TestTheme.includeFileInTemplate();
 
-/* TEST FOR MANAGE CUSTOM THEME PARTES
+TestTheme.createThemeMenu(); 
 TestTheme.createThemePostType();
 TestTheme.createThemeWidgetArea();
 TestTheme.createThemeSettingsPage();
-TestTheme.createThemeMenu(); 
+
+
+TestTheme.createSingle();
+TestTheme.includeFileInSingle();
+TestTheme.addBlockInSingle();
+TestTheme.createTemplate();
+TestTheme.includeFileInTemplate();
+TestTheme.addBlockInTemplate();
+
+
+
+TestTheme.readTheme();
+
+
+/* TEST FOR MANAGE CUSTOM THEME PARTES
+
 */
 
 /* TEST FOR MANAGE CUSTOM VISUALS

@@ -17,9 +17,8 @@ type defaultJson = {
  * - Ex: `{ "BODY" { open: "", close: "" }}`
  */
 type informationsJson = {
-  include: string[];
   blocks: {
-    [key: string]: { open: string; close: string };
+    [key: string]: { open: string; close: string, include: string[] };
   };
   name: string;
 };

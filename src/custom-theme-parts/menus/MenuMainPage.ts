@@ -8,6 +8,7 @@ import { menuMainPageParams } from "./types/types";
 import { replaceAllParams } from "../../files/types/types";
 import { InterfacecustomPart } from "../InterfacecustomPart";
 import { CustomPart } from "../CustomPart";
+import { customPartPath, customPartType } from "../enums/enums";
 
 type params = menuMainPageParams;
 class MenuMainPage extends CustomPart<params> {
@@ -40,11 +41,17 @@ class MenuMainPage extends CustomPart<params> {
   constructor(public themeAux: ThemeAux, protected informations: params) {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.menuName;
+    this.CUSTOM_PART_TYPE = customPartType.MENU;
     this.FILE_NAME = "WTM-MAIN-PAGE.php";
-    this.JSON_NAME = "WTM.json";
     this.IDENTIFIER_NAME = "MENU";
-    this.PATH = "custom-menu/";
-    this.DEFAULT_BUILD_PATH = this.PATH + "default-mainpage.php";
+    this.PATH = customPartPath.MENU;
+    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default-mainpage.php");
+    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
+    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.setMenuSlug = CommentsIdentifiers.getIdentifierId(
+      this.getInformations.menuName,
+      false
+    );
   }
 
   /**
@@ -55,14 +62,33 @@ class MenuMainPage extends CustomPart<params> {
   }
 
   /**
+   * @description get the path to the dircetory that contains the custom part
+   */
+  getDirectory(): string {
+    return this.themeAux.getInsideThemeAssetsPath(
+      this.PATH,
+      this.getInformations.menuName
+    );
+  }
+  /**
+   * @description get the absolute path to the main file of the custom part
+   */
+  public getPath(): string {
+    return this.getInsideDirectory(`${this.CUSTOM_PART_NAME }-${this.FILE_NAME}`);
+  }
+  /**
+   * @description returns the absolute path of the json file that contains the relevant informations of the custom part
+   */
+  public getJsonDirectory(): string {
+    return this.JSON_PATH;
+  }
+
+  /**
    * @description create the file of the given menu (menu-{menuName}.php) if not exists ( and populate it with the default params )
    */
   public create(): void {
     if (!this.validInformations()) throw new Error(this.ERR_NO_VALID_INFORMATIONS);
-    this.setMenuSlug = CommentsIdentifiers.getIdentifierId(
-      this.getInformations.menuName,
-      false
-    );
+    
     let mainPagePath: string = this.getPath();
 
     if (

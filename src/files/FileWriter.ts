@@ -103,10 +103,20 @@ class FileWriter {
     }
   }
 
+  /**
+   * @description create the direcotires that don't exists from a given path
+   * @param path the path to analize for extract the directories to create
+   */
   static createDirectory(path: string): void {
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path);
+    let paths = path.split("/");
+    let currentPath = "";
+    for ( let singlePath of paths ){
+      currentPath = StringComposeWriter.concatenatePaths(currentPath, singlePath);
+      if (!fs.existsSync(currentPath)) {
+        fs.mkdirSync(currentPath);
+      }
     }
+    
   }
 
   static removeFile(path: string): void {

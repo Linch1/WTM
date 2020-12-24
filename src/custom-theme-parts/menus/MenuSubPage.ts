@@ -8,6 +8,7 @@ import { menuSubPageParams } from "./types/types";
 import { replaceAllParams } from "../../files/types/types";
 import { InterfacecustomPart } from "../InterfacecustomPart";
 import { CustomPart } from "../CustomPart";
+import { customPartPath, customPartType } from "../enums/enums";
 
 type params = menuSubPageParams;
 class MenuSubPage extends CustomPart<params> {
@@ -36,11 +37,13 @@ class MenuSubPage extends CustomPart<params> {
   constructor(public themeAux: ThemeAux, protected informations: params) {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.pageName;
+    this.CUSTOM_PART_TYPE = customPartType.MENU;
     this.FILE_NAME = "WTM-SUB-PAGE.php";
-    this.JSON_NAME = "WTM.json";
     this.IDENTIFIER_NAME = "MENU";
-    this.PATH = "custom-menu/";
-    this.DEFAULT_BUILD_PATH = this.PATH + "default-subpage.php";
+    this.PATH = customPartPath.MENU;
+    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default-subpage.php");
+    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
+    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
   }
 
   public get getMenuName(): string {
@@ -88,7 +91,7 @@ class MenuSubPage extends CustomPart<params> {
 
     let subPagePath: string = this.getPath();
 
-    if (FileReader.existsPath(subPagePath) && !skipIfExists)
+    if (FileReader.existsPath(subPagePath) && !this.getInformations.skipIfExists)
       throw new Error(this.ERR_ALREADY_PRESENT);
 
     let defaultContent: string = FileReader.readFile(

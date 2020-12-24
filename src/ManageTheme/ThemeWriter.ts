@@ -8,6 +8,7 @@ import { PostType } from "../custom-theme-parts/postTypes/PostType";
 import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
 import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
 import { Menu } from "../custom-theme-parts/menus/Menu";
+import { ThemeAux } from "./ThemeAux";
 
 /**
  * This class is used to perform the write actions
@@ -15,12 +16,10 @@ import { Menu } from "../custom-theme-parts/menus/Menu";
  * for example add an import line to functions.php
  * or create a new custom post type
  */
-class ThemeWriter extends Theme {
+class ThemeWriter {
   
 
-  constructor(public ThemeFolder: string) {
-    super(ThemeFolder);
-  }
+  constructor(public themeAux: ThemeAux) {}
 
 
   /**
@@ -30,8 +29,8 @@ class ThemeWriter extends Theme {
   public importStyle(stylePath: string): void {
     let importString: string = WpFunctionComposer.enqueueStyleFunction(stylePath); // get the wp syntax for import the style
     FileWriter.appendToFunctionBody(
-      this.ASSETS_IMPORT_FILE_PATH, // file path
-      this.IMPORT_STYLES_FUNCTION_NAME, // function name
+      this.themeAux.ASSETS_IMPORT_FILE_PATH, // file path
+      this.themeAux.IMPORT_STYLES_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
   }
@@ -42,8 +41,8 @@ class ThemeWriter extends Theme {
   public importScript(scriptPath: string): void {
     let importString: string = WpFunctionComposer.enqueueScriptFunction(scriptPath); // get the wp syntax for import the script
     FileWriter.appendToFunctionBody(
-      this.ASSETS_IMPORT_FILE_PATH, // file path
-      this.IMPORT_SCRIPTS_FUNCTION_NAME, // function name
+      this.themeAux.ASSETS_IMPORT_FILE_PATH, // file path
+      this.themeAux.IMPORT_SCRIPTS_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
   }
@@ -54,8 +53,8 @@ class ThemeWriter extends Theme {
   public importFont(fontUrl: string): void {
     let importString: string = WpFunctionComposer.enqueueStyleFunction(fontUrl); // get the wp syntax for import the style
     FileWriter.appendToFunctionBody(
-      this.ASSETS_IMPORT_FILE_PATH, // file path
-      this.IMPORT_FONTS_FUNCTION_NAME, // function name
+      this.themeAux.ASSETS_IMPORT_FILE_PATH, // file path
+      this.themeAux.IMPORT_FONTS_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
   }

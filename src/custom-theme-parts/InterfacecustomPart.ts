@@ -3,6 +3,10 @@ interface InterfacecustomPart {
   DEFAULT_BUILD_PATH: string;
 
   /**
+   * @description create the needed file/directories
+   */
+  initialize(): void;
+  /**
    * @description checks if the post types informations are valid, returns true or false
    */
   validInformations(): boolean;

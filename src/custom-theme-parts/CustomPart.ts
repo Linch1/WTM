@@ -6,19 +6,24 @@ import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
 import { WpFunctionComposer } from "../files/WpFunctionComposer";
+import { throws } from "assert";
+import { customPartType } from "./enums/enums";
 
-class CustomPart<T> implements InterfacecustomPart {
+class CustomPart<T extends {skipIfExists?: boolean;}> implements InterfacecustomPart {
   public readonly ERR_NO_VALID_INFORMATIONS =
     "ERR: the informations attribute of this class are not correctly initalized";
   public readonly ERR_ALREADY_PRESENT =
-    "ERROR: The custom part area already exists";
+    "ERR: The custom part area already exists";
+  public readonly ERR_INVALID_TYPE = "ERR: The custom part has an invalid type"
 
   public PATH: string = "";
   public DEFAULT_BUILD_PATH: string = "";
   protected FILE_NAME = "WTM-SETTINGS-PAGE.php";
-  protected JSON_NAME = "WTM.json";
+  protected JSON_PATH = "";
+  protected JSON_FILE_PATH = "";
   protected IDENTIFIER_NAME = "SETTINGS-PAGE";
   protected CUSTOM_PART_NAME = "";
+  protected CUSTOM_PART_TYPE: customPartType = customPartType.NONE
 
   /**
    * @description intialize the class
@@ -26,6 +31,14 @@ class CustomPart<T> implements InterfacecustomPart {
    * @param informations the field pageName should also be a valid function name
    */
   constructor(public themeAux: ThemeAux, protected informations: T) {}
+
+  /**
+   * @description create the needed file/directories
+   */
+  initialize(): void{
+    this.createJsonDirectory();
+    this.createDirectory();
+  }
 
   /**
    * @description checks if the post types informations are valid, returns true or false
@@ -61,10 +74,13 @@ class CustomPart<T> implements InterfacecustomPart {
    * @description get the path to the dircetory that contains the custom part
    */
   getDirectory(): string {
-    return this.themeAux.getInsideThemeAssetsPath(
-      this.PATH,
-      this.CUSTOM_PART_NAME
-    );
+    return this.themeAux.getInsideThemeAssetsPath(this.PATH);
+  }
+  /**
+   * @description creates the element directory
+   */
+  public createDirectory() {
+    FileWriter.createDirectory(this.getDirectory());
   }
   /**
    * @description get the path to a file inside the custom part's directory
@@ -77,13 +93,21 @@ class CustomPart<T> implements InterfacecustomPart {
    * @description get the absolute path to the main file of the custom part
    */
   public getPath(): string {
-    return this.getInsideDirectory(this.FILE_NAME);
+    return this.getInsideDirectory(
+      this.CUSTOM_PART_NAME + "-" + this.FILE_NAME
+    );
   }
   /**
    * @description returns the absolute path of the json file that contains the relevant informations of the custom part
    */
   public getJsonPath(): string {
-    return this.getInsideDirectory(this.JSON_NAME);
+    return this.JSON_FILE_PATH;
+  }
+  /**
+   * @description creates the json directory
+   */
+  public createJsonDirectory() {
+    FileWriter.createDirectory(this.JSON_PATH);
   }
   /**
    * @description save the informations of the custom part
@@ -94,29 +118,26 @@ class CustomPart<T> implements InterfacecustomPart {
       JSON.stringify(this.getInformations)
     );
   }
-  /**
-   * @description creates the element directory
-   */
-  public createDirectory() {
-    let directory = this.getDirectory();
-    if (!FileReader.existsPath(directory))
-      FileWriter.createDirectory(directory);
-  }
+  
 
   /**
    * @description import the current structure in the theme
    */
   public import() {
+    if(this.CUSTOM_PART_TYPE === customPartType.NONE) throw new Error(this.ERR_INVALID_TYPE);
     if (!this.validInformations())
       throw new Error(this.ERR_NO_VALID_INFORMATIONS);
+    let requireFunction = WpFunctionComposer.requirePhpFile(
+      StringComposeWriter.concatenatePaths(this.PATH, this.CUSTOM_PART_NAME)
+    );
     StringComposeWriter.appendBeetweenChars(
       this.themeAux.THEME_FUNCTIONS_FILE,
-      WpFunctionComposer.requirePhpFile(
-        StringComposeWriter.concatenatePaths(this.PATH, this.CUSTOM_PART_NAME)
-      ),
+      requireFunction,
       CommentsIdentifiers.getIdentifierImportPair(this.IDENTIFIER_NAME)[0],
       CommentsIdentifiers.getIdentifierImportPair(this.IDENTIFIER_NAME)[1]
     );
+    
+    this.themeAux.updateJsonFunctions(this.CUSTOM_PART_TYPE, requireFunction, -1, this.getInformations.skipIfExists);
   }
 
   create(): void {

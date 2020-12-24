@@ -8,12 +8,10 @@ import { settingsPageParams } from "./types/types";
 import { replaceAllParams } from "../../files/types/types";
 import { InterfacecustomPart } from "../InterfacecustomPart";
 import { CustomPart } from "../CustomPart";
+import { customPartPath, customPartType } from "../enums/enums";
 
 type params = settingsPageParams;
 class SettingsPage extends CustomPart<params> {
-
-  public readonly PATH = "custom-settings-page/";
-  public readonly DEFAULT_BUILD_PATH = this.PATH + "default.php";
 
   public readonly IDENTIFIER_SETTINGS_PAGE_SLUG = "SETTINGS-PAGE-SLUG";
   public readonly IDENTIFIER_SETTINGS_PAGE_NAME = "SETTINGS-PAGE-NAME";
@@ -34,9 +32,15 @@ class SettingsPage extends CustomPart<params> {
   constructor(public themeAux: ThemeAux, protected informations: params) {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.pageName;
+    this.CUSTOM_PART_TYPE = customPartType.SETTINGS_PAGE;
     this.FILE_NAME = "WTM-SETTINGS-PAGE.php";
-    this.JSON_NAME = "WTM.json";
+    this.PATH = customPartPath.SETTINGS_PAGE;
+    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default.php");
     this.IDENTIFIER_NAME = "SETTINGS-PAGE";
+
+    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
+    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.initialize();
   }
 
   /**
@@ -44,14 +48,13 @@ class SettingsPage extends CustomPart<params> {
    */
   public create(skipIfExists: boolean = false): void {
     if (!this.validInformations()) throw new Error(this.ERR_NO_VALID_INFORMATIONS);
-    this.createDirectory();
     this.SETTINGS_PAGE_SLUG = CommentsIdentifiers.getIdentifierId(
       this.getInformations.pageName,
       false
     );
     let settingsPagePath: string = this.getPath();
 
-    if (FileReader.existsPath(settingsPagePath) && !skipIfExists)
+    if (FileReader.existsPath(settingsPagePath) && !this.getInformations.skipIfExists)
       throw new Error(this.ERR_ALREADY_PRESENT);
 
     let defaultContent: string = FileReader.readFile(
