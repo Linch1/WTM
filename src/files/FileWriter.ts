@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
 import { StringComposeWriter } from "./StringComposeWriter";
-import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
+import { CommentsIdentifiers } from "../Identifiers/CommentsIdentifiers";
 import { FileReader } from "./FileReader";
 
 class FileWriter {

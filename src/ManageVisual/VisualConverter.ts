@@ -1,10 +1,10 @@
+import { renderTypes } from "../Enums/manageVisual.visual.type";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-
+import { visualIdentifiersJson } from "../Types/manageVisual.jsons";
 import { Visual } from "./Visual";
-import { renderTypes } from "./enums/enums"
-import { visualIdentifiersJson } from "./types/types";
+
 
 class VisualConverter extends Visual{
     

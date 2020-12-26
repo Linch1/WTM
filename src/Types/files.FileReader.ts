@@ -1,0 +1,1 @@
+export type nestedStringsArrays = string | string[] | nestedStringsArrays[];

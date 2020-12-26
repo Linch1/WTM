@@ -5,7 +5,8 @@ import { VisualAux } from "../ManageVisual/VisualAux";
 import { VisualWriter } from "../ManageVisual/VisualWriter";
 import { VisualReader } from "../ManageVisual/VisualReader";
 import { VisualConverter } from "../ManageVisual/VisualConverter";
-import { renderTypes } from "../ManageVisual/enums/enums";
+import { renderTypes } from "../Enums/manageVisual.visual.type";
+
 
 
 let testVisual = "/home/pero/projects/WPThemeManager/visual/testVisual";

@@ -2,18 +2,20 @@
 
 import { ThemeAux } from "./ThemeAux";
 
-import { PostType } from "../custom-theme-parts/postTypes/PostType";
-import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
-import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
-import { MenuMainPage } from "../custom-theme-parts/menus/MenuMainPage";
-import { MenuSubPage } from "../custom-theme-parts/menus/MenuSubPage";
-import { Menu } from "../custom-theme-parts/menus/Menu";
-import { postTypeParams } from "../custom-theme-parts/postTypes/types/types";
-import { widgetAreaParams } from "../custom-theme-parts/widgetAreas/types/types";
-import { settingsPageParams } from "../custom-theme-parts/settingsPages/types/types";
-import { menuMainPageParams, menuSubPageParams } from "../custom-theme-parts/menus/types/types";
-import { Single } from "./theme-rendering/Single";
-import { Template } from "./theme-rendering/Template";
+import { PostType } from "../Entities/wp/postTypes/PostType";
+import { WidgetArea } from "../Entities/wp/widgetAreas/WidgetArea";
+import { SettingsPage } from "../Entities/wp/settingsPages/SettingsPage";
+import { MenuMainPage } from "../Entities/wp/menus/MenuMainPage";
+import { MenuSubPage } from "../Entities/wp/menus/MenuSubPage";
+import { Menu } from "../Entities/wp/menus/Menu";
+
+import { Single } from "../Entities/visual/Single";
+import { Template } from "../Entities/visual/Template";
+import { postTypeParams } from "../Types/entity.wp.postType";
+import { widgetAreaParams } from "../Types/entity.wp.widgetArea";
+import { settingsPageParams } from "../Types/entity.wp.settingsPage";
+import { menuMainPageParams } from "../Types/entity.wp.menuMainPage";
+import { menuSubPageParams } from "../Types/entity.wp.menuSubPage";
 /**
  * This class is used to build objects like a custom post type ( PostType )
  * or a widgetArea and other relative to the Theme

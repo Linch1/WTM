@@ -1,25 +1,23 @@
-import { customPartPath } from "../custom-theme-parts/enums/enums";
-import { Menu } from "../custom-theme-parts/menus/Menu";
-import { MenuMainPage } from "../custom-theme-parts/menus/MenuMainPage";
-import { MenuSubPage } from "../custom-theme-parts/menus/MenuSubPage";
-import {
-  menuMainPageParams,
-  menuSubPageParams,
-} from "../custom-theme-parts/menus/types/types";
-import { PostType } from "../custom-theme-parts/postTypes/PostType";
-import { postTypeParams } from "../custom-theme-parts/postTypes/types/types";
-import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
-import { settingsPageParams } from "../custom-theme-parts/settingsPages/types/types";
-import { widgetAreaParams } from "../custom-theme-parts/widgetAreas/types/types";
-import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
+import { Menu } from "../Entities/wp/menus/Menu";
+import { MenuMainPage } from "../Entities/wp/menus/MenuMainPage";
+import { MenuSubPage } from "../Entities/wp/menus/MenuSubPage";
+import { PostType } from "../Entities/wp/postTypes/PostType";
+import { SettingsPage } from "../Entities/wp/settingsPages/SettingsPage";
+import { WidgetArea } from "../Entities/wp/widgetAreas/WidgetArea";
+import { pagePath } from "../Enums/entities.visual.path";
+import { customPartPath } from "../Enums/entities.wp.path";
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { pagePath } from "./theme-rendering/enums/enums";
-import { Single } from "./theme-rendering/Single";
-import { Template } from "./theme-rendering/Template";
-import { informationsJson } from "./theme-rendering/types/types";
+import { informationsJson } from "../Types/entity.visual.jsons";
+import { menuMainPageParams } from "../Types/entity.wp.menuMainPage";
+import { menuSubPageParams } from "../Types/entity.wp.menuSubPage";
+import { postTypeParams } from "../Types/entity.wp.postType";
+import { settingsPageParams } from "../Types/entity.wp.settingsPage";
+import { widgetAreaParams } from "../Types/entity.wp.widgetArea";
+import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
+import { Single } from "../Entities/visual/Single";
+import { Template } from "../Entities/visual/Template";
 import { ThemeAux } from "./ThemeAux";
-import { functionsJson, importsJson } from "./types/types";
 
 /**
  * This class is used to perform the read actions on the Theme

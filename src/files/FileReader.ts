@@ -1,6 +1,6 @@
 import * as fs from "fs";
+import { nestedStringsArrays } from "../Types/files.FileReader";
 
-import { nestedStringsArrays } from "./types/types";
 
 class FileReader {
   static readonly NoFunctionFoundErr =

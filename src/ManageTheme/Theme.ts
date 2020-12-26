@@ -1,13 +1,11 @@
-import { throws } from "assert";
-import { customPartType } from "../custom-theme-parts/enums/enums";
+import { customPartType } from "../Enums/entities.wp.type";
+import { functionsJsonKeys, importsJsonKeys } from "../Enums/manageTheme.jsons";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
-
 import { StringComposeWriter } from "../files/StringComposeWriter";
+import { nestedStringsArrays } from "../Types/files.FileReader";
+import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
 
-import { nestedStringsArrays } from "../files/types/types";
-import { functionsJsonKeys, importsJsonKeys } from "./enums/enums";
-import { functionsJson, importsJson } from "./types/types";
 
 class Theme {
   public ERR_PATH_ALREADY_PRESERNT = "ERR: The given path is already required/imported"

@@ -1,6 +1,6 @@
 
 import { StringComposeWriter } from "./StringComposeWriter";
-import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
+import { CommentsIdentifiers } from "../Identifiers/CommentsIdentifiers";
 
 class WpFunctionComposer {
   static IDENTIFIER_IMPORTED =

@@ -4,10 +4,10 @@ import { Theme } from "./Theme";
 
 import { WpFunctionComposer } from "../files/WpFunctionComposer";
 
-import { PostType } from "../custom-theme-parts/postTypes/PostType";
-import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
-import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
-import { Menu } from "../custom-theme-parts/menus/Menu";
+import { PostType } from "../Entities/wp/postTypes/PostType";
+import { WidgetArea } from "../Entities/wp/widgetAreas/WidgetArea";
+import { SettingsPage } from "../Entities/wp/settingsPages/SettingsPage";
+import { Menu } from "../Entities/wp/menus/Menu";
 import { ThemeAux } from "./ThemeAux";
 
 /**

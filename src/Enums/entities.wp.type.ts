@@ -1,0 +1,8 @@
+export enum customPartType {
+  NONE = "NONE",
+  WIDGET_AREA = "WIDGET-AREA",
+  POST_TYPE = "POST-TYPES",
+  MENU = "MENU",
+  SETTINGS_PAGE = "SETTINGS-PAGE",
+  WIDGET = "WIDGETS",
+}

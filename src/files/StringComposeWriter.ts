@@ -3,8 +3,9 @@ import { FileReader } from "./FileReader";
 import { FileWriter } from "./FileWriter";
 import * as prettier from "prettier";
 import { StringComposeReader } from "./StringComposeReader";
-import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
-import { replaceAllParams } from "./types/types";
+import { CommentsIdentifiers } from "../Identifiers/CommentsIdentifiers";
+import { replaceAllParams } from "../Types/files.StringComposerWriter";
+
 
 class StringComposeWriter {
   /**

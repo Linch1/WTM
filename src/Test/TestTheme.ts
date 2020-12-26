@@ -2,15 +2,15 @@ import { ThemeAux } from "../ManageTheme/ThemeAux";
 import { ThemeReader } from "../ManageTheme/ThemeReader";
 import { ThemeWriter } from "../ManageTheme/ThemeWriter";
 import { ThemeComposer } from "../ManageTheme/ThemeComposer";
-import { Single } from "../ManageTheme/theme-rendering/Single";
-import { Template } from "../ManageTheme/theme-rendering/Template";
+import { Single } from "../Entities/visual/Single";
+import { Template } from "../Entities/visual/Template";
 
-import { PostType } from "../custom-theme-parts/postTypes/PostType";
-import { WidgetArea } from "../custom-theme-parts/widgetAreas/WidgetArea";
-import { SettingsPage } from "../custom-theme-parts/settingsPages/SettingsPage";
-import { MenuMainPage } from "../custom-theme-parts/menus/MenuMainPage";
-import { MenuSubPage } from "../custom-theme-parts/menus/MenuSubPage";
-import { Menu } from "../custom-theme-parts/menus/Menu";
+import { PostType } from "../Entities/wp/postTypes/PostType";
+import { WidgetArea } from "../Entities/wp/widgetAreas/WidgetArea";
+import { SettingsPage } from "../Entities/wp/settingsPages/SettingsPage";
+import { MenuMainPage } from "../Entities/wp/menus/MenuMainPage";
+import { MenuSubPage } from "../Entities/wp/menus/MenuSubPage";
+import { Menu } from "../Entities/wp/menus/Menu";
 
 let themePath: string = "/home/pero/Scrivania/blankslate1";
 let initalizer: ThemeAux = new ThemeAux(themePath);

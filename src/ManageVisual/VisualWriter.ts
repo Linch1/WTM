@@ -1,13 +1,9 @@
 import { FileWriter } from "../files/FileWriter";
 import { FileReader } from "../files/FileReader";
-import { StringComposeWriter } from "../files/StringComposeWriter";
 import { Visual } from "./Visual";
-import { CommentsIdentifiers } from "../comments-identifiers/CommentsIdentifiers";
-
-import { CONNREFUSED } from "dns";
-import { throws } from "assert";
-import { renderTypes } from "./enums/enums"
-import { visualIdentifiersJson } from "./types/types";
+import { CommentsIdentifiers } from "../Identifiers/CommentsIdentifiers";
+import { visualIdentifiersJson } from "../Types/manageVisual.jsons";
+import { renderTypes } from "../Enums/manageVisual.visual.type";
 
 class VisualWriter extends Visual {
   constructor(public VISUALS_MAIN_FOLDER: string) {
