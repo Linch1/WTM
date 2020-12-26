@@ -1,19 +1,21 @@
 
 import { StringComposeWriter } from "../files/StringComposeWriter";
+import { VisualWriter } from "../Entities/visual/VisualWriter";
+import { VisualReader } from "../Entities/visual/VisualReader";
+import { VisualConverter } from "../Entities/visual/VisualConverter";
+import { renderTypes } from "../Enums/entity.visual.renderType";
+import { Visual } from "../Entities/visual/Visual";
+import { BulkVisual } from "../Entities/visual/BulkVisual";
 
-import { VisualAux } from "../ManageVisual/VisualAux";
-import { VisualWriter } from "../ManageVisual/VisualWriter";
-import { VisualReader } from "../ManageVisual/VisualReader";
-import { VisualConverter } from "../ManageVisual/VisualConverter";
-import { renderTypes } from "../Enums/manageVisual.visual.type";
 
+let visualsFolder = "/home/pero/projects/WPThemeManager/visual"
+let testVisual = visualsFolder + "/testVisual";
+let visual: Visual = new Visual(testVisual);
+let visualWr: VisualWriter = visual.writer;
+let visualRd: VisualReader = visual.reader;
+let visualCv: VisualConverter= visual.converter;
 
-
-let testVisual = "/home/pero/projects/WPThemeManager/visual/testVisual";
-let visualIntializer: VisualAux = new VisualAux(testVisual);
-let visualWr: VisualWriter = visualIntializer.writer;
-let visualRd: VisualReader = visualIntializer.reader;
-let visualCv: VisualConverter= visualIntializer.converter;
+let bulkVisual: BulkVisual = new BulkVisual(visualsFolder);
 
 let StrCompW = StringComposeWriter;
 
@@ -48,21 +50,31 @@ class TestVisual {
 </body>
 
 </html>`; 
-    visualWr.setHtml(html);
+    visualWr.editDefaultHtml(html);
     this.log("Edited visual dfault.php HTML");
   }
   static visualRenderDefault(){
-    visualCv.renderType(renderTypes.HTML);
+    visualCv.render(renderTypes.HTML);
     this.log("Rendering HTML identifiers values")
   }
   static visualRenderAcf(){
-    visualCv.renderType(renderTypes.ACF);
+    visualCv.render(renderTypes.ACF);
     this.log("Rendering ACF identifiers values")
   }
   static visualPopulateIdentfiers(){
     visualWr.populateIdentifiers();
-    visualWr.populateIdentifiersAcf();
     this.log("Populated found identifiers")
+  }
+  static visualRead(){
+    visualRd.read();
+    console.log(visual.JSON_FILE_CONTENT);
+  }
+
+  static bulkGetAllVisuals(){
+    for ( let visual of bulkVisual.getAllVisuals()){
+      console.log(visual.JSON_FILE_CONTENT);
+    }
+    console.log();
   }
 
 

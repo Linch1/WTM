@@ -9,8 +9,8 @@ import { MenuMainPage } from "../Entities/wp/menus/MenuMainPage";
 import { MenuSubPage } from "../Entities/wp/menus/MenuSubPage";
 import { Menu } from "../Entities/wp/menus/Menu";
 
-import { Single } from "../Entities/visual/Single";
-import { Template } from "../Entities/visual/Template";
+import { Single } from "../Entities/rendering/Single";
+import { Template } from "../Entities/rendering/Template";
 import { postTypeParams } from "../Types/entity.wp.postType";
 import { widgetAreaParams } from "../Types/entity.wp.widgetArea";
 import { settingsPageParams } from "../Types/entity.wp.settingsPage";

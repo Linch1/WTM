@@ -8,15 +8,15 @@ import { pagePath } from "../Enums/entities.visual.path";
 import { customPartPath } from "../Enums/entities.wp.path";
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { informationsJson } from "../Types/entity.visual.jsons";
+import { informationsJson } from "../Types/entity.rendering.jsons";
 import { menuMainPageParams } from "../Types/entity.wp.menuMainPage";
 import { menuSubPageParams } from "../Types/entity.wp.menuSubPage";
 import { postTypeParams } from "../Types/entity.wp.postType";
 import { settingsPageParams } from "../Types/entity.wp.settingsPage";
 import { widgetAreaParams } from "../Types/entity.wp.widgetArea";
 import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
-import { Single } from "../Entities/visual/Single";
-import { Template } from "../Entities/visual/Template";
+import { Single } from "../Entities/rendering/Single";
+import { Template } from "../Entities/rendering/Template";
 import { ThemeAux } from "./ThemeAux";
 
 /**

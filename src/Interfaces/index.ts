@@ -1,2 +1,2 @@
 export * from './entity.wp.InterfaceGeneralWpEntity'
-export * from './entity.visual.InterfaceGeneralVisual'
+export * from './entity.rendering.InterfaceGeneralPage'

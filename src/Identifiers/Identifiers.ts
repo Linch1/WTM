@@ -59,12 +59,12 @@ export class Identifiers {
    * @param identifier the identifier to analyze
    * @returns array of strings [IDENTIFIER_TYPE, IDENTIFIER_NAME];
    */
-  static getIdentifierTypeName(identifier: string): string[] {
+  static getIdentifierTypeName(identifier: string): [identifierType , string] {
     identifier = identifier.substring(4, identifier.length - 1);
     let splitted = identifier.split("-");
     let TYPE = (splitted.shift() == undefined
       ? ""
-      : splitted.shift()) as string;
+      : splitted.shift()) as identifierType;
     let NAME = splitted.join("-");
     return [TYPE, NAME];
   }

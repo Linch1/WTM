@@ -1,8 +1,8 @@
 import { ValidateIdentifierMethods } from "../Decorators";
 import { identifierType } from "../Enums/identifiers.type";
-import { InterfaceGeneralIdentifier } from "../Interfaces/identifiers.InterfaceGeneralIdentifier";
+import { AbstractGeneralIdentifier } from "../Abstracts/identifiers.AbstractGeneralIdentifier";
 
-export class GeneralIdentifier implements InterfaceGeneralIdentifier {
+export class GeneralIdentifier implements AbstractGeneralIdentifier {
   static ERR_MISSING_IDENTIFIER_TYPE =
     "The IDENTIFIER_TYPE was not correctly initalized, it is undefined on empty";
   static ERR_INVALID_IDENTIFIER_TYPE = "The identifier type is not recognized"

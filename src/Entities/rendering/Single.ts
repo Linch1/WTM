@@ -1,12 +1,9 @@
-import { FileWriter } from "../../files/FileWriter";
-import { FileReader } from "../../files/FileReader";
-import { StringComposeWriter } from "../../files/StringComposeWriter";
 import { ThemeAux } from "../../ManageTheme/ThemeAux";
-import { GeneralVisual } from "./GeneralVisual";
+import { GeneralPageEntity } from "./GeneralPageEntity";
 import { pageTypes } from "../../Enums/entities.visual.type";
 import { pagePath } from "../../Enums/entities.visual.path";
 
-class Single extends GeneralVisual {
+class Single extends GeneralPageEntity {
   constructor(public themeAux: ThemeAux, pageName: string) {
     super(themeAux);
     this.PAGE_NAME = pageName;

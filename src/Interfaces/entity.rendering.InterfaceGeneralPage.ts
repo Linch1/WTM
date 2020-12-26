@@ -1,7 +1,7 @@
 import { pageTypes } from "../Enums/entities.visual.type";
-import { defaultJson, informationsJson } from "../Types/entity.visual.jsons";
+import { defaultJson, informationsJson } from "../Types/entity.rendering.jsons";
 
-export interface InterfaceGeneralVisual {
+export interface InterfaceGeneralPage {
 
     /*
     -- RAISED ERRORS --

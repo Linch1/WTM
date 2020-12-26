@@ -1,4 +1,4 @@
-export * from './entity.visual.jsons';
+export * from './entity.rendering.jsons';
 export * from './entity.wp.menuMainPage';
 export * from './entity.wp.menuSubPage';
 export * from './entity.wp.postType';
@@ -7,4 +7,4 @@ export * from './entity.wp.widgetArea';
 export * from './files.FileReader';
 export * from './files.StringComposerWriter';
 export * from './manageTheme.jsons';
-export * from './manageVisual.jsons';
+export * from './entity.visual.jsons';

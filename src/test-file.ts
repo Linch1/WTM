@@ -1,6 +1,3 @@
-import { Template } from "./Entities/visual/Template";
-import { GeneralIdentifier } from "./Identifiers/GeneralIdentfier";
-import { IdentifierId } from "./Identifiers/IdentifierId";
 import { TestTheme } from "./Test/TestTheme";
 import { TestVisual } from "./Test/TestVisual";
 
@@ -23,11 +20,11 @@ TestTheme.createThemeMenu();
 TestTheme.createThemePostType();
 TestTheme.createThemeWidgetArea();
 TestTheme.createThemeSettingsPage();
-
+TestTheme.readTheme();
 
 */
 
-TestTheme.readTheme();
+
 /* TEST FOR MANAGE CUSTOM VISUALS
 
 TestVisual.VisualCreate();
@@ -35,6 +32,10 @@ TestVisual.VisualEditHtml();
 TestVisual.visualPopulateIdentfiers();
 TestVisual.visualRenderDefault();
 TestVisual.visualRenderAcf();
-
+TestVisual.visualRead();
 
 */
+
+
+
+TestVisual.bulkGetAllVisuals();

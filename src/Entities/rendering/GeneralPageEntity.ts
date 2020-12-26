@@ -4,12 +4,12 @@ import { StringComposeWriter } from "../../files/StringComposeWriter";
 import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { WpFunctionComposer } from "../../files/WpFunctionComposer";
 import { pageTypes } from "../../Enums/entities.visual.type";
-import { defaultJson, informationsJson } from "../../Types/entity.visual.jsons";
+import { defaultJson, informationsJson } from "../../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../../Types/files.StringComposerWriter";
-import { InterfaceGeneralVisual } from "../../Interfaces/entity.visual.InterfaceGeneralVisual";
+import { InterfaceGeneralPage } from "../../Interfaces/entity.rendering.InterfaceGeneralPage";
 import { IdentifierHtml } from "../../Identifiers/IdentifierHtml";
 
-export class GeneralVisual implements InterfaceGeneralVisual {
+export class GeneralPageEntity implements InterfaceGeneralPage {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
     "ERR: The passed Html block identified by the passed identifier_name doesn't exists in the (template/single) file";
 

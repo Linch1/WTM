@@ -2,8 +2,8 @@ import { ThemeAux } from "../ManageTheme/ThemeAux";
 import { ThemeReader } from "../ManageTheme/ThemeReader";
 import { ThemeWriter } from "../ManageTheme/ThemeWriter";
 import { ThemeComposer } from "../ManageTheme/ThemeComposer";
-import { Single } from "../Entities/visual/Single";
-import { Template } from "../Entities/visual/Template";
+import { Single } from "../Entities/rendering/Single";
+import { Template } from "../Entities/rendering/Template";
 
 import { PostType } from "../Entities/wp/postTypes/PostType";
 import { WidgetArea } from "../Entities/wp/widgetAreas/WidgetArea";

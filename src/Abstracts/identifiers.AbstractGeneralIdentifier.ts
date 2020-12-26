@@ -1,6 +1,6 @@
 import { identifierType } from "../Enums/identifiers.type";
 
-export abstract class InterfaceGeneralIdentifier {
+export abstract class AbstractGeneralIdentifier {
   static ERR_INVALID_IDENTIFIER_TYPE =
     "The IDENTIFIER_TYPE was not correctly initalized, it is undefined on empty";
   static ERR_INVALID_NAME = "The passed name was empty";
