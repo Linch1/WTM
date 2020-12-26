@@ -1,8 +1,10 @@
 import * as fs from "fs";
 
 import { StringComposeWriter } from "./StringComposeWriter";
-import { CommentsIdentifiers } from "../Identifiers/CommentsIdentifiers";
 import { FileReader } from "./FileReader";
+import { Identifiers } from "../Identifiers/Identifiers";
+import { GeneralIdentifier } from "../Identifiers/GeneralIdentfier";
+import { identifierType } from "../Enums";
 
 class FileWriter {
   static EMPTY_TEXT: string = "ERR: Empty text in the body";
@@ -47,38 +49,6 @@ class FileWriter {
       ? `${functionBody}${toAppend}`
       : `${functionBody};${toAppend}`; // add the file importation
     this.editFileFunction(filePath, functionBody, functionBodyNew); // edit the file
-  }
-
-  /**
-   * 
-   * @param filePath the path of the file that contains the text to edit
-   * @param identifierType The type of the identifier that contains the text to edit
-   * @param identifierName The name of the identifier 
-   * @param toAppend The text to add
-   * @return void
-   */
-  static addAfterCommentIdentifierPair(
-    filePath: string,
-    identifierType: string,
-    identifierName: string,
-    toAppend: string
-  ): void {
-    let CI = CommentsIdentifiers;
-    let idIdentifiers: string[];
-    if (Object.keys(CI.IDENTIFIERS).includes(identifierType)) {
-      // @ts-ignore
-      idIdentifiers = CI.IDENTIFIERS[identifierType][
-        CI.IDENTIFIER_FUNCTION_POS
-      ](identifierName);
-    } else {
-      throw new Error(CI.NoIdentifierFoundWithThatType);
-    }
-    StringComposeWriter.appendBeetweenChars(
-      filePath,
-      toAppend,
-      idIdentifiers[0],
-      idIdentifiers[1]
-    );
   }
 
   static deleteFolderRecursive(path: string): void {

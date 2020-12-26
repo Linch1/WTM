@@ -1,8 +1,6 @@
 import { FileReader } from "../../../files/FileReader";
 import { FileWriter } from "../../../files/FileWriter";
-import { CommentsIdentifiers } from "../../../Identifiers/CommentsIdentifiers";
 import { StringComposeWriter } from "../../../files/StringComposeWriter";
-import { WpFunctionComposer } from "../../../files/WpFunctionComposer";
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
 import { customPartType } from "../../../Enums/entities.wp.type";
 import { customPartPath } from "../../../Enums/entities.wp.path";

@@ -1,6 +1,5 @@
 import { FileReader } from "../../../files/FileReader";
 import { FileWriter } from "../../../files/FileWriter";
-import { CommentsIdentifiers } from "../../../Identifiers/CommentsIdentifiers";
 import { StringComposeWriter } from "../../../files/StringComposeWriter";
 import { WpFunctionComposer } from "../../../files/WpFunctionComposer";
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
@@ -9,6 +8,7 @@ import { customPartType } from "../../../Enums/entities.wp.type";
 import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
+import { IdentifierId } from "../../../Identifiers/IdentifierId";
 
 type params = menuMainPageParams;
 class MenuMainPage extends GeneralWpEntity<params> {
@@ -48,7 +48,7 @@ class MenuMainPage extends GeneralWpEntity<params> {
     this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default-mainpage.php");
     this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
     this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
-    this.setMenuSlug = CommentsIdentifiers.getIdentifierId(
+    this.setMenuSlug = IdentifierId.getIdentifier(
       this.getInformations.menuName,
       false
     );

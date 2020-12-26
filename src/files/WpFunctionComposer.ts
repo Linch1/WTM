@@ -1,12 +1,10 @@
 
+import { identifierType } from "../Enums";
+import { Identifiers } from "../Identifiers/Identifiers";
 import { StringComposeWriter } from "./StringComposeWriter";
-import { CommentsIdentifiers } from "../Identifiers/CommentsIdentifiers";
 
 class WpFunctionComposer {
-  static IDENTIFIER_IMPORTED =
-    CommentsIdentifiers.IDENTIFIERS["IMPORTED"][
-      CommentsIdentifiers.IDENTIFIER_KEYWORD_POS
-    ];
+  static IDENTIFIER_IMPORTED = Identifiers.getIdentifier(identifierType.IMPORTED);
   /**
    * @description return the syntax of the function for correctly import a style file in wordpress
    * @param fileToImport the file path to import in the WP theme

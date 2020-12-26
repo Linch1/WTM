@@ -97,6 +97,7 @@ class TestTheme {
   }
   static addBlockInSingle(){
     single.addBlock("BODY", "PRIMO-DIV", "<div id='ciao' class='come' >", "</div>");
+    single.addBlock("PRIMO-DIV", "SECONDO-DIV", "<div id='ciao-SECONDO' class='come' >", "</div>");
   }
 
   static createTemplate(){

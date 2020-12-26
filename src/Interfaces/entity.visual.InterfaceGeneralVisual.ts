@@ -38,8 +38,6 @@ export interface InterfaceGeneralVisual {
 
   saveJson(): void;
 
-  createJson(): void;
-
   getPath(): string;
 
   getFileName(): string;

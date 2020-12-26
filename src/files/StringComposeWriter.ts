@@ -3,8 +3,9 @@ import { FileReader } from "./FileReader";
 import { FileWriter } from "./FileWriter";
 import * as prettier from "prettier";
 import { StringComposeReader } from "./StringComposeReader";
-import { CommentsIdentifiers } from "../Identifiers/CommentsIdentifiers";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
+import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
+import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
 
 
 class StringComposeWriter {
@@ -202,7 +203,7 @@ class StringComposeWriter {
 
     Object.keys(params).forEach(placeholder => {
       let newText = params[placeholder];
-      placeholder = CommentsIdentifiers.getIdentifierPlaceholder(
+      placeholder = IdentifierPlaceholder.getIdentifier(
         placeholder,
         false
       );
@@ -224,9 +225,11 @@ class StringComposeWriter {
 
     Object.keys(params).forEach(placeholder => {
       let newText = params[placeholder];
-      placeholder = CommentsIdentifiers.getIdentifierHtml(
-        placeholder
+      placeholder = IdentifierHtml.getIdentifier(
+        placeholder,
+        false
       );
+      console.log(placeholder)
       text = text.split(placeholder).join(newText);
     });
 

@@ -1,10 +1,10 @@
 import { StringComposeWriter } from "../../files/StringComposeWriter";
 import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { FileWriter } from "../../files/FileWriter";
-import { CommentsIdentifiers } from "../../Identifiers/CommentsIdentifiers";
 import { WpFunctionComposer } from "../../files/WpFunctionComposer";
 import { customPartType } from "../../Enums/entities.wp.type";
 import { InterfaceWpEntity } from "../../Interfaces/entity.wp.InterfaceGeneralWpEntity";
+import { IdentifierImport } from "../../Identifiers/IdentifierImport";
 
 export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements InterfaceWpEntity {
   
@@ -117,8 +117,8 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
     StringComposeWriter.appendBeetweenChars(
       this.themeAux.THEME_FUNCTIONS_FILE,
       requireFunction,
-      CommentsIdentifiers.getIdentifierImportPair(this.IDENTIFIER_NAME)[0],
-      CommentsIdentifiers.getIdentifierImportPair(this.IDENTIFIER_NAME)[1]
+      IdentifierImport.getIdentifierPairJsComment(this.IDENTIFIER_NAME)[0],
+      IdentifierImport.getIdentifierPairJsComment(this.IDENTIFIER_NAME)[1]
     );
     this.themeAux.updateJsonFunctions(this.CUSTOM_PART_TYPE, requireFunction, -1, this.getInformations.skipIfExists);
   }

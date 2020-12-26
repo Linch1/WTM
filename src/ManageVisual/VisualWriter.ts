@@ -1,9 +1,9 @@
 import { FileWriter } from "../files/FileWriter";
 import { FileReader } from "../files/FileReader";
 import { Visual } from "./Visual";
-import { CommentsIdentifiers } from "../Identifiers/CommentsIdentifiers";
 import { visualIdentifiersJson } from "../Types/manageVisual.jsons";
 import { renderTypes } from "../Enums/manageVisual.visual.type";
+import { Identifiers } from "../Identifiers/Identifiers";
 
 class VisualWriter extends Visual {
   constructor(public VISUALS_MAIN_FOLDER: string) {
@@ -49,12 +49,12 @@ class VisualWriter extends Visual {
    */
   public populateIdentifiers() {
     let identifiersJson: visualIdentifiersJson = {};
-    let identfiers: string[] = CommentsIdentifiers.getContainedIdentifiers(
+    let identfiers: string[] = Identifiers.getContainedIdentifiers(
       this.getDefaultFilePath()
     );
 
     for (let identifier of identfiers) {
-      let [TYPE, NAME] = CommentsIdentifiers.getIdentifierTypeName(identifier);
+      let [TYPE, NAME] = Identifiers.getIdentifierTypeName(identifier);
       if (!identifiersJson[TYPE]) identifiersJson[TYPE] = {};
       identifiersJson[TYPE][NAME] = "";
     }
@@ -75,12 +75,12 @@ class VisualWriter extends Visual {
     let identifiersJson: visualIdentifiersJson = JSON.parse(
       FileReader.readFile(this.getIdentifiersFilePath())
     );
-    let identfiers: string[] = CommentsIdentifiers.getContainedIdentifiers(
+    let identfiers: string[] = Identifiers.getContainedIdentifiers(
       this.getDefaultFilePath()
     );
 
     for (let identifier of identfiers) {
-      let [TYPE, NAME] = CommentsIdentifiers.getIdentifierTypeName(identifier);
+      let [TYPE, NAME] = Identifiers.getIdentifierTypeName(identifier);
       if (TYPE != renderTypes.HTML) continue;
       if (!identifiersJson[renderTypes.ACF]) identifiersJson[renderTypes.ACF] = {};
       identifiersJson[renderTypes.ACF][NAME] = "<?php ?>";

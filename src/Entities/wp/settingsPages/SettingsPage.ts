@@ -1,14 +1,13 @@
 import { FileReader } from "../../../files/FileReader";
 import { FileWriter } from "../../../files/FileWriter";
-import { CommentsIdentifiers } from "../../../Identifiers/CommentsIdentifiers";
 import { StringComposeWriter } from "../../../files/StringComposeWriter";
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
-import { WpFunctionComposer } from "../../../files/WpFunctionComposer";
 import { settingsPageParams } from "../../../Types/entity.wp.settingsPage";
 import { customPartType } from "../../../Enums/entities.wp.type";
 import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
+import { IdentifierId } from "../../../Identifiers/IdentifierId";
 
 type params = settingsPageParams;
 class SettingsPage extends GeneralWpEntity<params> {
@@ -48,7 +47,7 @@ class SettingsPage extends GeneralWpEntity<params> {
    */
   public create(skipIfExists: boolean = false): void {
     if (!this.validInformations()) throw new Error(this.ERR_NO_VALID_INFORMATIONS);
-    this.SETTINGS_PAGE_SLUG = CommentsIdentifiers.getIdentifierId(
+    this.SETTINGS_PAGE_SLUG = IdentifierId.getIdentifier(
       this.getInformations.pageName,
       false
     );

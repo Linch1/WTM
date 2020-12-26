@@ -3,11 +3,11 @@ import { FileReader } from "../../files/FileReader";
 import { StringComposeWriter } from "../../files/StringComposeWriter";
 import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { WpFunctionComposer } from "../../files/WpFunctionComposer";
-import { CommentsIdentifiers } from "../../Identifiers/CommentsIdentifiers";
 import { pageTypes } from "../../Enums/entities.visual.type";
 import { defaultJson, informationsJson } from "../../Types/entity.visual.jsons";
 import { replaceAllParams } from "../../Types/files.StringComposerWriter";
 import { InterfaceGeneralVisual } from "../../Interfaces/entity.visual.InterfaceGeneralVisual";
+import { IdentifierHtml } from "../../Identifiers/IdentifierHtml";
 
 export class GeneralVisual implements InterfaceGeneralVisual {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -21,7 +21,6 @@ export class GeneralVisual implements InterfaceGeneralVisual {
   public JSON_FOLDER_PATH = "";
   public JSON_FILE_PATH: string = "";
 
-  public readonly IDENTIFIERS_HTML_BLOCKS: string[] = ["BODY"]; /* pair */
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = "PAGE-NAME";
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_TYPE: string = "PAGE-TYPE";
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = "PAGE-HEADER";
@@ -53,7 +52,6 @@ export class GeneralVisual implements InterfaceGeneralVisual {
   public initialize(): void {
     FileWriter.createDirectory(this.themeAux.getInsideThemePath(this.PATH));
     FileWriter.createDirectory(this.JSON_FOLDER_PATH);
-    FileWriter.createFile(this.JSON_FILE_PATH, "");
   }
 
   /**
@@ -65,10 +63,6 @@ export class GeneralVisual implements InterfaceGeneralVisual {
       this.JSON_FILE_PATH,
       JSON.stringify(this.JSON_INFORMATIONS)
     );
-  }
-  public createJson(): void {
-    FileWriter.createDirectory(this.JSON_FOLDER_PATH);
-    FileWriter.createFile(this.JSON_FILE_PATH, "");
   }
 
   /**
@@ -93,7 +87,6 @@ export class GeneralVisual implements InterfaceGeneralVisual {
     let defaultContent: string = FileReader.readFile(
       this.themeAux.getInsideThemePath(this.DEFAULT_BUILD_PATH)
     );
-
     let params: replaceAllParams = {};
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_NAME] = this.PAGE_NAME;
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_TYPE] = this.PAGE_TYPE;
@@ -121,13 +114,13 @@ export class GeneralVisual implements InterfaceGeneralVisual {
    * @param path
    */
   public includeRelative(identifier_name: string, path: string): void {
-    if (!this.IDENTIFIERS_HTML_BLOCKS.includes(identifier_name))
+    if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(identifier_name))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
       WpFunctionComposer.includeRelative(path),
-      CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[0],
-      CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[1]
+      IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[0],
+      IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[1]
     );
     this.JSON_INFORMATIONS.blocks[identifier_name].include.push(path);
     this.saveJson();
@@ -147,23 +140,23 @@ export class GeneralVisual implements InterfaceGeneralVisual {
     open: string = "",
     close: string = ""
   ): void {
-    if (!this.IDENTIFIERS_HTML_BLOCKS.includes(identifier_name))
+    if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(identifier_name))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
 
     let toAdd = `
 ${open}
-${CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[0]}   
-${CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[1]}
+${IdentifierHtml.getIdentifierPairHtmlComment(blockName)[0]}   
+${IdentifierHtml.getIdentifierPairHtmlComment(blockName)[1]}
 ${close}
 `;
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
       toAdd,
-      CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[0],
-      CommentsIdentifiers.getIdentifierHtmlPair(identifier_name)[1]
+      IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[0],
+      IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[1]
     );
     this.JSON_INFORMATIONS.blocks[identifier_name].include.push(
-      CommentsIdentifiers.getIdentifierHtml(blockName)
+      IdentifierHtml.getIdentifier(blockName)
     );
     this.JSON_INFORMATIONS.blocks[blockName] = {
       open: open,
