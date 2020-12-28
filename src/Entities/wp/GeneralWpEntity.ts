@@ -12,7 +12,7 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
   public readonly ERR_ALREADY_PRESENT = "ERR: The custom part area already exists";
   public readonly ERR_INVALID_TYPE = "ERR: The custom part has an invalid type"
 
-  public PATH: string = "";
+  public PARENT_DIR_PATH: string = "";
   public DEFAULT_BUILD_PATH: string = "";
   protected FILE_NAME = "";
   protected JSON_PATH = "";
@@ -34,6 +34,14 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
   initialize(): void{
     this.createJsonDirectory();
     this.createDirectory();
+  }
+  
+  /**
+   * @description delete the all the relative files
+   */
+  public delete(): void{
+    FileWriter.removeFile(this.getPath());
+    FileWriter.removeFile(this.getPathJson());
   }
 
   /**
@@ -60,7 +68,7 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
    * @description get the path to the dircetory that contains the WpEntity
    */
   getDirectory(): string {
-    return this.themeAux.getInsideThemeAssetsPath(this.PATH);
+    return this.themeAux.getInsideThemeAssetsPath(this.PARENT_DIR_PATH);
   }
   /**
    * @description creates the element directory
@@ -86,7 +94,7 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
   /**
    * @description returns the absolute path of the json file that contains the relevant informations of the WpEntity
    */
-  public getJsonPath(): string {
+  public getPathJson(): string {
     return this.JSON_FILE_PATH;
   }
   /**
@@ -100,7 +108,7 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
    */
   public saveJson(): void {
     FileWriter.writeFile(
-      this.getJsonPath(),
+      this.getPathJson(),
       JSON.stringify(this.getInformations)
     );
   }
@@ -112,7 +120,7 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
     if (!this.validInformations())
       throw new Error(this.ERR_NO_VALID_INFORMATIONS);
     let requireFunction = WpFunctionComposer.requirePhpFile(
-      StringComposeWriter.concatenatePaths(this.PATH, this.CUSTOM_PART_NAME)
+      StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, this.CUSTOM_PART_NAME)
     );
     StringComposeWriter.appendBeetweenChars(
       this.themeAux.THEME_FUNCTIONS_FILE,

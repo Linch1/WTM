@@ -8,16 +8,16 @@ class Single extends GeneralPageEntity {
     super(themeAux);
     this.PAGE_NAME = pageName;
     this.PAGE_TYPE = pageTypes.POST;
-    this.PATH = pagePath.POST ;
+    this.PARENT_DIR_PATH = pagePath.POST ;
     this.DEFAULT_BUILD_PATH = "single-default.php";
     this.PAGE_PREFIX = "single-";
 
     this.JSON_INFORMATIONS.name = this.PAGE_NAME;
     this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(
-      "singles",
+      pagePath.POST,
       `WTM-${this.PAGE_NAME.toLowerCase().split(" ").join("-")}.json`
     );
-    this.JSON_FOLDER_PATH = this.themeAux.getInsideWTMPath("singles");
+    this.JSON_FOLDER_PATH = this.themeAux.getInsideWTMPath(pagePath.POST);
 
     this.initialize();
   }

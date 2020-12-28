@@ -8,6 +8,7 @@ import { defaultJson, informationsJson } from "../../Types/entity.rendering.json
 import { replaceAllParams } from "../../Types/files.StringComposerWriter";
 import { InterfaceGeneralPage } from "../../Interfaces/entity.rendering.InterfaceGeneralPage";
 import { IdentifierHtml } from "../../Identifiers/IdentifierHtml";
+import { addBlockParams } from "../../Types/entity.rendering.params.addBlock";
 
 export class GeneralPageEntity implements InterfaceGeneralPage {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -15,7 +16,7 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
 
   public PAGE_NAME: string = "";
   public PAGE_TYPE: pageTypes = pageTypes.PAGE;
-  public PATH = "";
+  public PARENT_DIR_PATH = "";
   public DEFAULT_BUILD_PATH: string = "";
   public PAGE_PREFIX: string = "";
   public JSON_FOLDER_PATH = "";
@@ -50,8 +51,15 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
    * @description create the needed file/directories
    */
   public initialize(): void {
-    FileWriter.createDirectory(this.themeAux.getInsideThemePath(this.PATH));
+    FileWriter.createDirectory(this.themeAux.getInsideThemePath(this.PARENT_DIR_PATH));
     FileWriter.createDirectory(this.JSON_FOLDER_PATH);
+  }
+  /**
+   * @description delete the all the relative files
+   */
+  public delete(): void{
+    FileWriter.removeFile(this.getPath());
+    FileWriter.removeFile(this.getPathJson());
   }
 
   /**
@@ -60,17 +68,16 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
    */
   public saveJson(): void {
     FileWriter.writeFile(
-      this.JSON_FILE_PATH,
+      this.getPathJson(),
       JSON.stringify(this.JSON_INFORMATIONS)
     );
   }
 
   /**
    * @description get the absolute path to the main file of the single/template
-   * - the function also **creates it if not exists**
    */
   public getPath(): string {
-    return this.themeAux.getInsideThemePath(this.PATH, this.getFileName());
+    return this.themeAux.getInsideThemePath(this.PARENT_DIR_PATH, this.getFileName());
   }
   public getFileName(): string {
     return (
@@ -79,6 +86,14 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
       ".php"
     );
   }
+  /**
+   * @description get the absolute path to the json file of the single/template
+   */
+  public getPathJson(): string {
+    return this.JSON_FILE_PATH;
+  }
+
+  
 
   /**
    * @description create the single/template and populate it's header/footer with the default ones
@@ -129,38 +144,36 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
   /**
    * @description add a block in the template/single ( like the BODY block  )
    * - a block starts and ends with an _HTML comment identifier_
-   * @param identifier_name the parent of the block the create
-   * @param blockName the name of the block
-   * @param open how the block start
-   * @param close how the block end
+   * @param blockInfo.identifier_name the parent of the block the create
+   * @param blockInfo.blockName the name of the block
+   * @param blockInfo.open how the block start
+   * @param blockInfo.close how the block end
    */
-  public addBlock(
-    identifier_name: string,
-    blockName: string,
-    open: string = "",
-    close: string = ""
-  ): void {
-    if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(identifier_name))
+  public addBlock(blockInfo: addBlockParams): void {
+    if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(blockInfo.identifier_name))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
+    
+    if( !blockInfo.close ) blockInfo.close == "";
+    if( !blockInfo.open ) blockInfo.open == "";
 
     let toAdd = `
 ${open}
-${IdentifierHtml.getIdentifierPairHtmlComment(blockName)[0]}   
-${IdentifierHtml.getIdentifierPairHtmlComment(blockName)[1]}
+${IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.blockName)[0]}   
+${IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.blockName)[1]}
 ${close}
 `;
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
       toAdd,
-      IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[0],
-      IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[1]
+      IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.identifier_name)[0],
+      IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.identifier_name)[1]
     );
-    this.JSON_INFORMATIONS.blocks[identifier_name].include.push(
-      IdentifierHtml.getIdentifier(blockName)
+    this.JSON_INFORMATIONS.blocks[blockInfo.identifier_name].include.push(
+      IdentifierHtml.getIdentifier(blockInfo.blockName)
     );
-    this.JSON_INFORMATIONS.blocks[blockName] = {
-      open: open,
-      close: close,
+    this.JSON_INFORMATIONS.blocks[blockInfo.blockName] = {
+      open: blockInfo.open,
+      close: blockInfo.close,
       include: [],
     };
     this.saveJson();

@@ -8,16 +8,16 @@ class Template extends GeneralPageEntity {
     super(themeAux);
     this.PAGE_NAME = pageName;
     this.PAGE_TYPE = pageTypes.PAGE;
-    this.PATH = pagePath.PAGE;
+    this.PARENT_DIR_PATH = pagePath.PAGE;
     this.DEFAULT_BUILD_PATH = "template-default.php";
     this.PAGE_PREFIX = "template-";
 
     this.JSON_INFORMATIONS.name = this.PAGE_NAME;
     this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(
-      "templates",
+      pagePath.PAGE,
       `WTM-${this.PAGE_NAME}.json`
     );
-    this.JSON_FOLDER_PATH = this.themeAux.getInsideWTMPath("templates");
+    this.JSON_FOLDER_PATH = this.themeAux.getInsideWTMPath(pagePath.PAGE);
 
     this.initialize();
   }

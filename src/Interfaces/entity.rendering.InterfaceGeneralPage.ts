@@ -1,4 +1,5 @@
 import { pageTypes } from "../Enums/entities.visual.type";
+import { addBlockParams } from "../Types";
 import { defaultJson, informationsJson } from "../Types/entity.rendering.jsons";
 
 export interface InterfaceGeneralPage {
@@ -22,7 +23,7 @@ export interface InterfaceGeneralPage {
   PAGE_TYPE: pageTypes;
   PAGE_PREFIX: string;
 
-  PATH: string;
+  PARENT_DIR_PATH: string;
   DEFAULT_BUILD_PATH: string;
 
   JSON_FOLDER_PATH: string;
@@ -46,10 +47,5 @@ export interface InterfaceGeneralPage {
 
   includeRelative(identifier_name: string, path: string): void;
 
-  addBlock(
-    identifier_name: string,
-    blockName: string,
-    open: string,
-    close: string
-  ): void;
+  addBlock(blockInfos: addBlockParams): void;
 }

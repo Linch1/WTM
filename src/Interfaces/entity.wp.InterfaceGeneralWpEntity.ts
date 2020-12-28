@@ -19,7 +19,7 @@ export interface InterfaceWpEntity {
   
   */
 
-  PATH: string;
+  PARENT_DIR_PATH: string;
   DEFAULT_BUILD_PATH: string;
 
   initialize(): void;
@@ -36,7 +36,7 @@ export interface InterfaceWpEntity {
 
   getPath(): string;
 
-  getJsonPath(): string;
+  getPathJson(): string;
 
   createJsonDirectory(): void;
 

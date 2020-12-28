@@ -8,3 +8,4 @@ export * from './files.FileReader';
 export * from './files.StringComposerWriter';
 export * from './manageTheme.jsons';
 export * from './entity.visual.jsons';
+export * from './entity.rendering.params.addBlock';

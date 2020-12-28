@@ -27,10 +27,10 @@ class PostType  extends GeneralWpEntity<params> {
     this.CUSTOM_PART_TYPE = customPartType.POST_TYPE;
     this.FILE_NAME = "WTM-POST-TYPE.php";
     this.IDENTIFIER_NAME = "POST-TYPES";
-    this.PATH = customPartPath.POST_TYPE;
-    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default.php");
-    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
-    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.PARENT_DIR_PATH = customPartPath.POST_TYPE;
+    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, "default.php");
+    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH);
+    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
     this.initialize();
   }
 

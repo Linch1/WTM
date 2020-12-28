@@ -33,12 +33,12 @@ class SettingsPage extends GeneralWpEntity<params> {
     this.CUSTOM_PART_NAME = this.getInformations.pageName;
     this.CUSTOM_PART_TYPE = customPartType.SETTINGS_PAGE;
     this.FILE_NAME = "WTM-SETTINGS-PAGE.php";
-    this.PATH = customPartPath.SETTINGS_PAGE;
-    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default.php");
+    this.PARENT_DIR_PATH = customPartPath.SETTINGS_PAGE;
+    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, "default.php");
     this.IDENTIFIER_NAME = "SETTINGS-PAGE";
 
-    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
-    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH);
+    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
     this.initialize();
   }
 

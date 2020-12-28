@@ -9,6 +9,10 @@ import { WidgetArea } from "../Entities/wp/widgetAreas/WidgetArea";
 import { SettingsPage } from "../Entities/wp/settingsPages/SettingsPage";
 import { Menu } from "../Entities/wp/menus/Menu";
 import { ThemeAux } from "./ThemeAux";
+import { importsJsonKeys } from "../Enums";
+import { Single } from "../Entities/rendering/Single";
+import { Template } from "../Entities/rendering/Template";
+import { addBlockParams } from "../Types";
 
 /**
  * This class is used to perform the write actions
@@ -33,6 +37,7 @@ class ThemeWriter {
       this.themeAux.IMPORT_STYLES_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
+    this.themeAux.updateJsonImports(importsJsonKeys.STYLES, importString, -1);
   }
   /**
    * @description import in the WP theme given script file
@@ -45,6 +50,7 @@ class ThemeWriter {
       this.themeAux.IMPORT_SCRIPTS_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
+    this.themeAux.updateJsonImports(importsJsonKeys.SCRIPTS, importString, -1);
   }
   /**
    * @description import in the WP theme given font url
@@ -57,44 +63,74 @@ class ThemeWriter {
       this.themeAux.IMPORT_FONTS_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
+    this.themeAux.updateJsonImports(importsJsonKeys.FONTS, importString, -1);
   }
 
   /**
    * @description create and import the given postType in the theme
    * @param postTypeObject the post type to create and import
    */
-  public pushPostType(postTypeObject: PostType): void {
+  public wpPushPostType(postTypeObject: PostType): void {
     postTypeObject.create();
     postTypeObject.import();
   }
 
   /**
    * @description create and import the given widgeArea in the theme
-   * @param postTypeObject the widget area to create and import
+   * @param widgetArea the widget area to create and import
    */
-  public pushWidgetArea(widgetArea: WidgetArea): void {
+  public wpPushWidgetArea(widgetArea: WidgetArea): void {
     widgetArea.create();
     widgetArea.import();
   }
 
   /**
    * @description create and import the given settings page in the theme
-   * @param postTypeObject the settings page to create and import
+   * @param settingsPage the settings page to create and import
    */
-  public pushSettingsPage(settingsPage: SettingsPage): void {
+  public wpPushSettingsPage(settingsPage: SettingsPage): void {
     settingsPage.create();
     settingsPage.import();
   }
 
   /**
    * @description create and import the givenmenu in the theme
-   * @param postTypeObject the menu to create and import
+   * @param menu the menu to create and import
    */
-  public pushMenu(menu: Menu): void {
+  public wpPushMenu(menu: Menu): void {
     menu.createMainPage();
     menu.createSubPages();
     menu.importMainPage();
     menu.importSubPages();
+  }
+
+  /**
+   * @description create the given page
+   * @param template the Template or Single to create
+   */
+  public renderingPagePush(page: Template | Single){
+    page.create();
+  }
+  /**
+   * @description add the given blocks to the given page
+   * @param page the page where to add the blocks
+   * @param blocks the blocks to add
+   */
+  public renderingPageAddBlocks(page: Single | Template, blocks: addBlockParams[]){
+    for ( let block of blocks ){
+      page.addBlock(block);
+    }
+  }
+  /**
+   * @description include the path in the given block as last element
+   * @param page the page where to add this include statements
+   * @param includeInfo an array of tuples. The tuple have to follow the format 
+   * - [ _BLOCK NAME_ , _RELATIVE PATH TO INCLUDE_ ]
+   */
+  public renderingPageIncludeRelative( page: Single | Template, includeInfo: [ string, string ][] ){
+    for ( let include of includeInfo ){
+      page.includeRelative(include[0], include[1]);
+    }
   }
 
   /**

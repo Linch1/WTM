@@ -51,13 +51,13 @@ class FileWriter {
     this.editFileFunction(filePath, functionBody, functionBodyNew); // edit the file
   }
 
-  static deleteFolderRecursive(path: string): void {
+  static removeFolderRecursive(path: string): void {
     if (fs.existsSync(path)) {
       fs.readdirSync(path).forEach((file: string, index: number) => {
         let curPath = path + "/" + file;
         if (fs.lstatSync(curPath).isDirectory()) {
           // recurse
-          this.deleteFolderRecursive(curPath);
+          this.removeFolderRecursive(curPath);
         } else {
           // delete file
           fs.unlinkSync(curPath);

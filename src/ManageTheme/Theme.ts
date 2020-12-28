@@ -79,7 +79,7 @@ class Theme {
    * - each key indicates a **comment identifire ( pair )**
    * @param key the key
    * @param elem the require function
-   * @param index the line index 
+   * @param index the line index ( -1 for the last )
    */
   public updateJsonFunctions(key: customPartType| functionsJsonKeys, elem: string, index: number, skipIfExists: boolean = false) {
     if(index == -1) index = this.JSON_FUNCTIONS[key].length;

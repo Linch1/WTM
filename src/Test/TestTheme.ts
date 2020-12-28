@@ -35,18 +35,18 @@ class TestTheme {
       postTypeName: "images",
       postTypeDisplayName: "Images edu",
       postTypeNameSingular: "image",
-      skipIfExists: true
+      skipIfExists: true,
     });
-    writer.pushPostType(postType);
+    writer.wpPushPostType(postType);
     this.log("created post type");
   }
 
   static createThemeWidgetArea() {
     let widgetArea: WidgetArea = composer.buildWidgetArea({
       widgetAreaName: "widgetArea",
-      skipIfExists: true
+      skipIfExists: true,
     });
-    writer.pushWidgetArea(widgetArea);
+    writer.wpPushWidgetArea(widgetArea);
     this.log("created widget area");
   }
 
@@ -55,9 +55,9 @@ class TestTheme {
       pageName: "settings_page",
       pageDisplayedName: "displayed name",
       pageBrowserTitle: "browser title",
-      skipIfExists: true
+      skipIfExists: true,
     });
-    writer.pushSettingsPage(settingsPage);
+    writer.wpPushSettingsPage(settingsPage);
     this.log("created settings page");
   }
 
@@ -66,52 +66,81 @@ class TestTheme {
       menuName: "menuName",
       menuDisplayedName: "displayed menu name",
       pageBrowserTitle: "browser title",
-      skipIfExists: true
+      skipIfExists: true,
     });
 
     let subPageOne: MenuSubPage = composer.buildMenuSubPage({
       pageName: "pageNameOne",
       pageNameDisplayed: "Page One",
       pageBrowserTitle: "browser title one",
-      skipIfExists: true
+      skipIfExists: true,
     });
     let subPageTwo: MenuSubPage = composer.buildMenuSubPage({
       pageName: "pageNameTwo",
       pageNameDisplayed: "Page Two",
       pageBrowserTitle: "browser title two",
-      skipIfExists: true
+      skipIfExists: true,
     });
 
     let menu = composer.buildMenu(mainPage, [subPageOne, subPageTwo]);
-    writer.pushMenu(menu);
+    writer.wpPushMenu(menu);
     this.log("created menu");
 
     return menu;
   }
 
-  static createSingle(){
-    single.create();
+  static createSingle() {
+    writer.renderingPagePush(single);
   }
-  static includeFileInSingle(){
-    single.includeRelative("BODY", "/partials/ciao")
+  static addBlockInSingle() {
+    writer.renderingPageAddBlocks(single, [
+      {
+        identifier_name: "BODY",
+        blockName: "PRIMO-DIV",
+        open: "<div id='ciao' class='come' >",
+        close: "</div>",
+      },
+      {
+        identifier_name: "PRIMO-DIV",
+        blockName: "SECONDO-DIV",
+        open: "<div id='ciao-SECONDO' class='come' >",
+        close: "</div>",
+      },
+    ]);
   }
-  static addBlockInSingle(){
-    single.addBlock("BODY", "PRIMO-DIV", "<div id='ciao' class='come' >", "</div>");
-    single.addBlock("PRIMO-DIV", "SECONDO-DIV", "<div id='ciao-SECONDO' class='come' >", "</div>");
+  static includeFileInSingle() {
+    writer.renderingPageIncludeRelative(single, [["BODY", "/partials/BODY"], ["PRIMO-DIV", "/partials/PRIMO-DIV"]]);
   }
 
-  static createTemplate(){
-    template.create();
+  static createTemplate() {
+    writer.renderingPagePush(template);
   }
-  static includeFileInTemplate(){
-    template.includeRelative("BODY", "/partials/ciao")
+  static addBlockInTemplate() {
+    writer.renderingPageAddBlocks(template, [
+      {
+        identifier_name: "BODY",
+        blockName: "PRIMO-DIV",
+        open: "<div id='ciao' class='come' >",
+        close: "</div>",
+      },
+      {
+        identifier_name: "PRIMO-DIV",
+        blockName: "SECONDO-DIV",
+        open: "<div id='ciao-SECONDO' class='come' >",
+        close: "</div>",
+      },
+    ]);
   }
-  static addBlockInTemplate(){
-    template.addBlock("BODY", "PRIMO-DIV", "<div id='ciao' class='come' >", "</div>");
+  static includeFileInTemplate() {
+    writer.renderingPageIncludeRelative(template, [["BODY", "/partials/BODY"], ["PRIMO-DIV", "/partials/PRIMO-DIV"]]);
   }
 
-  static readTheme(){
-    this.log("Reading template")
+  static deleteEntity( entity: Single | Template | PostType | WidgetArea | SettingsPage | Menu ) {
+    entity.delete();
+  }
+
+  static readTheme() {
+    this.log("Reading template");
     console.log(reader.getPostTypes());
     console.log(reader.getSettingsPages());
     console.log(reader.getWidgetAreas());

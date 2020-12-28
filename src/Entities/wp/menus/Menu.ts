@@ -36,6 +36,15 @@ class Menu {
     this.createMenuDirectory();
     FileWriter.createDirectory(this.mainPage.getJsonDirectory());
   }
+  /**
+   * @description delete the all the relative files
+   */
+  public delete(): void{
+    for ( let subpage of this.subPages){
+      subpage.delete();
+    }
+    this.mainPage.delete();
+  }
 
   /**
    * @description create the directory that contains the menu mainPage and subPages
@@ -43,7 +52,7 @@ class Menu {
   public createMenuDirectory() {
     FileWriter.createDirectory(
       this.themeAux.getInsideThemeAssetsPath(
-        this.mainPage.PATH,
+        this.mainPage.PARENT_DIR_PATH,
         this.MENU_NAME
       )
     );
@@ -60,7 +69,7 @@ class Menu {
   ) {
     this.MENU_JSON[key] = obj;
     FileWriter.writeFile(
-      this.mainPage.getJsonPath(),
+      this.mainPage.getPathJson(),
       JSON.stringify(this.MENU_JSON)
     );
   }

@@ -44,10 +44,10 @@ class MenuMainPage extends GeneralWpEntity<params> {
     this.CUSTOM_PART_TYPE = customPartType.MENU;
     this.FILE_NAME = "WTM-MAIN-PAGE.php";
     this.IDENTIFIER_NAME = "MENU";
-    this.PATH = customPartPath.MENU;
-    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PATH, "default-mainpage.php");
-    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PATH);
-    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.PARENT_DIR_PATH = customPartPath.MENU;
+    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, "default-mainpage.php");
+    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH);
+    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
     this.setMenuSlug = IdentifierId.getIdentifier(
       this.getInformations.menuName,
       false
@@ -66,7 +66,7 @@ class MenuMainPage extends GeneralWpEntity<params> {
    */
   getDirectory(): string {
     return this.themeAux.getInsideThemeAssetsPath(
-      this.PATH,
+      this.PARENT_DIR_PATH,
       this.getInformations.menuName
     );
   }
