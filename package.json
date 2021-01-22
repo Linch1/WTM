@@ -1,21 +1,21 @@
 {
-    "name": "wpthememanager",
+    "name": "wtm-lib",
     "version": "0.0.1",
-    "description": "Build and Manage Easily a custom wordpress theme",
+    "description": "Build and Manage Easily a custom wordpress theme the the wordpress theme manager library",
     "main": "index.js",
     "scripts": {
         "test": "node ./dist/test-file.js"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Linch1/WPThemeManager.git"
+        "url": "git+https://github.com/Linch1/WTM-LIB.git"
     },
     "author": "linch1",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/Linch1/WPThemeManager/issues"
+        "url": "https://github.com/Linch1/WTM-LIB/issues"
     },
-    "homepage": "https://github.com/Linch1/WPThemeManager#readme",
+    "homepage": "https://github.com/Linch1/WTM-LIB#readme",
     "devDependencies": {
         "@types/node": "^14.14.10",
         "prettier": "^2.2.1"
