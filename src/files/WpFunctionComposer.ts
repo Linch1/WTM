@@ -4,7 +4,7 @@ import { IdentifierImport } from "../Identifiers/IdentifierImport";
 import { Identifiers } from "../Identifiers/Identifiers";
 import { StringComposeWriter } from "./StringComposeWriter";
 
-class WpFunctionComposer {
+export class WpFunctionComposer {
   static IDENTIFIER_IMPORTED = IdentifierImport;
   /**
    * @description return the syntax of the function for correctly import a style file in wordpress
@@ -43,5 +43,3 @@ class WpFunctionComposer {
     return `<?php include(TEMPLATEPATH.'${path}');?>\n`;
   }
 }
-
-export { WpFunctionComposer };

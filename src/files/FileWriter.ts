@@ -6,7 +6,7 @@ import { Identifiers } from "../Identifiers/Identifiers";
 import { GeneralIdentifier } from "../Identifiers/GeneralIdentfier";
 import { identifierType } from "../Enums";
 
-class FileWriter {
+export class FileWriter {
   static EMPTY_TEXT: string = "ERR: Empty text in the body";
 
   /**
@@ -84,5 +84,3 @@ class FileWriter {
     fs.appendFileSync(path, content, "utf8");
   }
 }
-
-export { FileWriter };

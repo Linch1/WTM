@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { nestedStringsArrays } from "../Types/files.FileReader";
 
 
-class FileReader {
+export class FileReader {
   static readonly NoFunctionFoundErr =
     "NO FUNCTION FOUND: no function was found with the given name";
 
@@ -106,4 +106,3 @@ class FileReader {
 
 }
 
-export { FileReader };

@@ -1,7 +1,7 @@
 import { FileReader } from "./FileReader";
 import { StringComposeWriter } from "./StringComposeWriter";
 
-class StringComposeReader {
+export class StringComposeReader {
   static readonly NoStartCharFound =
     "ERR: The given start char is not present in the file";
   static readonly ERR_CANNOT_GET_LAST_ELEM: "ERR: Cannot get the last element of the given Path";
@@ -70,5 +70,3 @@ class StringComposeReader {
     else return lastElem[1];
   }
 }
-
-export { StringComposeReader };

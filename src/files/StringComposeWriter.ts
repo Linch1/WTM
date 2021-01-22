@@ -6,7 +6,7 @@ import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
 
-class StringComposeWriter {
+export class StringComposeWriter {
   /**
    * @description conncatenate into a valid path the given strings
    * @param paths an array of strings to concatenate
@@ -232,5 +232,3 @@ class StringComposeWriter {
     return text;
   }
 }
-
-export { StringComposeWriter };
