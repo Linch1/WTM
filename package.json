@@ -4,7 +4,8 @@
     "description": "Build and Manage Easily a custom wordpress theme the the wordpress theme manager library",
     "main": "index.js",
     "scripts": {
-        "test": "node ./dist/test-file.js"
+        "test": "node ./dist/test-file.js",
+        "build": "tsc"
     },
     "repository": {
         "type": "git",
