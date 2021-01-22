@@ -39,11 +39,11 @@ export abstract class AbstractGeneralVisual {
     
     this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
-      "default." + extension
+      "render." + extension
     );
     this.DEFAULT_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
-      "render." + extension
+      "default." + extension
     );
     this.init();
     

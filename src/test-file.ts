@@ -31,15 +31,16 @@ TestTheme.readTheme();
 */
 
 TestVisual.VisualCreate();
-
-/* TEST FOR MANAGE CUSTOM VISUALS
-
-
 TestVisual.VisualEditHtml();
 TestVisual.visualPopulateIdentfiers();
 TestVisual.visualRenderDefault();
 TestVisual.visualRenderAcf();
 TestVisual.visualRead();
+
+/* TEST FOR MANAGE CUSTOM VISUALS
+
+
+
 
 */
 
