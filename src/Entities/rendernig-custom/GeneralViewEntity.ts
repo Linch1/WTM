@@ -6,53 +6,57 @@ import { WpFunctionComposer } from "../../files/WpFunctionComposer";
 import { pageTypes } from "../../Enums/entities.visual.type";
 import { defaultJson, informationsJson } from "../../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../../Types/files.StringComposerWriter";
-import { InterfaceGeneralPage } from "../../Interfaces/entity.rendering.InterfaceGeneralPage";
 import { IdentifierHtml } from "../../Identifiers/IdentifierHtml";
 import { addBlockParams } from "../../Types/entity.rendering.params.addBlock";
 
-export class GeneralPageEntity implements InterfaceGeneralPage {
+export class GeneralViewEntity {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
     "ERR: The passed Html block identified by the passed identifier_name doesn't exists in the (template/single) file";
 
   public PAGE_NAME: string = "";
   public PAGE_TYPE: pageTypes = pageTypes.PAGE;
   public PARENT_DIR_PATH = "";
-  public DEFAULT_BUILD_PATH: string = "";
+  public DEFAULT_BUILD: string = "";
   public PAGE_PREFIX: string = "";
   public JSON_FOLDER_PATH = "";
   public JSON_FILE_PATH: string = "";
+  public JSON_DEFAULT_FILE_PATH = "";
 
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = "PAGE-NAME";
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_TYPE: string = "PAGE-TYPE";
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = "PAGE-HEADER";
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = "PAGE-FOOTER";
 
-  public JSON_DEFAULT_DIR_PATH = this.themeAux.getInsideWTMPath(
-    "theme-rendering"
-  );
-  public JSON_DEFAULT_FILE_PATH = this.themeAux.getInsideWTMPath(
-    "theme-rendering",
-    "default.json"
-  );
-  public JSON_DEFAULT_INFORMATIONS: defaultJson;
+  
+  public JSON_DEFAULT_INFORMATIONS: {
+    PAGE: {
+      header: string;
+      footer: string;
+    };
+  } = {
+    PAGE : {
+      "header": "",
+      "footer": ""
+    }
+  };
 
   public JSON_INFORMATIONS: informationsJson = {
     blocks: { BODY: { open: "", close: "", include: [] } },
     name: "",
   };
 
-  constructor(public themeAux: ThemeAux) {
-    this.JSON_DEFAULT_INFORMATIONS = JSON.parse(
-      FileReader.readFile(this.JSON_DEFAULT_FILE_PATH)
-    );
-  }
+  constructor(parentAbsPath : string,) {}
 
   /**
    * @description create the needed file/directories
    */
   public initialize(): void {
-    FileWriter.createDirectory(this.themeAux.getInsideThemePath(this.PARENT_DIR_PATH));
+    FileWriter.createDirectory(this.PARENT_DIR_PATH);
     FileWriter.createDirectory(this.JSON_FOLDER_PATH);
+    FileWriter.createFile(this.JSON_DEFAULT_FILE_PATH, JSON.stringify(this.JSON_DEFAULT_INFORMATIONS));
+    this.JSON_DEFAULT_INFORMATIONS = JSON.parse(
+      FileReader.readFile(this.JSON_DEFAULT_FILE_PATH)
+    );
   }
   /**
    * @description delete the all the relative files
@@ -77,13 +81,13 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
    * @description get the absolute path to the main file of the single/template
    */
   public getPath(): string {
-    return this.themeAux.getInsideThemePath(this.PARENT_DIR_PATH, this.getFileName());
+    return StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, this.getFileName());
   }
   public getFileName(): string {
     return (
       this.PAGE_PREFIX +
       this.PAGE_NAME.toLocaleLowerCase().split(" ").join("-") +
-      ".php"
+      ".ejs"
     );
   }
   /**
@@ -99,18 +103,16 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
    * @description create the single/template and populate it's header/footer with the default ones
    */
   public create(): void {
-    let defaultContent: string = FileReader.readFile(
-      this.themeAux.getInsideThemePath(this.DEFAULT_BUILD_PATH)
-    );
+    let defaultContent: string = this.DEFAULT_BUILD;
     let params: replaceAllParams = {};
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_NAME] = this.PAGE_NAME;
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_TYPE] = this.PAGE_TYPE;
     params[
       this.IDENTIFIER_PLACEHOLDER_PAGE_HEADER
-    ] = this.JSON_DEFAULT_INFORMATIONS[this.PAGE_TYPE].header;
+    ] = this.JSON_DEFAULT_INFORMATIONS.PAGE.header;
     params[
       this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER
-    ] = this.JSON_DEFAULT_INFORMATIONS[this.PAGE_TYPE].footer;
+    ] = this.JSON_DEFAULT_INFORMATIONS.PAGE.footer;
 
     let newContent: string = defaultContent;
     newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(
@@ -133,7 +135,7 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
-      WpFunctionComposer.includeRelative(path),
+      `<%include ${path}%>`,
       IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[1]
     );
@@ -152,9 +154,9 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
   public addBlock(blockInfo: addBlockParams): void {
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(blockInfo.identifier_name))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
-
-    blockInfo.open = blockInfo.open ? blockInfo.open : "";
-    blockInfo.close = blockInfo.close ? blockInfo.close : "";
+    
+    blockInfo.open =  blockInfo.open ? blockInfo.open : "";
+    blockInfo.close =  blockInfo.close ? blockInfo.close : "";
 
     let toAdd = `
 ${blockInfo.open}

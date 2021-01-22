@@ -3,7 +3,7 @@ import { GeneralPageEntity } from "./GeneralPageEntity";
 import { pageTypes } from "../../Enums/entities.visual.type";
 import { pagePath } from "../../Enums/entities.visual.path";
 
-class Single extends GeneralPageEntity {
+export class Single extends GeneralPageEntity {
   constructor(public themeAux: ThemeAux, pageName: string) {
     super(themeAux);
     this.PAGE_NAME = pageName;
@@ -24,4 +24,3 @@ class Single extends GeneralPageEntity {
 
   
 }
-export { Single };

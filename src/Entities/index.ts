@@ -17,7 +17,10 @@ export * from "./wp/menus/Menu";
 export * from "./wp/menus/MenuMainPage";
 export * from "./wp/menus/MenuSubPage";
 
-
 export * from "./rendering/GeneralPageEntity";
 export * from "./rendering/Single";
 export * from "./rendering/Template";
+
+export * from "./rendernig-custom/GeneralViewEntity";
+export * from "./rendernig-custom/View";
+
