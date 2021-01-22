@@ -172,7 +172,7 @@ export class StringComposeWriter {
     let lang: string = "";
     if (extension == "css") lang = "css";
     else if (extension == "js" || extension == "ts") lang = "typescript";
-    else if (extension == "html" || extension == "php") lang = "html";
+    else if (extension == "html" || extension == "php" || "ejs") lang = "html";
     FileWriter.writeFile(
       filePath,
       prettier.format(fileContent, { semi: false, parser: lang })

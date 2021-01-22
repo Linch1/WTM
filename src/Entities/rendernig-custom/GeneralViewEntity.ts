@@ -179,5 +179,6 @@ ${blockInfo.close}
       include: [],
     };
     this.saveJson();
+    StringComposeWriter.makePretty(this.getPath());
   }
 }
