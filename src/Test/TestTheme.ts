@@ -11,6 +11,7 @@ import { SettingsPage } from "../Entities/wp/settingsPages/SettingsPage";
 import { MenuMainPage } from "../Entities/wp/menus/MenuMainPage";
 import { MenuSubPage } from "../Entities/wp/menus/MenuSubPage";
 import { Menu } from "../Entities/wp/menus/Menu";
+import { write } from "fs";
 
 let themePath: string = "/home/pero/Scrivania/blankslate1";
 let initalizer: ThemeAux = new ThemeAux(themePath);
@@ -30,6 +31,14 @@ class TestTheme {
   static log(phrase: string) {
     console.log(`[ WTM-TEST ] : ${phrase}`);
   }
+
+  static wpImportsTest(){
+    writer.importFont('/font/import');
+    writer.importStyle('/style/import');
+    writer.importScript('/script/import');
+    this.log("made custom imports");
+  }
+
   static createThemePostType() {
     let postType: PostType = composer.buildPostType({
       postTypeName: "images",

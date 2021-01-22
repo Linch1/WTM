@@ -8,7 +8,7 @@ class StringComposeReader {
   static readonly NoContentFound = null;
 
   /**
-   * @description read the text contained beetween to chars/phrases ( and that start with a specific text optionally )
+   * @description read the text contained beetween to chars/phrases ( and check if the text that start with a specific phrase/word optionally )
    * @param filePath the file that you want to edht
    * @param startChar the start character
    * @param endChar the end character
@@ -21,12 +21,12 @@ class StringComposeReader {
    * - WARNING It may cause errors in case where we have a similar situation:
    * Consider the following text to edit in a specific file:
    *
-   *         My Identifier hey whats up ''' this text is the wrong one ''' this is
-   *         MyIdentifier hey whats up ''' this text should be returned ''' this is
+   *          hey whats up My Identifier  ''' this text is the wrong one ''' this is
+   *          hey whats up MyIdentifier ''' this text should be returned ''' this is
    *
    * in this case calling the function
    *
-   *         readBeetweenChars(filePath, "MyIdentifier", "this is", "hey whats up")  -- return --> ''' this text is the wrong one '''
+   *         readBeetweenChars(filePath, "hey whats up", "this is", "MyIdentifier")  -- return --> ''' this text is the wrong one '''
    *
    * But this is a really rare case.
    * `
@@ -48,6 +48,7 @@ class StringComposeReader {
     specificIdentifier = StringComposeWriter.removeSpacesAndNewLines(
       specificIdentifier
     );
+
     let startCharSplit: string[] = fileTextSingleLine.split(startChar);
     if (startCharSplit.length <= 1) throw new Error(this.NoStartCharFound);
     let foundContent: string = "";

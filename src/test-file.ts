@@ -37,5 +37,5 @@ TestVisual.visualRead();
 */
 
 
-
-TestVisual.bulkGetAllVisuals();
+TestTheme.wpImportsTest();
+// TestVisual.bulkGetAllVisuals();

@@ -1,19 +1,19 @@
-
 import { identifierType } from "../Enums";
+import { GeneralIdentifier } from "../Identifiers/GeneralIdentfier";
+import { IdentifierImport } from "../Identifiers/IdentifierImport";
 import { Identifiers } from "../Identifiers/Identifiers";
 import { StringComposeWriter } from "./StringComposeWriter";
 
 class WpFunctionComposer {
-  static IDENTIFIER_IMPORTED = Identifiers.getIdentifier(identifierType.IMPORTED);
+  static IDENTIFIER_IMPORTED = IdentifierImport;
   /**
    * @description return the syntax of the function for correctly import a style file in wordpress
    * @param fileToImport the file path to import in the WP theme
    */
   static enqueueStyleFunction(fileToImport: string): string {
     fileToImport = StringComposeWriter.addInitialSlash(fileToImport);
-    return `wp_enqueue_style( '${fileToImport.replace(
-      "/",
-      WpFunctionComposer.IDENTIFIER_IMPORTED
+    return `wp_enqueue_style( '${WpFunctionComposer.IDENTIFIER_IMPORTED.getIdentifier(
+      fileToImport, false
     )}',get_template_directory_uri().'${fileToImport}',false,'0.0.1','all');\n`;
   }
   /**
@@ -22,9 +22,8 @@ class WpFunctionComposer {
    */
   static enqueueScriptFunction(fileToImport: string): string {
     fileToImport = StringComposeWriter.addInitialSlash(fileToImport);
-    return `wp_enqueue_script( '${fileToImport.replace(
-      "/",
-      this.IDENTIFIER_IMPORTED
+    return `wp_enqueue_script( '${WpFunctionComposer.IDENTIFIER_IMPORTED.getIdentifier(
+      fileToImport, false
     )}',get_template_directory_uri().'${fileToImport}',array('jquery'),'0.0.1',true);\n`;
   }
   /**
@@ -40,8 +39,8 @@ class WpFunctionComposer {
    * @description return the syntax of the function for correctly include a fine in a template/single
    * @param path the path to include ( relative to the theme dir path )
    */
-  static includeRelative(path: string): string{
-    return `<?php include(TEMPLATEPATH.'${path}');?>\n`
+  static includeRelative(path: string): string {
+    return `<?php include(TEMPLATEPATH.'${path}');?>\n`;
   }
 }
 

@@ -11,9 +11,9 @@ class Theme {
   public ERR_PATH_ALREADY_PRESERNT = "ERR: The given path is already required/imported"
 
   public themeStructure: nestedStringsArrays = [];
-  public readonly IMPORT_STYLES_FUNCTION_NAME: string = "add_styles";
-  public readonly IMPORT_FONTS_FUNCTION_NAME: string = "add_fonts";
-  public readonly IMPORT_SCRIPTS_FUNCTION_NAME: string = "add_scripts";
+  public readonly IMPORT_STYLES_FUNCTION_NAME: string = "add_styles()";
+  public readonly IMPORT_FONTS_FUNCTION_NAME: string = "add_fonts()";
+  public readonly IMPORT_SCRIPTS_FUNCTION_NAME: string = "add_scripts()";
 
   public readonly ASSETS_CUSTOM_PATH: string = this.getInsideThemePath(
     "assets/functions/"

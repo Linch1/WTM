@@ -1,9 +1,9 @@
-import { FileWriter } from "../../files/FileWriter";
-import { FileReader } from "../../files/FileReader";
-import { visualJsonIdentifiers } from "../../Types/entity.visual.jsons";
-import { Identifiers } from "../../Identifiers/Identifiers";
+import { FileWriter } from "../files/FileWriter";
+import { FileReader } from "../files/FileReader";
+import { visualJsonIdentifiers } from "../Types/entity.visual.jsons";
+import { Identifiers } from "../Identifiers/Identifiers";
 import { Visual } from "./Visual";
-import { identifierType } from "../../Enums";
+import { identifierType } from "../Enums";
 
 class VisualWriter {
 

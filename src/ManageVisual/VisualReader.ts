@@ -1,6 +1,6 @@
 
-import { FileReader } from "../../files/FileReader";
-import { visualJson } from "../../Types/entity.visual.jsons";
+import { FileReader } from "../files/FileReader";
+import { visualJson } from "../Types/entity.visual.jsons";
 import { Visual } from "./Visual";
 
 class VisualReader {

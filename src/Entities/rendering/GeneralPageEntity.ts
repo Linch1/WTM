@@ -172,8 +172,8 @@ ${close}
       IdentifierHtml.getIdentifier(blockInfo.blockName)
     );
     this.JSON_INFORMATIONS.blocks[blockInfo.blockName] = {
-      open: blockInfo.open,
-      close: blockInfo.close,
+      open: blockInfo.open ? blockInfo.open : "",
+      close: blockInfo.close ? blockInfo.close : "",
       include: [],
     };
     this.saveJson();

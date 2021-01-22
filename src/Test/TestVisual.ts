@@ -1,11 +1,11 @@
 
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { VisualWriter } from "../Entities/visual/VisualWriter";
-import { VisualReader } from "../Entities/visual/VisualReader";
-import { VisualConverter } from "../Entities/visual/VisualConverter";
+import { VisualWriter } from "../ManageVisual/VisualWriter";
+import { VisualReader } from "../ManageVisual/VisualReader";
+import { VisualConverter } from "../ManageVisual/VisualConverter";
 import { renderTypes } from "../Enums/entity.visual.renderType";
-import { Visual } from "../Entities/visual/Visual";
-import { BulkVisual } from "../Entities/visual/BulkVisual";
+import { Visual } from "../ManageVisual/Visual";
+import { BulkVisual } from "../ManageVisual/BulkVisual";
 
 
 let visualsFolder = "/home/pero/projects/WPThemeManager/visual"

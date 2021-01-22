@@ -1,6 +1,6 @@
-import { FileReader } from "../../files/FileReader";
-import { StringComposeWriter } from "../../files/StringComposeWriter";
-import { visualJson } from "../../Types";
+import { FileReader } from "../files/FileReader";
+import { StringComposeWriter } from "../files/StringComposeWriter";
+import { visualJson } from "../Types";
 import { Visual } from "./Visual";
 
 export class BulkVisual {

@@ -1,5 +1,5 @@
-import { AbstractGeneralVisual } from "../../Abstracts/entity.visual.AbstractGeneralVisual";
-import { renderTypes } from "../../Enums/entity.visual.renderType";
+import { AbstractGeneralVisual } from "../Abstracts/entity.visual.AbstractGeneralVisual";
+import { renderTypes } from "../Enums/entity.visual.renderType";
 import { VisualConverter } from "./VisualConverter";
 import { VisualReader } from "./VisualReader";
 import { VisualWriter } from "./VisualWriter";

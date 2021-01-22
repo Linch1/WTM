@@ -1,9 +1,9 @@
 
-import { renderTypes } from "../../Enums/entity.visual.renderType";
-import { FileReader } from "../../files/FileReader";
-import { FileWriter } from "../../files/FileWriter";
-import { StringComposeWriter } from "../../files/StringComposeWriter";
-import { visualJson } from "../../Types/entity.visual.jsons";
+import { renderTypes } from "../Enums/entity.visual.renderType";
+import { FileReader } from "../files/FileReader";
+import { FileWriter } from "../files/FileWriter";
+import { StringComposeWriter } from "../files/StringComposeWriter";
+import { visualJson } from "../Types/entity.visual.jsons";
 import { Visual } from "./Visual";
 
 class VisualConverter {

@@ -1,4 +1,3 @@
-
 import { FileReader } from "./FileReader";
 import { FileWriter } from "./FileWriter";
 import * as prettier from "prettier";
@@ -6,7 +5,6 @@ import { StringComposeReader } from "./StringComposeReader";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
-
 
 class StringComposeWriter {
   /**
@@ -59,6 +57,7 @@ class StringComposeWriter {
     oldFormatText: string,
     singleLineText: string
   ): string {
+
     let singleLineTextCopy: string = singleLineText;
     let oldFormatTextSpaces: string[] = oldFormatText.split(" ");
     let emptyWordsCount = 0; // check how many consequent empty word there are ( "" )
@@ -110,13 +109,13 @@ class StringComposeWriter {
 
   /**
    * @description
-   * Add a given text at the end of the lines contained between twospecified characters/phrases
-   * if given also checks if the found lines starts with a specific phrases
+   * Add a given text at the end of the content contained between two specified characters/phrases.
+   * If given also checks if the found content strats with a specific phrase/word.
    * @param filePath: the path of the file that contains the text to edit
    * @param text: the text to append
    * @param startChar: the start character
    * @param endChar: the end character [OPTIONAL]
-   * @param specificIdentifier: the specific words that introduce the body to edit [OPTIONAL]
+   * @param specificIdentifier: the specific words that introduce the content to edit [OPTIONAL]
    */
   static appendBeetweenChars(
     filePath: string,
@@ -125,24 +124,29 @@ class StringComposeWriter {
     endChar: string = "",
     specificIdentifier: string = ""
   ) {
-    let currentBetweenCharsContent = StringComposeReader.readBeetweenChars(
-      filePath,
-      startChar,
-      endChar,
-      specificIdentifier
+    let currentBetweenCharsContent = StringComposeWriter.removeSpacesAndNewLines( 
+      StringComposeReader.readBeetweenChars(
+        filePath,
+        startChar,
+        endChar,
+        specificIdentifier
+      )
     );
 
-    let currentFileContent: string = FileReader.readFile(filePath);
+    let currentFileContent: string = FileReader.readFile(filePath)
     let currentFileContentSIngleLine: string = StringComposeWriter.removeSpacesAndNewLines(
       currentFileContent
     );
+    let toReplace: string = startChar + currentBetweenCharsContent + endChar;
+    let replaceWith: string = startChar + currentBetweenCharsContent + text + endChar
+    
     FileWriter.writeFile(
       filePath,
       StringComposeWriter.reinsertSpacesAndNewlines(
         currentFileContent,
         currentFileContentSIngleLine.replace(
-          specificIdentifier + startChar + currentBetweenCharsContent + endChar,
-          specificIdentifier + startChar + currentBetweenCharsContent + text + endChar
+          toReplace,
+          replaceWith
         )
       )
     );
@@ -188,7 +192,7 @@ class StringComposeWriter {
    * @param word the word to format
    */
   static preformatString(word: string): string {
-    return "\n\t" + word + "\n";
+    return "\n\t" + word;
   }
 
   /**
@@ -200,13 +204,9 @@ class StringComposeWriter {
     text: string,
     params: replaceAllParams
   ): string {
-
-    Object.keys(params).forEach(placeholder => {
+    Object.keys(params).forEach((placeholder) => {
       let newText = params[placeholder];
-      placeholder = IdentifierPlaceholder.getIdentifier(
-        placeholder,
-        false
-      );
+      placeholder = IdentifierPlaceholder.getIdentifier(placeholder, false);
       text = text.split(placeholder).join(newText);
     });
 
@@ -222,14 +222,10 @@ class StringComposeWriter {
     text: string,
     params: replaceAllParams
   ): string {
-
-    Object.keys(params).forEach(placeholder => {
+    Object.keys(params).forEach((placeholder) => {
       let newText = params[placeholder];
-      placeholder = IdentifierHtml.getIdentifier(
-        placeholder,
-        false
-      );
-      console.log(placeholder)
+      placeholder = IdentifierHtml.getIdentifier(placeholder, false);
+      
       text = text.split(placeholder).join(newText);
     });
 

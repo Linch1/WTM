@@ -13,7 +13,7 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
   /**
    * @description get the identifier
    * @param name the name of the identifier
-   * @param addInitialSlash if the identifier has to start with '//'
+   * @param addInitialSlash if the identifier has to start with '//' ( default: true )
    */
   @ValidateIdentifierMethods
   static getIdentifier(name: string, addInitialSlash: boolean = true): string {

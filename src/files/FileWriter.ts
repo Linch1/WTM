@@ -30,27 +30,6 @@ class FileWriter {
     this.writeFile(filePath, fileContent.replace(oldContent, newContent));
   }
 
-  /**
-   * @description add at the end of a function the given text
-   * @param filePath the file path that contains the function to edit
-   * @param functionName the function name
-   * @param toAppend the text to add at the function body
-   */
-  static appendToFunctionBody(
-    filePath: string,
-    functionName: string,
-    toAppend: string
-  ): void {
-    let functionBody: string = FileReader.readFunctionBody(
-      filePath,
-      functionName
-    ); // get the import file content
-    let functionBodyNew: string = functionBody.endsWith(";") || functionBody.endsWith("/")
-      ? `${functionBody}${toAppend}`
-      : `${functionBody};${toAppend}`; // add the file importation
-    this.editFileFunction(filePath, functionBody, functionBodyNew); // edit the file
-  }
-
   static removeFolderRecursive(path: string): void {
     if (fs.existsSync(path)) {
       fs.readdirSync(path).forEach((file: string, index: number) => {

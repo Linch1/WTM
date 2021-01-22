@@ -13,6 +13,7 @@ import { importsJsonKeys } from "../Enums";
 import { Single } from "../Entities/rendering/Single";
 import { Template } from "../Entities/rendering/Template";
 import { addBlockParams } from "../Types";
+import { StringComposeWriter } from "../files/StringComposeWriter";
 
 /**
  * This class is used to perform the write actions
@@ -32,25 +33,30 @@ class ThemeWriter {
    */
   public importStyle(stylePath: string): void {
     let importString: string = WpFunctionComposer.enqueueStyleFunction(stylePath); // get the wp syntax for import the style
-    FileWriter.appendToFunctionBody(
+    importString = StringComposeWriter.preformatString(importString);
+    this.themeAux.updateJsonImports(importsJsonKeys.STYLES, importString, -1);
+    this.appendToFunctionBody(
       this.themeAux.ASSETS_IMPORT_FILE_PATH, // file path
       this.themeAux.IMPORT_STYLES_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
-    this.themeAux.updateJsonImports(importsJsonKeys.STYLES, importString, -1);
+    
   }
   /**
    * @description import in the WP theme given script file
    * @param scriptPath the file path to the script file
    */
   public importScript(scriptPath: string): void {
+    
     let importString: string = WpFunctionComposer.enqueueScriptFunction(scriptPath); // get the wp syntax for import the script
-    FileWriter.appendToFunctionBody(
+    importString = StringComposeWriter.preformatString(importString);
+    this.themeAux.updateJsonImports(importsJsonKeys.SCRIPTS, importString, -1);
+    this.appendToFunctionBody(
       this.themeAux.ASSETS_IMPORT_FILE_PATH, // file path
       this.themeAux.IMPORT_SCRIPTS_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
-    this.themeAux.updateJsonImports(importsJsonKeys.SCRIPTS, importString, -1);
+    
   }
   /**
    * @description import in the WP theme given font url
@@ -58,12 +64,14 @@ class ThemeWriter {
    */
   public importFont(fontUrl: string): void {
     let importString: string = WpFunctionComposer.enqueueStyleFunction(fontUrl); // get the wp syntax for import the style
-    FileWriter.appendToFunctionBody(
+    importString = StringComposeWriter.preformatString(importString);
+    this.themeAux.updateJsonImports(importsJsonKeys.FONTS, importString, -1);
+    this.appendToFunctionBody(
       this.themeAux.ASSETS_IMPORT_FILE_PATH, // file path
       this.themeAux.IMPORT_FONTS_FUNCTION_NAME, // function name
       importString // string to append to the function body
     );
-    this.themeAux.updateJsonImports(importsJsonKeys.FONTS, importString, -1);
+    
   }
 
   /**
@@ -136,17 +144,16 @@ class ThemeWriter {
   /**
    * @description add to the given function the given text and prettify the given file
    * @param filePath the path to the file where the function is defined
-   * @param functionName the function name
+   * @param functionDeclaration the declaration of the function ( ex: add_text(myparam: string) )
    * @param toAppend the text to add in the function's body
    * @todo implement the php-prettier function
    */
   public appendToFunctionBody(
     filePath: string,
-    functionName: string,
+    functionDeclaration: string,
     toAppend: string
   ): void {
-    FileWriter.appendToFunctionBody(filePath, functionName, toAppend);
-    // StringComposeWriter.makePretty(filePath);
+    StringComposeWriter.appendBeetweenChars(filePath, toAppend, 'function', '}', functionDeclaration );
   }
 }
 
