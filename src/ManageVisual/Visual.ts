@@ -9,8 +9,8 @@ export class Visual extends AbstractGeneralVisual {
   public writer: VisualWriter;
   public converter: VisualConverter;
 
-  constructor(public VISUAL_FOLDER: string) {
-    super(VISUAL_FOLDER);
+  constructor(public VISUAL_FOLDER: string, extension?: string) {
+    super(VISUAL_FOLDER, extension);
     this.reader = new VisualReader(this);
     this.writer = new VisualWriter(this);
     this.converter = new VisualConverter(this);

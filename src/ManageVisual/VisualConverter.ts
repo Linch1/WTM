@@ -10,9 +10,9 @@ class VisualConverter {
   constructor(public visual: Visual) {}
 
   /**
-   * @description replace all the placholders in the inside **default.php**
+   * @description replace all the placholders in the inside **default.##**
    * with the identifiers HTML values inside **WTM.json**.
-   * then the new html obtained by this operation is wrote inside **render.php**
+   * then the new html obtained by this operation is wrote inside **render.##**
    */
   render(type: renderTypes) {
     let html: string = FileReader.readFile(this.visual.DEFAULT_FILE_PATH);

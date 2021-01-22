@@ -8,16 +8,9 @@ export abstract class AbstractGeneralVisual {
   public readonly ERR_VISUAL_ALREADY_EXISTS = "ERR: The visual already exists";
   public readonly ERR_CANNOT_GET_VISUAL_NAME =
     "ERR: Cannot retrive the visual name from the given path";
-  
-  public readonly RENDER_FILE_PATH: string = StringComposeWriter.concatenatePaths(
-    this.getDirPath(),
-    "render.php"
-  );
-  public readonly DEFAULT_FILE_PATH: string = StringComposeWriter.concatenatePaths(
-    this.getDirPath(),
-    "default.php"
-  );
 
+  public readonly RENDER_FILE_PATH: string;
+  public readonly DEFAULT_FILE_PATH: string;
   public readonly INIT_RENDER_FILE_CONTENT: string = "";
   public readonly INIT_DEFAULT_FILE_CONTENT: string = "";
 
@@ -34,9 +27,23 @@ export abstract class AbstractGeneralVisual {
     },
   };
 
-  constructor(public VISUAL_FOLDER: string) {
+  /**
+   * @description create a visual with the given informations
+   * @param VISUAL_FOLDER the folder where the visuale is ( or have to be ) containers
+   * @param extension the typo of the visual ( php/ejs/html ... ) _without the dot_
+   */
+  constructor(public VISUAL_FOLDER: string, extension: string = "php") {
     this.JSON_FILE_CONTENT.visual.name = StringComposeReader.getPathLastElem(
       this.VISUAL_FOLDER
+    );
+    
+    this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      "default." + extension
+    );
+    this.DEFAULT_FILE_PATH = StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      "render." + extension
     );
     this.init();
     

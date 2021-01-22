@@ -41,8 +41,8 @@ class VisualWriter {
   }
 
   /**
-   * @description populate the WTM.json file of the given visual with the identifiers contained in default.php
-   * - default.php should contain **only** HTML identifiers
+   * @description populate the WTM.json file of the given visual with the identifiers contained in default.##
+   * - default.## should contain **only** HTML identifiers
    */
   public populateIdentifiers() {
     let identifiersJson: visualJsonIdentifiers = this.visual.JSON_FILE_CONTENT.identifiers;
@@ -63,8 +63,6 @@ class VisualWriter {
       }
 
     }
-    
-
     FileWriter.writeFile(
       this.visual.JSON_FILE_PATH,
       JSON.stringify(this.visual.JSON_FILE_CONTENT)

@@ -30,10 +30,11 @@ TestTheme.readTheme();
 
 */
 
+TestVisual.VisualCreate();
 
 /* TEST FOR MANAGE CUSTOM VISUALS
 
-TestVisual.VisualCreate();
+
 TestVisual.VisualEditHtml();
 TestVisual.visualPopulateIdentfiers();
 TestVisual.visualRenderDefault();

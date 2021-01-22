@@ -8,9 +8,9 @@ import { Visual } from "../ManageVisual/Visual";
 import { BulkVisual } from "../ManageVisual/BulkVisual";
 
 
-let visualsFolder = "/home/pero/projects/WPThemeManager/visual"
-let testVisual = visualsFolder + "/testVisual";
-let visual: Visual = new Visual(testVisual);
+let visualsFolder = "/home/pero/projects/WTM/LIB/visual"
+let testVisual = visualsFolder + "/testVisual-ejs";
+let visual: Visual = new Visual(testVisual, 'ejs');
 let visualWr: VisualWriter = visual.writer;
 let visualRd: VisualReader = visual.reader;
 let visualCv: VisualConverter= visual.converter;
