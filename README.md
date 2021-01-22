@@ -1,2 +1,2 @@
 # WTM
-WTM:  Wordpress theme manager is library for easly manage a wordpress theme
+**Wordpress theme manager** is library for easly manage a wordpress theme
