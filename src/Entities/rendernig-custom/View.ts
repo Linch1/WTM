@@ -16,7 +16,7 @@ export class View extends GeneralViewEntity {
 <!--[WTM-HTML-BODY]>-->
 [WTM-PLACEHOLDER-PAGE-FOOTER]
 `;
-    this.PAGE_PREFIX = "template-";
+    this.PAGE_PREFIX = "view-";
 
     this.PARENT_DIR_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views");
     this.JSON_FOLDER_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views/views-json");
