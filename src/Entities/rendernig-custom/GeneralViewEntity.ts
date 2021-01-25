@@ -57,6 +57,9 @@ export class GeneralViewEntity {
     this.JSON_DEFAULT_INFORMATIONS = JSON.parse(
       FileReader.readFile(this.JSON_DEFAULT_FILE_PATH)
     );
+    this.JSON_INFORMATIONS = JSON.parse(
+      FileReader.readFile(this.JSON_FILE_PATH)
+    );
   }
   /**
    * @description delete the all the relative files
