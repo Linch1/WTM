@@ -138,7 +138,7 @@ export class GeneralViewEntity {
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
-      `<%include ${path}%>`,
+      `<%-include ("${path}")%>`,
       IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[1]
     );
