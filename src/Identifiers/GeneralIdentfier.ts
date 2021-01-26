@@ -42,4 +42,13 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
       `<!--[WTM-${this.IDENTIFIER_TYPE}-${name}]>-->`,
     ];
   }
+  /**
+   * @description get the identifier executable
+   * @param name the name of the identifier
+   * @param addInitialSlash if the identifier has to start with '//' ( default: true )
+   */
+  static getIdentifierExecutable(name: string, addInitialSlash: boolean = true): string {
+    let identifier = `[WTM-${this.IDENTIFIER_TYPE}-!EXEC!-${name}]`;
+    return addInitialSlash ? `//` + identifier : identifier;
+  }
 }
