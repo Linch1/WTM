@@ -12,8 +12,9 @@ import { addBlockParams } from "../../Types/entity.rendering.params.addBlock";
 export class GeneralViewEntity {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
     "ERR: The passed Html block identified by the passed identifier_name doesn't exists in the (template/single) file";
-    public readonly ERR_VIEW_NOT_CREATED =
+  public readonly ERR_VIEW_NOT_CREATED =
     "ERR: Before calling this method create the view with the .create() method";
+  public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
 
   public PAGE_NAME: string = "";
   public PAGE_TYPE: pageTypes = pageTypes.PAGE;
@@ -119,6 +120,9 @@ export class GeneralViewEntity {
    * @description create the single/template and populate it's header/footer with the default ones
    */
   public create(): void {
+    if(this.isCreated()){
+      throw new Error(this.ERR_VIEW_ALREADY_EXISTS)
+    }
     let defaultContent: string = this.DEFAULT_BUILD;
     let params: replaceAllParams = {};
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_NAME] = this.PAGE_NAME;
@@ -135,8 +139,11 @@ export class GeneralViewEntity {
       newContent,
       params
     );
+
+    this.JSON_INFORMATIONS.name = this.PAGE_NAME;
     FileWriter.createFile(this.JSON_FILE_PATH, JSON.stringify(this.JSON_INFORMATIONS));
     FileWriter.writeFile(this.getPath(), newContent);
+
     this.saveJson();
   }
 
@@ -150,6 +157,7 @@ export class GeneralViewEntity {
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(identifier_name))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     if(!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
+    
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
       `<%-include ("${path}")%>`,

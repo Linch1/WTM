@@ -12,7 +12,6 @@ export class Single extends GeneralPageEntity {
     this.DEFAULT_BUILD_PATH = "single-default.php";
     this.PAGE_PREFIX = "single-";
 
-    this.JSON_INFORMATIONS.name = this.PAGE_NAME;
     this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(
       pagePath.POST,
       `WTM-${this.PAGE_NAME.toLowerCase().split(" ").join("-")}.json`

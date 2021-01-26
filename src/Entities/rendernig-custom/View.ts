@@ -22,7 +22,6 @@ export class View extends GeneralViewEntity {
     this.JSON_FOLDER_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views/views-json");
     this.JSON_DEFAULT_FILE_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views/views-json/default.json");
     
-    this.JSON_INFORMATIONS.name = this.PAGE_NAME;
     this.JSON_FILE_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, `Views/views-json/WTM-${this.PAGE_NAME}.json`);
 
     this.initialize();
