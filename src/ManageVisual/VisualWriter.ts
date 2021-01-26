@@ -3,7 +3,7 @@ import { FileReader } from "../files/FileReader";
 import { visualJsonIdentifiers } from "../Types/entity.visual.jsons";
 import { Identifiers } from "../Identifiers/Identifiers";
 import { Visual } from "./Visual";
-import { identifierType } from "../Enums";
+import { identifierActions, identifierType } from "../Enums";
 
 class VisualWriter {
 
@@ -46,8 +46,9 @@ class VisualWriter {
    */
   public populateIdentifiers() {
     let identifiersJson: visualJsonIdentifiers = this.visual.JSON_FILE_CONTENT.identifiers;
-    let identfiers: string[] = Identifiers.getStaticIdentifiers(
-      this.visual.DEFAULT_FILE_PATH
+    let identfiers: string[] = Identifiers.getContainedIdentifiers(
+      this.visual.DEFAULT_FILE_PATH,
+      identifierActions.STATIC
     );
 
     for (let _knownIdentifier in identifiersJson){
@@ -55,7 +56,7 @@ class VisualWriter {
 
       for (let foundIdentifier of identfiers) {
         
-        let [TYPE, NAME] = Identifiers.getIdentifierTypeName(foundIdentifier);
+        let [TYPE, ACTION, NAME] = Identifiers.getIdentifierTypeActionName(foundIdentifier);
         if( TYPE !== identifierType.HTML) throw new Error(this.ERR_NOT_HTML_IDENTIFIER);
         
         identifiersJson[knownIdentifier][NAME] = "";

@@ -4,5 +4,5 @@ export enum identifierType {
   IMPORTED = "IMPORTED",
   PLACEHOLDER = "PLACEHOLDER",
   HTML = "HTML",
-  ACF = "ACF",
+  ACF = "ACF"
 }

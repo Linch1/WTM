@@ -1,3 +1,4 @@
+import { identifierActions } from "../Enums/identifiers.actions";
 import { identifierType } from "../Enums/identifiers.type";
 import { FileReader } from "../files/FileReader";
 
@@ -14,7 +15,7 @@ export class Identifiers {
    * @description check if a given word is a comment identifier
    * @param word the word that has to be analized for check if it is a comment identifier
    */
-  static checkIdentifier(word: string): string {
+  static checkCommentIdentifier(word: string): string {
     for (let identifierType of this.IDENTIFIERS) {
       let identifierKeyword = this.getIdentifier(identifierType);
       if (word.includes(identifierKeyword) && word.startsWith("//"))
@@ -25,24 +26,28 @@ export class Identifiers {
 
   /**
    * @description return a list containg the regex expression for find the identifiers inside a string
+   * @param identifierAction the action category of the identifiers to retrive
    */
-  static getIdentifiersRegex(): RegExp[] {
+  static getIdentifiersRegex(identifierAction: identifierActions): RegExp[] {
     let identifiersRegex = [];
-    for (let identifierType of this.IDENTIFIERS) {
-      identifiersRegex.push(
-        new RegExp(`\\[${this.getIdentifier(identifierType)}-(.*)\\]`, "g")
-      );
+    for(let action in identifierActions){
+      if( identifierAction !=  identifierActions.ALL && action != identifierAction) continue;
+      for (let identifierType of this.IDENTIFIERS) {
+        identifiersRegex.push( new RegExp(`\\[${this.getIdentifier(identifierType)}-${identifierAction}-(.*)\\]`, "g") );
+      } 
     }
+    
     return identifiersRegex;
   }
 
   /**
-   * @description get all the identifiers of the type *[WTM-IDENTIFIER-NAME]* contained in a file
+   * @description get the identifiers contained in the passed file  that have a given action 
    * @param filePath the path to the file
+   * @param identifierAction the action category of the identifiers to retrive
    */
-  static getContainedIdentifiers(filePath: string): string[] {
+  static getContainedIdentifiers(filePath: string, identifierAction: identifierActions): string[] {
     let text = FileReader.readFile(filePath);
-    let identifiersRegex: RegExp[] = this.getIdentifiersRegex();
+    let identifiersRegex: RegExp[] = this.getIdentifiersRegex(identifierAction);
     let foundIdentifiers: string[] = [];
 
     for (let regex of identifiersRegex) {
@@ -55,43 +60,16 @@ export class Identifiers {
   }
 
   /**
-   * @description get all the non executable identifiers contained in the given file
-   * @param filePath the path to the file
-   */
-  static getStaticIdentifiers(filePath: string): string[] {
-    let identifiers: string[] = this.getContainedIdentifiers(filePath);
-    let staticIdentifiers: string[] = [];
-    for (let identifier of identifiers) {
-      if(!identifier.includes("!EXEC!")) staticIdentifiers.push(identifier);
-    }
-    return staticIdentifiers;
-  }
-
-  /**
-   * @description get all the executable identifiers contained in the given file
-   * @param filePath the path to the file
-   */
-  static getExecutableIdentifiers(filePath: string): string[] {
-    let identifiers: string[] = this.getContainedIdentifiers(filePath);
-    let execIdentifiers: string[] = [];
-    for (let identifier of identifiers) {
-      if(identifier.includes("!EXEC!")) execIdentifiers.push(identifier);
-    }
-    return execIdentifiers;
-  }
-
-  /**
    * @description get the identifier type and name
    * @param identifier the identifier to analyze
    * @returns array of strings [IDENTIFIER_TYPE, IDENTIFIER_NAME];
    */
-  static getIdentifierTypeName(identifier: string): [identifierType , string] {
-    identifier = identifier.substring(4, identifier.length - 1);
+  static getIdentifierTypeActionName(identifier: string): [identifierType, identifierActions, string] {
+    identifier = identifier.substring(4, identifier.length - 1); // removes "[WTM" and "]"
     let splitted = identifier.split("-");
-    let TYPE = (splitted.shift() == undefined
-      ? ""
-      : splitted.shift()) as identifierType;
+    let TYPE = (splitted.shift() == undefined ? "" : splitted.shift()) as identifierType; // the first .shift() remove an empty char, the second get the type
+    let ACTION = splitted.shift() as identifierActions;
     let NAME = splitted.join("-");
-    return [TYPE, NAME];
+    return [TYPE, ACTION, NAME];
   }
 }
