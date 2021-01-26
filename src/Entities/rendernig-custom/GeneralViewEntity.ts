@@ -151,7 +151,7 @@ export class GeneralViewEntity {
    * @description include the given path in the block identified by the passed identifier_name
    * - the aviable blocks can be viewed from _this.IDENTIFIERS_HTML_BLOCKS_
    * @param identifier_name
-   * @param path
+   * @param path this path is relative to the root dir, the root this is automatically prepended ( root dir : **process.env.PWD**)
    */
   public includeRelative(identifier_name: string, path: string): void {
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(identifier_name))
@@ -160,7 +160,7 @@ export class GeneralViewEntity {
     
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
-      `<%-include ("${path}")%>`,
+      `<%-include (TEMPLATE_PATH +"${path}", {TEMPLATE_PATH: process.env.PWD})-%>`,
       IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[1]
     );
