@@ -14,7 +14,7 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
   static PROTECTED_NAMES: string[] = [];
   static IDENTIFIER_TYPE: identifierType;
   
-  static EXEC: { [key: string]: () => any };
+  static EXEC: { [key: string]: () => any } = {};
 
   /**
    * @description get the identifier
@@ -62,7 +62,7 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
     let identifier = `[WTM-${this.IDENTIFIER_TYPE}-${action}-${name}]`;
     return addInitialSlash ? `//` + identifier : identifier;
   }
-
+  
   static setExecutable(identifierName: string, callback: () => any) {
     if (this.PROTECTED_NAMES.includes(identifierName)) {
       throw new Error(this.ERR_PROTECTED_NAME);
