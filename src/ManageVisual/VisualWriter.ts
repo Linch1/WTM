@@ -46,7 +46,7 @@ class VisualWriter {
    */
   public populateIdentifiers() {
     let identifiersJson: visualJsonIdentifiers = this.visual.JSON_FILE_CONTENT.identifiers;
-    let identfiers: string[] = Identifiers.getContainedIdentifiers(
+    let identfiers: string[] = Identifiers.getStaticIdentifiers(
       this.visual.DEFAULT_FILE_PATH
     );
 

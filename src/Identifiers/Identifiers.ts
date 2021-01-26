@@ -55,6 +55,32 @@ export class Identifiers {
   }
 
   /**
+   * @description get all the non executable identifiers contained in the given file
+   * @param filePath the path to the file
+   */
+  static getStaticIdentifiers(filePath: string): string[] {
+    let identifiers: string[] = this.getContainedIdentifiers(filePath);
+    let staticIdentifiers: string[] = [];
+    for (let identifier of identifiers) {
+      if(!identifier.includes("!EXEC!")) staticIdentifiers.push(identifier);
+    }
+    return staticIdentifiers;
+  }
+
+  /**
+   * @description get all the executable identifiers contained in the given file
+   * @param filePath the path to the file
+   */
+  static getExecutableIdentifiers(filePath: string): string[] {
+    let identifiers: string[] = this.getContainedIdentifiers(filePath);
+    let execIdentifiers: string[] = [];
+    for (let identifier of identifiers) {
+      if(identifier.includes("!EXEC!")) execIdentifiers.push(identifier);
+    }
+    return execIdentifiers;
+  }
+
+  /**
    * @description get the identifier type and name
    * @param identifier the identifier to analyze
    * @returns array of strings [IDENTIFIER_TYPE, IDENTIFIER_NAME];
