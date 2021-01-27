@@ -27,7 +27,7 @@ class VisualConverter {
       json.identifiers[type][identifierActions.STATIC]
     );
     newHtml = StringComposeWriter.replaceAllExecutableIdentifiers(
-      html,
+      newHtml,
       type,
       json.identifiers[type][identifierActions.EXECUTABLE]
     );

@@ -246,10 +246,11 @@ export class StringComposeWriter {
     params: replaceAllParams
   ): string {
     Object.keys(params).forEach((placeholder) => {
-      let newText = params[placeholder];
+      
       let identifierName: string = placeholder;
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.EXECUTABLE, false);
-      text = text.split(identifier).join(`<div id="${identifier}" data-action="${identifierActions.EXECUTABLE}" data-type="${type}" data-name="${identifierName}"></div>`);
+      let newText = `<div id="${identifier}" data-action="${identifierActions.EXECUTABLE}" data-type="${type}" data-name="${identifierName}"></div>`;
+      text = text.split(identifier).join(newText);
     });
     return text;
   }
