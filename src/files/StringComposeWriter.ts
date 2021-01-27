@@ -5,6 +5,7 @@ import { StringComposeReader } from "./StringComposeReader";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
+import { identifierActions } from "../Enums";
 
 export class StringComposeWriter {
   /**
@@ -214,18 +215,17 @@ export class StringComposeWriter {
   }
 
   /**
-   * @description replace all the occurences of a html identifier with a given word
+   * @description replace all the occurences of a _STATIC_ html identifier with a given word
    * @param text the text that contains the words to replace
    * @param params an object with this structure { html_identifier_name: new_text_to_put_over_identifier }
    */
-  static replaceAllIdentifiersHtml(
+  static replaceAllStaticIdentifiersHtml(
     text: string,
     params: replaceAllParams
   ): string {
     Object.keys(params).forEach((placeholder) => {
       let newText = params[placeholder];
-      placeholder = IdentifierHtml.getIdentifier(placeholder, false);
-      
+      placeholder = IdentifierHtml.getIdentifierWithAction(placeholder, identifierActions.STATIC, false);
       text = text.split(placeholder).join(newText);
     });
 

@@ -19,7 +19,7 @@ class VisualConverter {
     let json: visualJson = JSON.parse(
       FileReader.readFile(this.visual.JSON_FILE_PATH)
     );
-    let newHtml: string = StringComposeWriter.replaceAllIdentifiersHtml(
+    let newHtml: string = StringComposeWriter.replaceAllStaticIdentifiersHtml(
       html,
       json.identifiers[type]
     );
