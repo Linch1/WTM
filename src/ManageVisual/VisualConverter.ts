@@ -1,4 +1,3 @@
-
 import { identifierActions } from "../Enums";
 import { renderTypes } from "../Enums/entity.visual.renderType";
 import { FileReader } from "../files/FileReader";
@@ -16,14 +15,21 @@ class VisualConverter {
    * then the new html obtained by this operation is wrote inside **render.##**
    */
   render(type: renderTypes) {
-    if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
+    if (!this.visual.isCreated())
+      throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
     let html: string = FileReader.readFile(this.visual.DEFAULT_FILE_PATH);
     let json: visualJson = JSON.parse(
       FileReader.readFile(this.visual.JSON_FILE_PATH)
     );
-    let newHtml: string = StringComposeWriter.replaceAllStaticIdentifiersHtml(
+    let newHtml: string = StringComposeWriter.replaceAllStaticIdentifiers(
       html,
+      type,
       json.identifiers[type][identifierActions.STATIC]
+    );
+    newHtml = StringComposeWriter.replaceAllExecutableIdentifiers(
+      html,
+      type,
+      json.identifiers[type][identifierActions.EXECUTABLE]
     );
     FileWriter.writeFile(this.visual.RENDER_FILE_PATH, newHtml);
   }

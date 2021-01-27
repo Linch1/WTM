@@ -5,7 +5,8 @@ import { StringComposeReader } from "./StringComposeReader";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
-import { identifierActions } from "../Enums";
+import { identifierActions, identifierNameToClass, identifierType, renderTypes } from "../Enums";
+import { GeneralIdentifier } from "../Identifiers";
 
 export class StringComposeWriter {
   /**
@@ -215,20 +216,39 @@ export class StringComposeWriter {
   }
 
   /**
-   * @description replace all the occurences of a _STATIC_ html identifier with a given word
+   * @description replace all the occurences of a _STATIC_ identifier with a given word
    * @param text the text that contains the words to replace
    * @param params an object with this structure { html_identifier_name: new_text_to_put_over_identifier }
    */
-  static replaceAllStaticIdentifiersHtml(
+  static replaceAllStaticIdentifiers(
     text: string,
+    type: renderTypes,
     params: replaceAllParams
   ): string {
     Object.keys(params).forEach((placeholder) => {
       let newText = params[placeholder];
-      placeholder = IdentifierHtml.getIdentifierWithAction(placeholder, identifierActions.STATIC, false);
+      placeholder = identifierNameToClass[type].getIdentifierWithAction(placeholder, identifierActions.STATIC, false);
       text = text.split(placeholder).join(newText);
     });
 
+    return text;
+  }
+
+  /**
+   * @description replace all the occurences of a _EXECUTABLE_ identifier with a predefined html tag
+   * @param text the text that contains the words to replace
+   * @param params an object with this structure { html_identifier_name: new_text_to_put_over_identifier }
+   */
+  static replaceAllExecutableIdentifiers(
+    text: string,
+    type: renderTypes,
+    params: replaceAllParams
+  ): string {
+    Object.keys(params).forEach((placeholder) => {
+      let newText = params[placeholder];
+      placeholder = identifierNameToClass[type].getIdentifierWithAction(placeholder, identifierActions.EXECUTABLE, false);
+      text = text.split(placeholder).join(`<div id="${placeholder}" data-action="${identifierActions.EXECUTABLE}" data-type="${type}" data-name="${placeholder}"></div>`);
+    });
     return text;
   }
 }
