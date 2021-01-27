@@ -63,7 +63,7 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
     return addInitialSlash ? `//` + identifier : identifier;
   }
   
-  static setExecutable(identifierName: string, callback: () => any) {
+  static setExecutable(identifierName: string, callback: (...args: any[]) => any) {
     if (this.PROTECTED_NAMES.includes(identifierName)) {
       throw new Error(this.ERR_PROTECTED_NAME);
     }
