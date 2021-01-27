@@ -1,4 +1,5 @@
 
+import { identifierActions } from "../Enums";
 import { renderTypes } from "../Enums/entity.visual.renderType";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
@@ -21,7 +22,7 @@ class VisualConverter {
     );
     let newHtml: string = StringComposeWriter.replaceAllStaticIdentifiersHtml(
       html,
-      json.identifiers[type]
+      json.identifiers[type][identifierActions.STATIC]
     );
     FileWriter.writeFile(this.visual.RENDER_FILE_PATH, newHtml);
   }

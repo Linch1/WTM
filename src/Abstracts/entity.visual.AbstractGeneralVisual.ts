@@ -2,6 +2,7 @@ import { FileReader } from "../files/FileReader";
 import { StringComposeReader } from "../files/StringComposeReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { visualJson } from "../Types/entity.visual.jsons";
+import { identifierActions } from "../Enums";
 
 
 export abstract class AbstractGeneralVisual {
@@ -22,8 +23,16 @@ export abstract class AbstractGeneralVisual {
   public JSON_FILE_CONTENT: visualJson = {
     visual: { name: "" },
     identifiers: {
-      HTML: {},
-      ACF: {},
+      HTML: {
+        "!STATIC!": {},
+        "!ALL!": {},
+        "!EXEC!": {}
+      },
+      ACF: {
+        "!STATIC!": {},
+        "!ALL!": {},
+        "!EXEC!": {}
+      },
     },
   };
 

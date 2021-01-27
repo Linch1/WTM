@@ -3,11 +3,11 @@ import { FileReader } from "../files/FileReader";
 import { visualJsonIdentifiers } from "../Types/entity.visual.jsons";
 import { Identifiers } from "../Identifiers/Identifiers";
 import { Visual } from "./Visual";
-import { identifierActions, identifierType } from "../Enums";
+import { identifierActions, identifierType, renderTypes } from "../Enums";
 
 class VisualWriter {
 
-  public ERR_NOT_HTML_IDENTIFIER = "During the population of the identifier was found a non HTML identifier."
+  public ERR_NOT_RENDER_IDENTIFIER = "During the population of the identifier was found a non registered RENDER identifier, check the enum renderTypes."
 
   constructor(public visual: Visual) {}
 
@@ -48,20 +48,20 @@ class VisualWriter {
     let identifiersJson: visualJsonIdentifiers = this.visual.JSON_FILE_CONTENT.identifiers;
     let identfiers: string[] = Identifiers.getContainedIdentifiers(
       this.visual.DEFAULT_FILE_PATH,
-      identifierActions.STATIC
+      identifierActions.ALL
     );
-
     for (let _knownIdentifier in identifiersJson){
-      let knownIdentifier = _knownIdentifier as keyof visualJsonIdentifiers;
-
       for (let foundIdentifier of identfiers) {
         
         let [TYPE, ACTION, NAME] = Identifiers.getIdentifierTypeActionName(foundIdentifier);
-        if( TYPE !== identifierType.HTML) throw new Error(this.ERR_NOT_HTML_IDENTIFIER);
-        
-        identifiersJson[knownIdentifier][NAME] = "";
+        if( ! (TYPE in renderTypes ) ) {
+          throw new Error(this.ERR_NOT_RENDER_IDENTIFIER);
+        }
+        // this line give errors from typesscripèt but it's sure that the TYPE is of type renderType ( for the upper 'if' check )
+        // and the ACTION is for sure a key of the json becouse it is built to have all the ACTIONS as key for each TYPE (renderType)
+        //@ts-ignore
+        identifiersJson[TYPE][ACTION][NAME] = "";
       }
-
     }
     FileWriter.writeFile(
       this.visual.JSON_FILE_PATH,
