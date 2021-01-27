@@ -14,7 +14,7 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
   static PROTECTED_NAMES: string[] = [];
   static IDENTIFIER_TYPE: identifierType;
   
-  static EXEC: { [key: string]: () => any } = {};
+  static EXEC: { [key: string]: (...args: any[]) => any } = {};
 
   /**
    * @description get the identifier
