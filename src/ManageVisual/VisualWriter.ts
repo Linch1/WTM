@@ -42,7 +42,6 @@ class VisualWriter {
 
   /**
    * @description populate the WTM.json file of the given visual with the identifiers contained in default.##
-   * - default.## should contain **only** HTML identifiers
    */
   public populateIdentifiers() {
     if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
@@ -59,10 +58,10 @@ class VisualWriter {
         if( ! (TYPE in renderTypes ) ) {
           throw new Error(this.ERR_NOT_RENDER_IDENTIFIER);
         }
-        // this line give errors from typesscripèt but it's sure that the TYPE is of type renderType ( for the upper 'if' check )
+        // this line give errors from typesscript but it's sure that the TYPE is of type renderType ( for the upper 'if' check )
         // and the ACTION is for sure a key of the json becouse it is built to have all the ACTIONS as key for each TYPE (renderType)
         //@ts-ignore
-        identifiersJson[TYPE][ACTION][NAME] = "";
+        identifiersJson[TYPE][ACTION][NAME] = identifiersJson[TYPE][ACTION][NAME] ? identifiersJson[TYPE][ACTION][NAME]: "";
       }
     }
     FileWriter.writeFile(
