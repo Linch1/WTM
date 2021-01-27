@@ -227,8 +227,9 @@ export class StringComposeWriter {
   ): string {
     Object.keys(params).forEach((placeholder) => {
       let newText = params[placeholder];
-      placeholder = identifierToClass[type].getIdentifierWithAction(placeholder, identifierActions.STATIC, false);
-      text = text.split(placeholder).join(newText);
+      let identifierName: string = placeholder;
+      let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.STATIC, false);
+      text = text.split(identifier).join(newText);
     });
 
     return text;
@@ -246,8 +247,9 @@ export class StringComposeWriter {
   ): string {
     Object.keys(params).forEach((placeholder) => {
       let newText = params[placeholder];
-      placeholder = identifierToClass[type].getIdentifierWithAction(placeholder, identifierActions.EXECUTABLE, false);
-      text = text.split(placeholder).join(`<div id="${placeholder}" data-action="${identifierActions.EXECUTABLE}" data-type="${type}" data-name="${placeholder}"></div>`);
+      let identifierName: string = placeholder;
+      let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.EXECUTABLE, false);
+      text = text.split(identifier).join(`<div id="${identifier}" data-action="${identifierActions.EXECUTABLE}" data-type="${type}" data-name="${identifierName}"></div>`);
     });
     return text;
   }
