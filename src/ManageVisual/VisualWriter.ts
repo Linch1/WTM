@@ -45,6 +45,8 @@ class VisualWriter {
    * - default.## should contain **only** HTML identifiers
    */
   public populateIdentifiers() {
+    if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
+    
     let identifiersJson: visualJsonIdentifiers = this.visual.JSON_FILE_CONTENT.identifiers;
     let identfiers: string[] = Identifiers.getContainedIdentifiers(
       this.visual.DEFAULT_FILE_PATH,
@@ -74,6 +76,8 @@ class VisualWriter {
    * @param newHtml the new html to use
    */
   public editDefaultHtml(newHtml: string){
+    if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
+
     FileWriter.writeFile(this.visual.DEFAULT_FILE_PATH, newHtml);
   }
 

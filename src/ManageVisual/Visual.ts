@@ -25,6 +25,7 @@ export class Visual extends AbstractGeneralVisual {
    * @param renderType
    */
   public Vupdate(newHtml: string, renderType: renderTypes) {
+    if(!this.isCreated()) throw new Error(this.ERR_VISUAL_NOT_CREATED);
     this.writer.editDefaultHtml(newHtml);
     this.writer.populateIdentifiers();
     this.converter.render(renderType);

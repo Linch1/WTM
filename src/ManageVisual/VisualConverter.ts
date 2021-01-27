@@ -16,6 +16,7 @@ class VisualConverter {
    * then the new html obtained by this operation is wrote inside **render.##**
    */
   render(type: renderTypes) {
+    if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
     let html: string = FileReader.readFile(this.visual.DEFAULT_FILE_PATH);
     let json: visualJson = JSON.parse(
       FileReader.readFile(this.visual.JSON_FILE_PATH)

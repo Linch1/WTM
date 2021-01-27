@@ -9,6 +9,8 @@ export abstract class AbstractGeneralVisual {
   public readonly ERR_VISUAL_ALREADY_EXISTS = "ERR: The visual already exists";
   public readonly ERR_CANNOT_GET_VISUAL_NAME =
     "ERR: Cannot retrive the visual name from the given path";
+  public readonly ERR_VISUAL_NOT_CREATED =
+    "ERR: Before calling this method create the visual with the myVisual.writer.createVisual() method";
 
   public readonly RENDER_FILE_PATH: string;
   public readonly DEFAULT_FILE_PATH: string;
@@ -56,6 +58,13 @@ export abstract class AbstractGeneralVisual {
     );
     this.init();
     
+  }
+
+  /**
+   * @description returns true if the current visual was created
+   */
+  public isCreated(): boolean{
+    return FileReader.existsPath(this.getDirPath());
   }
 
   public init(){
