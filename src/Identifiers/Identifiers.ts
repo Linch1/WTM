@@ -31,12 +31,10 @@ export class Identifiers {
   static getIdentifiersRegex(identifierAction: identifierActions): RegExp[] {
     let identifiersRegex = [];
     for(let action in identifierActions){
-
       let actionVal: identifierActions = (<any>identifierActions)[action];
       if( identifierAction !=  identifierActions.ALL && actionVal != identifierAction) continue;
-
       for (let identifierType of this.IDENTIFIERS) {
-        identifiersRegex.push( new RegExp(`\\[${this.getIdentifier(identifierType)}-${identifierAction}-(.*)\\]`, "g") );
+        identifiersRegex.push( new RegExp(`\\[${this.getIdentifier(identifierType)}-${actionVal}-(.*)\\]`, "g") );
       } 
       
     }

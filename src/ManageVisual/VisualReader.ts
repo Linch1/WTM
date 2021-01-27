@@ -7,7 +7,7 @@ class VisualReader {
   constructor(public visual: Visual) {}
 
   /**
-   * @description read the visual json bind it to the visual
+   * @description read the visual json and bind it to the visual
    */
   public read(){
     let visualJsonContent: visualJson = JSON.parse(FileReader.readFile(this.visual.JSON_FILE_PATH));
