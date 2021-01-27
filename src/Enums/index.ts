@@ -6,4 +6,4 @@ export * from './manageTheme.jsons';
 export * from './entity.visual.renderType';
 export * from './identifiers.actions';
 export * from './identifiers.type';
-export * from './identifiers.mapNameToIdentifier';
+export * from './identifiers.mapIdentifierToClass';

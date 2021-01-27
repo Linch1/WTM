@@ -5,7 +5,7 @@ import { StringComposeReader } from "./StringComposeReader";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
-import { identifierActions, identifierNameToClass, identifierType, renderTypes } from "../Enums";
+import { identifierActions, identifierToClass, identifierType, renderTypes } from "../Enums";
 import { GeneralIdentifier } from "../Identifiers";
 
 export class StringComposeWriter {
@@ -227,7 +227,7 @@ export class StringComposeWriter {
   ): string {
     Object.keys(params).forEach((placeholder) => {
       let newText = params[placeholder];
-      placeholder = identifierNameToClass[type].getIdentifierWithAction(placeholder, identifierActions.STATIC, false);
+      placeholder = identifierToClass[type].getIdentifierWithAction(placeholder, identifierActions.STATIC, false);
       text = text.split(placeholder).join(newText);
     });
 
@@ -246,7 +246,7 @@ export class StringComposeWriter {
   ): string {
     Object.keys(params).forEach((placeholder) => {
       let newText = params[placeholder];
-      placeholder = identifierNameToClass[type].getIdentifierWithAction(placeholder, identifierActions.EXECUTABLE, false);
+      placeholder = identifierToClass[type].getIdentifierWithAction(placeholder, identifierActions.EXECUTABLE, false);
       text = text.split(placeholder).join(`<div id="${placeholder}" data-action="${identifierActions.EXECUTABLE}" data-type="${type}" data-name="${placeholder}"></div>`);
     });
     return text;

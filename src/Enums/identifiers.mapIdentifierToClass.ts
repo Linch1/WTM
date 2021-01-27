@@ -1,5 +1,5 @@
 import { IdentifierAcf, IdentifierHtml, IdentifierId, IdentifierImport, IdentifierImported, IdentifierPlaceholder } from "../Identifiers";
-export const identifierNameToClass = {
+export const identifierToClass = {
   ID: IdentifierId,
   IMPORT: IdentifierImport,
   IMPORTED: IdentifierImported,
