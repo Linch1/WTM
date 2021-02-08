@@ -48,7 +48,7 @@ export abstract class AbstractGeneralVisual {
       this.VISUAL_FOLDER
     );
     this.JSON_FILE_CONTENT.visual.extension = extension;
-    
+
     this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
       "render." + extension
@@ -79,6 +79,13 @@ export abstract class AbstractGeneralVisual {
    */
   public getName(): string {
     return this.JSON_FILE_CONTENT.visual.name;
+  }
+
+  /**
+   * @description get the visual name from the VISUAL_FOLDER
+   */
+  public getExtension(): string {
+    return this.JSON_FILE_CONTENT.visual.extension;
   }
 
   /**
