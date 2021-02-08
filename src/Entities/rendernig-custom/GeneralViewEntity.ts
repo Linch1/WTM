@@ -17,6 +17,7 @@ export class GeneralViewEntity {
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
 
   public PAGE_NAME: string = "";
+  public PAGE_EXTENSION: string = "";
   public PAGE_TYPE: pageTypes = pageTypes.PAGE;
   public PARENT_DIR_PATH = "";
   public DEFAULT_BUILD: string = "";
@@ -45,9 +46,13 @@ export class GeneralViewEntity {
 
   public JSON_INFORMATIONS: informationsJson = {
     blocks: { BODY: { open: "", close: "", include: [] } },
-    name: "",
+    view: { name: "", extension: ""}
   };
 
+  /**
+   * @todo declare a list of aviable extension ?
+   * @param parentAbsPath 
+   */
   constructor(parentAbsPath : string,) {}
 
   /**
@@ -80,7 +85,7 @@ export class GeneralViewEntity {
    * @description check if the current view is yet created or not, return true if it is created;
    */
   public isCreated(): boolean{
-    return this.JSON_INFORMATIONS.name != "";
+    return this.getName() != "";
   }
 
   /**
@@ -100,11 +105,23 @@ export class GeneralViewEntity {
   public getPath(): string {
     return StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, this.getFileName());
   }
+  public getName(): string {
+    return this.JSON_INFORMATIONS.view.name;
+  }
+  public setName( name: string ) {
+    this.JSON_INFORMATIONS.view.name = name;
+  }
+  public getExtension(): string {
+    return this.JSON_INFORMATIONS.view.extension;
+  }
+  public setExtension( extension: string ) {
+    this.JSON_INFORMATIONS.view.extension = extension;
+  }
   public getFileName(): string {
     return (
       this.PAGE_PREFIX +
-      this.PAGE_NAME.toLocaleLowerCase().split(" ").join("-") +
-      ".ejs"
+      this.getName().toLocaleLowerCase().split(" ").join("-") +
+      this.getExtension()
     );
   }
   /**
@@ -140,7 +157,7 @@ export class GeneralViewEntity {
       params
     );
 
-    this.JSON_INFORMATIONS.name = this.PAGE_NAME;
+    this.setName(this.PAGE_NAME);
     FileWriter.createFile(this.JSON_FILE_PATH, JSON.stringify(this.JSON_INFORMATIONS));
     FileWriter.writeFile(this.getPath(), newContent);
 
@@ -148,6 +165,7 @@ export class GeneralViewEntity {
   }
 
   /**
+   * @todo chenge the include statemend based on the extension type, the current one works for ejs
    * @description include the given path in the block identified by the passed identifier_name
    * - the aviable blocks can be viewed from _this.IDENTIFIERS_HTML_BLOCKS_
    * @param identifier_name

@@ -41,7 +41,7 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
 
   public JSON_INFORMATIONS: informationsJson = {
     blocks: { BODY: { open: "", close: "", include: [] } },
-    name: "",
+    view: { name: "", extension: 'php' }
   };
 
   constructor(public themeAux: ThemeAux) {
@@ -90,14 +90,26 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
    * @description check if the current PAGE is yet created or not, return true if it is created;
    */
   public isCreated(): boolean{
-    return this.JSON_INFORMATIONS.name != "";
+    return this.getName() != "";
   }
 
   /**
    * @description get the absolute path to the main file of the single/template
    */
   public getPath(): string {
-    return this.themeAux.getInsideThemePath(this.PARENT_DIR_PATH, this.getFileName());
+    return StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, this.getFileName());
+  }
+  public getName(): string {
+    return this.JSON_INFORMATIONS.view.name;
+  }
+  public setName( name: string ) {
+    this.JSON_INFORMATIONS.view.name = name;
+  }
+  public getExtension(): string {
+    return this.JSON_INFORMATIONS.view.extension;
+  }
+  public setExtension( extension: string ) {
+    this.JSON_INFORMATIONS.view.extension = extension;
   }
   public getFileName(): string {
     return (
@@ -141,7 +153,7 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
       params
     );
 
-    this.JSON_INFORMATIONS.name = this.PAGE_NAME;
+    this.setName(this.PAGE_NAME);
     FileWriter.createFile(this.JSON_FILE_PATH, JSON.stringify(this.JSON_INFORMATIONS));
     FileWriter.writeFile(this.getPath(), newContent);
     this.saveJson();

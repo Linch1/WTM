@@ -20,5 +20,8 @@ export type informationsJson = {
   blocks: {
     [key: string]: { open: string; close: string; include: string[] };
   };
-  name: string;
+  view: { 
+    name: string, 
+    extension: string
+  }
 };

@@ -5,9 +5,10 @@ import { pagePath } from "../../Enums/entities.visual.path";
 import { StringComposeWriter } from "../../files";
 
 export class View extends GeneralViewEntity {
-  constructor( parentAbsPath : string, pageName: string) {
+  constructor( parentAbsPath : string, pageName: string = "", extension: string = "php") {
     super(parentAbsPath);
     this.PAGE_NAME = pageName;
+    this.PAGE_EXTENSION = extension;
     this.PAGE_TYPE = pageTypes.PAGE;
     
     this.DEFAULT_BUILD = 
