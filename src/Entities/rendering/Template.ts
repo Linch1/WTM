@@ -11,6 +11,7 @@ export class Template extends GeneralPageEntity {
     this.PARENT_DIR_PATH = pagePath.PAGE;
     this.DEFAULT_BUILD_PATH = "template-default.php";
     this.PAGE_PREFIX = "template-";
+    if( this.PAGE_NAME.includes(this.PAGE_PREFIX) ) this.PAGE_NAME = this.PAGE_NAME.replace(this.PAGE_PREFIX, "");
 
     this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(
       pagePath.PAGE,
