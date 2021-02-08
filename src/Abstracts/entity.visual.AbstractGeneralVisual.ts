@@ -49,15 +49,16 @@ export abstract class AbstractGeneralVisual {
     );
     this.JSON_FILE_CONTENT.visual.extension = extension;
 
+    this.init();
+
     this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
-      "render." + extension
+      "render." + this.getExtension()
     );
     this.DEFAULT_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
-      "default." + extension
+      "default." + this.getExtension()
     );
-    this.init();
     
   }
 
