@@ -14,9 +14,8 @@ export class BulkView {
         for ( let viewFile of viewsFolderFiles){
             let viewNameArr: string[] = viewFile.split(".");
             viewNameArr.pop(); // remove the extension from the file name
-            viewFile = viewNameArr.join(".")
-            let visualFolderPath = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, viewFile);
-            views.push(new View(visualFolderPath, this.extension));
+            viewFile = viewNameArr.join(".");
+            views.push(new View(this.VIEWS_FOLDER, viewFile));
         }
         return views;
     }

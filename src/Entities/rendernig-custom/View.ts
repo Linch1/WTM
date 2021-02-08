@@ -2,10 +2,15 @@ import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { GeneralViewEntity } from "./GeneralViewEntity";
 import { pageTypes } from "../../Enums/entities.visual.type";
 import { pagePath } from "../../Enums/entities.visual.path";
-import { StringComposeWriter } from "../../files";
+import { FileReader, FileWriter, StringComposeReader, StringComposeWriter } from "../../files";
 
 export class View extends GeneralViewEntity {
   constructor( parentAbsPath : string, pageName: string = "", extension: string = "php") {
+
+    parentAbsPath = parentAbsPath.trim();
+    pageName = pageName.trim();
+    extension = extension.trim();
+
     super(parentAbsPath);
     
     this.PAGE_PREFIX = "view-";
@@ -20,8 +25,9 @@ export class View extends GeneralViewEntity {
 <!--<[WTM-HTML-BODY]-->
 <!--[WTM-HTML-BODY]>-->
 [WTM-PLACEHOLDER-PAGE-FOOTER]
-`;
-
+`;  
+    if( StringComposeReader.getPathLastElem(parentAbsPath) == 'Views') 
+      parentAbsPath = parentAbsPath.substr(0, parentAbsPath.length - '/Views'.length );
     this.PARENT_DIR_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views");
     this.JSON_FOLDER_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views/views-json");
     this.JSON_DEFAULT_FILE_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views/views-json/default.json");
