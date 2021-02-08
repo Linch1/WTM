@@ -23,7 +23,7 @@ export abstract class AbstractGeneralVisual {
     this.JSON_FILE_NAME
   );
   public JSON_FILE_CONTENT: visualJson = {
-    visual: { name: "" },
+    visual: { name: "", extension: "" },
     identifiers: {
       HTML: {
         "!STATIC!": {},
@@ -47,6 +47,7 @@ export abstract class AbstractGeneralVisual {
     this.JSON_FILE_CONTENT.visual.name = StringComposeReader.getPathLastElem(
       this.VISUAL_FOLDER
     );
+    this.JSON_FILE_CONTENT.visual.extension = extension;
     
     this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),

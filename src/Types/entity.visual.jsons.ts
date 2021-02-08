@@ -8,6 +8,7 @@ export type visualJsonIdentifiers = {
 export type visualJson = {
   visual: {
     name: string;
+    extension: string;
   };
   identifiers: visualJsonIdentifiers;
 };
