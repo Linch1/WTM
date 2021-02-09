@@ -1,54 +1,47 @@
-import { FileWriter } from "../../files/FileWriter";
-import { FileReader } from "../../files/FileReader";
-import { StringComposeWriter } from "../../files/StringComposeWriter";
-import { ThemeAux } from "../../ManageTheme/ThemeAux";
-import { WpFunctionComposer } from "../../files/WpFunctionComposer";
-import { pageTypes } from "../../Enums/entities.visual.type";
-import { defaultJson, informationsJson } from "../../Types/entity.rendering.jsons";
-import { replaceAllParams } from "../../Types/files.StringComposerWriter";
-import { InterfaceGeneralPage } from "../../Interfaces/entity.rendering.InterfaceGeneralPage";
-import { IdentifierHtml } from "../../Identifiers/IdentifierHtml";
-import { addBlockParams } from "../../Types/entity.rendering.params.addBlock";
+import { FileReader } from "../files/FileReader";
+import { StringComposeReader } from "../files/StringComposeReader";
+import { StringComposeWriter } from "../files/StringComposeWriter";
+import { visualJson } from "../Types/entity.visual.jsons";
+import { identifierActions } from "../Enums";
+import { FileWriter } from "../files/FileWriter";
+import { informationsJson } from "../Types/entity.rendering.jsons";
+import { replaceAllParams } from "../Types/files.StringComposerWriter";
+import { addBlockParams } from "../Types/entity.rendering.params.addBlock";
+import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
 
-export class GeneralPageEntity implements InterfaceGeneralPage {
+export abstract class AbstractGeneralView {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
     "ERR: The passed Html block identified by the passed identifier_name doesn't exists in the (template/single) file";
-  public readonly ERR_PAGE_NOT_CREATED =
-    "ERR: Before calling this method create the page with the .create() method";
-  public readonly ERR_PAGE_ALREADY_EXISTS = "ERR: The page already exists";
-
-  public PAGE_NAME: string = "";
-  public PAGE_TYPE: pageTypes = pageTypes.PAGE;
-  public PARENT_DIR_PATH = "";
-  public DEFAULT_BUILD_PATH: string = "";
-  public PAGE_PREFIX: string = "";
-  public JSON_FOLDER_PATH = "";
-  public JSON_FILE_PATH: string = "";
+  public readonly ERR_VIEW_NOT_CREATED =
+    "ERR: Before calling this method create the view with the .create() method";
+  public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
 
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = "PAGE-NAME";
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_TYPE: string = "PAGE-TYPE";
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = "PAGE-HEADER";
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = "PAGE-FOOTER";
 
-  public JSON_DEFAULT_DIR_PATH = this.themeAux.getInsideWTMPath(
-    "theme-rendering"
-  );
-  public JSON_DEFAULT_FILE_PATH = this.themeAux.getInsideWTMPath(
-    "theme-rendering",
-    "default.json"
-  );
-  public JSON_DEFAULT_INFORMATIONS: defaultJson;
-
   public JSON_INFORMATIONS: informationsJson = {
     blocks: { BODY: { open: "", close: "", include: [] } },
-    view: { name: "", extension: 'php' }
+    view: { name: "", extension: "php" },
   };
+  public JSON_COMMON_INFORMATIONS: {
+    header: string;
+    footer: string;
+  } = { 'header': '', 'footer': ''}
+  public COMMON_DEFAULT_BUILD = "";
 
-  constructor(public themeAux: ThemeAux) {
-    this.JSON_DEFAULT_INFORMATIONS = JSON.parse(
-      FileReader.readFile(this.JSON_DEFAULT_FILE_PATH)
-    );
-  }
+  constructor(
+    public PAGE_NAME: string,
+    public PAGE_EXTENSION: string,
+    public PARENT_DIR_PATH: string,
+    public PAGE_PREFIX: string,
+    public JSON_FOLDER_PATH: string,
+    public JSON_FILE_PATH: string,
+    public JSON_COMMON_INFORMATIONS_FILE_PATH: string,
+    public COMMON_DEFAULT_BUILD_FILE_PATH: string
+  ) {}
+
+  abstract getIncludeFunction(path: string): string;
 
   /**
    * @description create the needed file/directories
@@ -56,26 +49,49 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
   public initialize(): void {
     FileWriter.createDirectory(this.PARENT_DIR_PATH);
     FileWriter.createDirectory(this.JSON_FOLDER_PATH);
-    FileWriter.createFile(this.JSON_DEFAULT_FILE_PATH, JSON.stringify(this.JSON_DEFAULT_INFORMATIONS));
+    FileWriter.createFile(
+      this.JSON_COMMON_INFORMATIONS_FILE_PATH,
+      JSON.stringify(this.JSON_COMMON_INFORMATIONS)
+    );
+    FileWriter.createFile( this.COMMON_DEFAULT_BUILD_FILE_PATH, "" );
 
-    this.JSON_DEFAULT_INFORMATIONS = JSON.parse(
-      FileReader.readFile(this.JSON_DEFAULT_FILE_PATH)
+    this.JSON_COMMON_INFORMATIONS = JSON.parse(
+      FileReader.readFile(this.JSON_COMMON_INFORMATIONS_FILE_PATH)
     );
 
-    if(FileReader.existsPath(this.JSON_FILE_PATH)){
+    if (FileReader.existsPath(this.JSON_FILE_PATH)) {
       this.JSON_INFORMATIONS = JSON.parse(
         FileReader.readFile(this.JSON_FILE_PATH)
       );
     }
+    if (FileReader.existsPath(this.COMMON_DEFAULT_BUILD_FILE_PATH)) {
+        this.COMMON_DEFAULT_BUILD = FileReader.readFile(this.COMMON_DEFAULT_BUILD_FILE_PATH)
+    }
   }
+  
+  getDefaultBuild(): string {
+    return this.COMMON_DEFAULT_BUILD;
+  }
+  getDefaultHeader(): string {
+    return this.JSON_COMMON_INFORMATIONS.header;
+  }
+  getDefaultFooter(): string {
+    return this.JSON_COMMON_INFORMATIONS.footer;
+  }
+
   /**
    * @description delete the all the relative files
    */
-  public delete(): void{
+  public delete(): void {
     FileWriter.removeFile(this.getPath());
     FileWriter.removeFile(this.getPathJson());
   }
-
+  /**
+   * @description check if the current view is yet created or not, return true if it is created;
+   */
+  public isCreated(): boolean {
+    return this.getName() != "";
+  }
   /**
    * @description save the informations of the single/template
    * - the function also **creates it if not exists**
@@ -87,35 +103,31 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
     );
   }
   /**
-   * @description check if the current PAGE is yet created or not, return true if it is created;
-   */
-  public isCreated(): boolean{
-    return this.getName() != "";
-  }
-
-  /**
    * @description get the absolute path to the main file of the single/template
    */
   public getPath(): string {
-    return StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, this.getFileName());
+    return StringComposeWriter.concatenatePaths(
+      this.PARENT_DIR_PATH,
+      this.getFileName()
+    );
   }
   public getName(): string {
     return this.JSON_INFORMATIONS.view.name;
   }
-  public setName( name: string ) {
+  public setName(name: string) {
     this.JSON_INFORMATIONS.view.name = name;
   }
   public getExtension(): string {
     return this.JSON_INFORMATIONS.view.extension;
   }
-  public setExtension( extension: string ) {
+  public setExtension(extension: string) {
     this.JSON_INFORMATIONS.view.extension = extension;
   }
   public getFileName(): string {
     return (
       this.PAGE_PREFIX +
-      this.PAGE_NAME.toLocaleLowerCase().split(" ").join("-") +
-      ".php"
+      this.PAGE_NAME.toLocaleLowerCase().split(" ").join("-") + '.' + 
+      this.getExtension()
     );
   }
   /**
@@ -125,27 +137,18 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
     return this.JSON_FILE_PATH;
   }
 
-  
-
   /**
    * @description create the single/template and populate it's header/footer with the default ones
    */
   public create(): void {
-    if(this.isCreated()){
-      throw new Error(this.ERR_PAGE_ALREADY_EXISTS);
+    if (this.isCreated()) {
+      throw new Error(this.ERR_VIEW_ALREADY_EXISTS);
     }
-    let defaultContent: string = FileReader.readFile(
-      this.themeAux.getInsideThemePath(this.DEFAULT_BUILD_PATH)
-    );
+    let defaultContent: string = this.getDefaultBuild();
     let params: replaceAllParams = {};
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_NAME] = this.PAGE_NAME;
-    params[this.IDENTIFIER_PLACEHOLDER_PAGE_TYPE] = this.PAGE_TYPE;
-    params[
-      this.IDENTIFIER_PLACEHOLDER_PAGE_HEADER
-    ] = this.JSON_DEFAULT_INFORMATIONS[this.PAGE_TYPE].header;
-    params[
-      this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER
-    ] = this.JSON_DEFAULT_INFORMATIONS[this.PAGE_TYPE].footer;
+    params[this.IDENTIFIER_PLACEHOLDER_PAGE_HEADER] = this.getDefaultHeader();
+    params[this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER] = this.getDefaultFooter();
 
     let newContent: string = defaultContent;
     newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(
@@ -154,8 +157,12 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
     );
 
     this.setName(this.PAGE_NAME);
-    FileWriter.createFile(this.JSON_FILE_PATH, JSON.stringify(this.JSON_INFORMATIONS));
+    FileWriter.createFile(
+      this.JSON_FILE_PATH,
+      JSON.stringify(this.JSON_INFORMATIONS)
+    );
     FileWriter.writeFile(this.getPath(), newContent);
+
     this.saveJson();
   }
 
@@ -168,10 +175,10 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
   public includeRelative(identifier_name: string, path: string): void {
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(identifier_name))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
-    if(!this.isCreated()) throw new Error(this.ERR_PAGE_NOT_CREATED);
+    if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
-      WpFunctionComposer.includeRelative(path),
+      this.getIncludeFunction(path),
       IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[1]
     );
@@ -188,9 +195,13 @@ export class GeneralPageEntity implements InterfaceGeneralPage {
    * @param blockInfo.close how the block end
    */
   public addBlock(blockInfo: addBlockParams): void {
-    if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(blockInfo.identifier_name))
+    if (
+      !Object.keys(this.JSON_INFORMATIONS.blocks).includes(
+        blockInfo.identifier_name
+      )
+    )
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
-    if(!this.isCreated()) throw new Error(this.ERR_PAGE_NOT_CREATED);
+    if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
 
     blockInfo.open = blockInfo.open ? blockInfo.open : "";
     blockInfo.close = blockInfo.close ? blockInfo.close : "";
@@ -216,5 +227,6 @@ ${blockInfo.close}
       include: [],
     };
     this.saveJson();
+    StringComposeWriter.makePretty(this.getPath());
   }
 }

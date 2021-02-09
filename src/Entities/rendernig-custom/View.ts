@@ -1,41 +1,44 @@
 import { ThemeAux } from "../../ManageTheme/ThemeAux";
-import { GeneralViewEntity } from "./GeneralViewEntity";
 import { pageTypes } from "../../Enums/entities.visual.type";
 import { pagePath } from "../../Enums/entities.visual.path";
 import { FileReader, FileWriter, StringComposeReader, StringComposeWriter } from "../../files";
+import { AbstractGeneralView } from "../../Abstracts/entity.view.AbstractGeneralView";
 
-export class View extends GeneralViewEntity {
+export class View extends AbstractGeneralView {
   constructor( parentAbsPath : string, pageName: string = "", extension: string = "php") {
 
+    let viewsDefaultFolder: string = 'Views';
+    let viewsDefaultPrefix: string = "view-";
+    let viewsDefaultJsonFolder: string = "views-json";
+    let viewsDefaultJsonFolderPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultFolder}/${viewsDefaultJsonFolder}`);
+    
     parentAbsPath = parentAbsPath.trim();
+    if( StringComposeReader.getPathLastElem(parentAbsPath) == viewsDefaultFolder) 
+      parentAbsPath = parentAbsPath.substr(0, parentAbsPath.length - `/${viewsDefaultFolder}`.length );
+    else
+      parentAbsPath = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultFolder);
     pageName = pageName.trim();
+    if( pageName.includes(viewsDefaultPrefix) ) pageName = pageName.replace(viewsDefaultPrefix, "");
     extension = extension.trim();
 
-    super(parentAbsPath);
+    let currentViewJsonPath = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/WTM-${pageName.toLowerCase().split(" ").join("-")}.json`);
+    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/common.json`);
+    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultPrefix}common.${extension}`);
     
-    this.PAGE_PREFIX = "view-";
-    this.PAGE_NAME = pageName;
-    if( this.PAGE_NAME.includes(this.PAGE_PREFIX) ) this.PAGE_NAME = this.PAGE_NAME.replace(this.PAGE_PREFIX, "");
-
-    this.PAGE_EXTENSION = extension;
-    this.PAGE_TYPE = pageTypes.PAGE;
-    
-    this.DEFAULT_BUILD = 
-`[WTM-PLACEHOLDER-PAGE-HEADER]
-<!--<[WTM-HTML-BODY]-->
-<!--[WTM-HTML-BODY]>-->
-[WTM-PLACEHOLDER-PAGE-FOOTER]
-`;  
-    if( StringComposeReader.getPathLastElem(parentAbsPath) == 'Views') 
-      parentAbsPath = parentAbsPath.substr(0, parentAbsPath.length - '/Views'.length );
-    this.PARENT_DIR_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views");
-    this.JSON_FOLDER_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views/views-json");
-    this.JSON_DEFAULT_FILE_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, "Views/views-json/default.json");
-    
-    this.JSON_FILE_PATH = StringComposeWriter.concatenatePaths(parentAbsPath, `Views/views-json/WTM-${this.PAGE_NAME}.json`);
-
+    super(
+      pageName,
+      extension,
+      parentAbsPath,
+      viewsDefaultPrefix,
+      viewsDefaultJsonFolderPath,
+      currentViewJsonPath,
+      viewsCommonJsonPath,
+      viewsCommonDefaultBuildPath
+    );
+ 
     this.initialize();
   }
-
-  
+  getIncludeFunction(path: string): string {
+    return `<%-include (TEMPLATE_PATH +"${path}", {TEMPLATE_PATH: process.env.PWD})-%>`;
+  }
 }

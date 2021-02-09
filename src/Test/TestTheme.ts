@@ -13,7 +13,7 @@ import { MenuSubPage } from "../Entities/wp/menus/MenuSubPage";
 import { Menu } from "../Entities/wp/menus/Menu";
 import { write } from "fs";
 
-let themePath: string = "/home/pero/Scrivania/blankslate1";
+let themePath: string = "/home/pero/Scrivania/blankslate-test";
 let initalizer: ThemeAux = new ThemeAux(themePath);
 const composer: ThemeComposer = initalizer.composer;
 const reader: ThemeReader = initalizer.reader;

@@ -9,8 +9,8 @@ import { BulkVisual } from "../ManageVisual/BulkVisual";
 
 
 let visualsFolder = "/home/pero/projects/WTM/LIB/visual"
-let testVisual = visualsFolder + "/testVisual-ejs";
-let visual: Visual = new Visual(testVisual, 'ejs');
+let testVisual = visualsFolder + "/testVisual-php";
+let visual: Visual = new Visual(testVisual, 'php');
 let visualWr: VisualWriter = visual.writer;
 let visualRd: VisualReader = visual.reader;
 let visualCv: VisualConverter= visual.converter;

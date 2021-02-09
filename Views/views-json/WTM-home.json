@@ -1,1 +1,0 @@
-{"blocks":{"BODY":{"open":"","close":"","include":["//[WTM-HTML-PRIMO-DIV]","/partials/BODY"]},"PRIMO-DIV":{"open":"<div id='ciao-PRIMO' class='come' >","close":"</div>","include":["//[WTM-HTML-SECONDO-DIV]","/partials/PRIMO-DIV"]},"SECONDO-DIV":{"open":"<div id='ciao-SECONDO' class='come' >","close":"</div>","include":[]}},"name":"home"}
