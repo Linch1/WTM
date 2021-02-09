@@ -2,10 +2,10 @@ import { TestTheme } from "./Test/TestTheme";
 import { TestVisual } from "./Test/TestVisual";
 import { TestCustomRender } from "./Test/TestCustomRender";
 
-// TestCustomRender.createView();
-// TestCustomRender.addBlockInTemplate();
-// TestCustomRender.includeFileInTemplate();
-// TestCustomRender.delete();
+TestCustomRender.createView();
+TestCustomRender.addBlockInTemplate();
+TestCustomRender.includeFileInTemplate();
+TestCustomRender.delete();
 
 /* TEST FOR MANAGE THEME SINGLE/TEMPLATE
 TestTheme.createSingle();

@@ -45,13 +45,6 @@ export class FileWriter {
       fs.rmdirSync(path);
     }
   }
-
-  static createFile(path: string, content: string): void {
-    if (!fs.existsSync(path)) {
-      this.writeFile(path, content);
-    }
-  }
-
   /**
    * @description create the direcotires that don't exists from a given path
    * @param path the path to analize for extract the directories to create
@@ -77,6 +70,11 @@ export class FileWriter {
   }
   static writeFile(path: string, content: string): void {
     fs.writeFileSync(path, content, "utf8");
+  }
+  static createFile(path: string, content: string): void {
+    if (!fs.existsSync(path)) {
+      this.writeFile(path, content);
+    }
   }
 
   static appendFile(path: string, content: string): void {

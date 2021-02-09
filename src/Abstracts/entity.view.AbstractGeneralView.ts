@@ -39,7 +39,10 @@ export abstract class AbstractGeneralView {
     public JSON_FILE_PATH: string,
     public JSON_COMMON_INFORMATIONS_FILE_PATH: string,
     public COMMON_DEFAULT_BUILD_FILE_PATH: string
-  ) {}
+  ) {
+    this.JSON_INFORMATIONS.view.name = PAGE_NAME;
+    this.JSON_INFORMATIONS.view.extension = PAGE_EXTENSION;
+  }
 
   abstract getIncludeFunction(path: string): string;
 
@@ -90,7 +93,7 @@ export abstract class AbstractGeneralView {
    * @description check if the current view is yet created or not, return true if it is created;
    */
   public isCreated(): boolean {
-    return this.getName() != "";
+    return FileReader.existsPath(this.getPath());
   }
   /**
    * @description save the informations of the single/template
@@ -162,7 +165,6 @@ export abstract class AbstractGeneralView {
       newContent,
       params
     );
-
     this.setName(this.PAGE_NAME);
     FileWriter.createFile(
       this.JSON_FILE_PATH,
