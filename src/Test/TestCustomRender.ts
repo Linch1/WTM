@@ -1,4 +1,4 @@
-import {View} from "../Entities/rendernig-custom/View";
+import {View} from "../Entities/rendering/View";
 
 let view = new View("/home/pero/projects/WTM/LIB", "home");
 /**

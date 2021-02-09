@@ -20,6 +20,6 @@ export * from "./wp/menus/MenuSubPage";
 export * from "./rendering/Single";
 export * from "./rendering/Template";
 
-export * from "./rendernig-custom/BulkView";
-export * from "./rendernig-custom/View";
+export * from "./rendering/BulkView";
+export * from "./rendering/View";
 
