@@ -138,6 +138,13 @@ export abstract class AbstractGeneralView {
   }
 
   /**
+   * @description get the existing view blocks
+   */
+  public getBlocks(): string[] {
+    return Object.keys(this.JSON_INFORMATIONS.blocks);
+  }
+
+  /**
    * @description create the single/template and populate it's header/footer with the default ones
    */
   public create(): void {
