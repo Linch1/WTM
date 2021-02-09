@@ -10,14 +10,14 @@ export class View extends AbstractGeneralView {
     let viewsDefaultFolder: string = 'Views';
     let viewsDefaultPrefix: string = "view-";
     let viewsDefaultJsonFolder: string = "views-json";
-    let viewsDefaultJsonFolderPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultFolder}/${viewsDefaultJsonFolder}`);
-    
+
     parentAbsPath = parentAbsPath.trim();
-    if( StringComposeReader.getPathLastElem(parentAbsPath) == viewsDefaultFolder) 
-      parentAbsPath = parentAbsPath.substr(0, parentAbsPath.length - `/${viewsDefaultFolder}`.length );
-    else
+    if( !(StringComposeReader.getPathLastElem(parentAbsPath) == viewsDefaultFolder))
       parentAbsPath = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultFolder);
     pageName = pageName.trim();
+
+    let viewsDefaultJsonFolderPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}`);
+    
     if( pageName.includes(viewsDefaultPrefix) ) pageName = pageName.replace(viewsDefaultPrefix, "");
     extension = extension.trim();
 
@@ -35,7 +35,6 @@ export class View extends AbstractGeneralView {
       viewsCommonJsonPath,
       viewsCommonDefaultBuildPath
     );
- 
     this.initialize();
   }
   getIncludeFunction(path: string): string {

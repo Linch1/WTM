@@ -13,9 +13,9 @@ export class BulkView {
         let viewsFolderFiles = FileReader.getFiles(this.VIEWS_FOLDER);
         for ( let viewFile of viewsFolderFiles){
             let viewNameArr: string[] = viewFile.split(".");
-            viewNameArr.pop(); // remove the extension from the file name
+            let extension = viewNameArr.pop(); // remove the extension from the file name
             viewFile = viewNameArr.join(".");
-            views.push(new View(this.VIEWS_FOLDER, viewFile));
+            views.push(new View(this.VIEWS_FOLDER, viewFile, extension));
         }
         return views;
     }
