@@ -21,10 +21,10 @@ export class Template extends AbstractGeneralView {
     let viewsDefaultJsonFolderPath: string = themeAux.getInsideWTMPath(pagePath.PAGE);
     let viewsCommonJsonPath: string = themeAux.getInsideWTMPath(
       "theme-rendering",
-      `${viewsDefaultPrefix}common.json`
+      `common.json`
     );
     let viewsCommonDefaultBuildPath: string = themeAux.getInsideThemePath(
-      `${viewsDefaultPrefix}common.${extension}`
+      `common.${extension}`
     );
     
     super(

@@ -21,10 +21,10 @@ export class Single extends AbstractGeneralView {
     let viewsDefaultJsonFolderPath: string = themeAux.getInsideWTMPath(pagePath.POST);
     let viewsCommonJsonPath: string = themeAux.getInsideWTMPath(
       "theme-rendering",
-      `${viewsDefaultPrefix}common.json`
+      `common.json`
     );
     let viewsCommonDefaultBuildPath: string = themeAux.getInsideThemePath(
-      `${viewsDefaultPrefix}common.${extension}`
+      `common.${extension}`
     );
     console.log(
       pageName,
