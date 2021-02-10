@@ -11,6 +11,10 @@ export type visualJson = {
     extension: string;
   };
   identifiers: visualJsonIdentifiers;
+  dependencies: {
+    scripts: string[];
+    styles: string[];
+  }
 };
 
 

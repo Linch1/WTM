@@ -55,6 +55,11 @@ export abstract class AbstractGeneralView {
     this.JSON_INFORMATIONS.view.extension = PAGE_EXTENSION;
   }
 
+  /**
+   * @description return the syntax for correctly include a file in the view ex:
+   * - Wordpress: _< ?php include (TEMPLATEPATH . path ); ?>_
+   * - ejs: _<%-include(TEMPLATE_PATH+path)%>_
+   */
   abstract getIncludeFunction(path: string): string;
 
   /**
