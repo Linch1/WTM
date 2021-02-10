@@ -95,7 +95,18 @@ export abstract class AbstractGeneralVisual {
   public getDirPath(): string {
     return StringComposeWriter.concatenatePaths(this.VISUAL_FOLDER);
   }
-
+  /**
+   * @description return the abs path of the visual default file
+   */
+  public getDefaultFilePath(): string{
+    return this.DEFAULT_FILE_PATH;
+  }
+  /**
+   * @description return the abs path of the visual render file
+   */
+  public getRenderFilePath(): string{
+    return this.RENDER_FILE_PATH;
+  }
   public getHtmlDefault(): string{
     return FileReader.readFile(this.DEFAULT_FILE_PATH);
   }

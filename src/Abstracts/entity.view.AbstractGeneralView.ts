@@ -30,6 +30,17 @@ export abstract class AbstractGeneralView {
   } = { 'header': '', 'footer': ''}
   public COMMON_DEFAULT_BUILD = "";
 
+  /**
+   * 
+   * @param PAGE_NAME 
+   * @param PAGE_EXTENSION 
+   * @param PARENT_DIR_PATH Absolute path
+   * @param PAGE_PREFIX 
+   * @param JSON_FOLDER_PATH Absolute path
+   * @param JSON_FILE_PATH Absolute path
+   * @param JSON_COMMON_INFORMATIONS_FILE_PATH 
+   * @param COMMON_DEFAULT_BUILD_FILE_PATH Absolute path
+   */
   constructor(
     public PAGE_NAME: string,
     public PAGE_EXTENSION: string,
