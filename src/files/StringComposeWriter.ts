@@ -6,7 +6,7 @@ import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
 import { identifierActions, identifierToClass, identifierType, renderTypes } from "../Enums";
-import { GeneralIdentifier } from "../Identifiers";
+import { GeneralIdentifier, Identifiers } from "../Identifiers";
 import { replaceIdentifiersParams } from "../Types/files.StrCompWr.replaceIdentifiers";
 import { IncludeFunctions } from "../Enums/includeFunctions";
 import { extensions } from "../Enums/extension";
@@ -261,12 +261,12 @@ export class StringComposeWriter {
       let identifierName: string = placeholder;
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.STATIC, false);
       
-      let newText;
+      let newText: string = "";
       if(identifierContent.text) newText = identifierContent.text;
       else if(identifierContent.visualTarget) 
         newText = StringComposeWriter.getReplacingHtmlTagWhitVisualInclude(identifier, identifierActions.STATIC, type, identifierName, identifierContent.visualTarget, extension); 
-
-      text = text.split(identifier).join(newText);
+      if(!newText.length) return;
+      text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.STATIC}-${identifierName}(.*)\\]`, "g") , newText);
     });
 
     return text;
@@ -290,13 +290,13 @@ export class StringComposeWriter {
       let identifierContent = params[placeholder];
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.EXECUTABLE, false);
       
-      let newText;
+      let newText: string = "";
       if(identifierContent.text) newText = identifierContent.text;
       else if(identifierContent.visualTarget) 
         newText = StringComposeWriter.getReplacingHtmlTagWhitVisualInclude(identifier, identifierActions.EXECUTABLE, type, identifierName, identifierContent.visualTarget, extension); 
       else  newText = StringComposeWriter.getReplacingHtmlTag(identifier, identifierActions.EXECUTABLE, type, identifierName);
-
-      text = text.split(identifier).join(newText);
+      if(!newText.length) return;
+      text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.EXECUTABLE}-${identifierName}(.*)\\]`, "g") , newText);
     });
     return text;
   }

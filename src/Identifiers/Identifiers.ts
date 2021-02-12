@@ -84,15 +84,20 @@ export class Identifiers {
    * @param identifier the identifier to analyze
    */
   static getIdentifierAttributes(identifier: string): identifiersAttributesType{
-    identifier = identifier.substring(4, identifier.length - 1);
-    let attributes = identifier.split(" ");
-    attributes.shift() // remove the first elem that is the identifier type,action,name
+    let attributes = [];
+    let foundAttributes = identifier.match(/(\w+)\s*=\s*((["'])(.*?)\3|([^>\s]*)(?=\s|\/>))/g);
+    if( foundAttributes ) attributes.push(...foundAttributes);
     let toReturn: identifiersAttributesType = {};
 
     for ( let attribute of attributes ){
       let attributeNameValue = attribute.split("=");
       let attributeName = attributeNameValue[0];
-      let attributeValue = attributeNameValue[0].substring(1, identifier.length - 1); // substring removes the inital and end chars ( "", '', `` )
+      
+      let attributeValue = attributeNameValue[1]; // after removes the inital and end chars ( "", '', `` )
+      attributeValue = attributeValue.replace(/\"/g, "")
+      attributeValue = attributeValue.replace( /\'/g, "");
+      attributeValue = attributeValue.replace( /\`/g, "");
+
       if( attributeName in identifiersAttributes ){
         let castAttribute = attributeName as keyof typeof identifiersAttributes;
         toReturn[castAttribute] = attributeValue;
@@ -100,6 +105,11 @@ export class Identifiers {
     }
     
     return toReturn;
+  }
+
+  static checkValidExtension( extension: string | extensions | undefined): boolean{
+    if( extension && extension in extensions) return true;
+    return false;
   }
   
 }
