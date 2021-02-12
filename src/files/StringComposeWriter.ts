@@ -7,6 +7,9 @@ import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
 import { identifierActions, identifierToClass, identifierType, renderTypes } from "../Enums";
 import { GeneralIdentifier } from "../Identifiers";
+import { replaceIdentifiersParams } from "../Types/files.StrCompWr.replaceIdentifiers";
+import { IncludeFunctions } from "../Enums/includeFunctions";
+import { extensions } from "../Enums/extension";
 
 export class StringComposeWriter {
   /**
@@ -216,19 +219,53 @@ export class StringComposeWriter {
   }
 
   /**
+   * @description return an html <div> that replaces the identifier in the render file
+   * @param identifier the identifier
+   * @param action the identifier action
+   * @param type the identifier type
+   * @param name the identifier name
+   */
+  static getReplacingHtmlTag(identifier: string, action: identifierActions, type: renderTypes, name: string): string{
+    return `<div id="${identifier}" data-action="${action}" data-type="${type}" data-name="${name}"></div>`
+  }
+  /**
+   * @description return an html <div> that contains an include statement that replace the identifier in the render file
+   * @param identifier the identifier
+   * @param action the identifier action
+   * @param type the identifier type
+   * @param name the identifier name
+   * @param visualPath the path to the visual to include
+   * @param extension the extension, base on which the include statement will change
+   */
+  static getReplacingHtmlTagWhitVisualInclude(identifier: string, action: identifierActions,type: renderTypes, name: string, visualPath: string, extension: extensions): string{
+    return `
+    <div id="${identifier}" data-action="${action}" data-type="${type}" data-name="${name}">
+      ${IncludeFunctions.include(visualPath, extension)} 
+    </div>`
+  }
+
+  /**
    * @description replace all the occurences of a _STATIC_ identifier with a given word
    * @param text the text that contains the words to replace
-   * @param params an object with this structure { html_identifier_name: new_text_to_put_over_identifier }
+   * @param params an object with the following structure  
+   * - _{[key: string]: identifiersAttributesType}_ 
    */
   static replaceAllStaticIdentifiers(
     text: string,
     type: renderTypes,
-    params: replaceAllParams
+    params: replaceIdentifiersParams,
+    extension: extensions
   ): string {
     Object.keys(params).forEach((placeholder) => {
-      let newText = params[placeholder];
+      let identifierContent = params[placeholder];
       let identifierName: string = placeholder;
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.STATIC, false);
+      
+      let newText;
+      if(identifierContent.text) newText = identifierContent.text;
+      else if(identifierContent.visualTarget) 
+        newText = StringComposeWriter.getReplacingHtmlTagWhitVisualInclude(identifier, identifierActions.STATIC, type, identifierName, identifierContent.visualTarget, extension); 
+
       text = text.split(identifier).join(newText);
     });
 
@@ -238,18 +275,27 @@ export class StringComposeWriter {
   /**
    * @description replace all the occurences of a _EXECUTABLE_ identifier with a predefined html tag
    * @param text the text that contains the words to replace
-   * @param params an object with this structure { html_identifier_name: new_text_to_put_over_identifier }
+   * @param params an object with the following structure 
+   * - _{[key: string]: identifiersAttributesType}_ 
    */
   static replaceAllExecutableIdentifiers(
     text: string,
     type: renderTypes,
-    params: replaceAllParams
+    params: replaceIdentifiersParams,
+    extension: extensions
   ): string {
     Object.keys(params).forEach((placeholder) => {
       
       let identifierName: string = placeholder;
+      let identifierContent = params[placeholder];
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.EXECUTABLE, false);
-      let newText = `<div id="${identifier}" data-action="${identifierActions.EXECUTABLE}" data-type="${type}" data-name="${identifierName}"></div>`;
+      
+      let newText;
+      if(identifierContent.text) newText = identifierContent.text;
+      else if(identifierContent.visualTarget) 
+        newText = StringComposeWriter.getReplacingHtmlTagWhitVisualInclude(identifier, identifierActions.EXECUTABLE, type, identifierName, identifierContent.visualTarget, extension); 
+      else  newText = StringComposeWriter.getReplacingHtmlTag(identifier, identifierActions.EXECUTABLE, type, identifierName);
+
       text = text.split(identifier).join(newText);
     });
     return text;

@@ -1,5 +1,6 @@
 import { AbstractGeneralVisual } from "../Abstracts/entity.visual.AbstractGeneralVisual";
 import { renderTypes } from "../Enums/entity.visual.renderType";
+import { extensions } from "../Enums/extension";
 import { VisualConverter } from "./VisualConverter";
 import { VisualReader } from "./VisualReader";
 import { VisualWriter } from "./VisualWriter";
@@ -9,7 +10,7 @@ export class Visual extends AbstractGeneralVisual {
   public writer: VisualWriter;
   public converter: VisualConverter;
 
-  constructor(public VISUAL_FOLDER: string, extension?: string) {
+  constructor(public VISUAL_FOLDER: string, extension?: extensions) {
     super(VISUAL_FOLDER, extension);
     this.reader = new VisualReader(this);
     this.writer = new VisualWriter(this);

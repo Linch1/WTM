@@ -1,3 +1,4 @@
+import { extensions } from "../Enums/extension";
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { visualJson } from "../Types";
@@ -9,7 +10,7 @@ export class BulkVisual {
      * @param VISUALS_FOLDER the folder where the visual are contained
      * @param extension the extension of the visual files ( php, ejs, html etc...) _without the dot_
      */
-    constructor(public VISUALS_FOLDER: string, public extension?: string){}
+    constructor(public VISUALS_FOLDER: string, public extension?: extensions){}
 
     public getAllVisuals(): Visual[]{
         let visuals: Visual[] = []; 

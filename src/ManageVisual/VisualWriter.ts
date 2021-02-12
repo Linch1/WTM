@@ -4,6 +4,7 @@ import { visualJsonIdentifiers } from "../Types/entity.visual.jsons";
 import { Identifiers } from "../Identifiers/Identifiers";
 import { Visual } from "./Visual";
 import { identifierActions, identifierType, renderTypes } from "../Enums";
+import { identifiersAttributesType } from "../Types/identifiers.attributes";
 
 export class VisualWriter {
 
@@ -71,13 +72,13 @@ export class VisualWriter {
       for (let foundIdentifier of identfiers) {
         
         let [TYPE, ACTION, NAME] = Identifiers.getIdentifierTypeActionName(foundIdentifier);
+        let ATTRIBUTES: identifiersAttributesType = Identifiers.getIdentifierAttributes(foundIdentifier);
         if( ! (TYPE in renderTypes ) ) {
           throw new Error(this.ERR_NOT_RENDER_IDENTIFIER);
         }
-        // this line give errors from typesscript but it's sure that the TYPE is of type renderType ( for the upper 'if' check )
-        // and the ACTION is for sure a key of the json becouse it is built to have all the ACTIONS as key for each TYPE (renderType)
-        //@ts-ignore
-        identifiersJson[TYPE][ACTION][NAME] = identifiersJson[TYPE][ACTION][NAME] ? identifiersJson[TYPE][ACTION][NAME]: "";
+        let castType = TYPE as unknown as renderTypes;
+        
+        identifiersJson[castType][ACTION][NAME] = ATTRIBUTES ;
       }
     }
     FileWriter.writeFile(

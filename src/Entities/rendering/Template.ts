@@ -2,6 +2,7 @@ import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { pagePath } from "../../Enums/entities.visual.path";
 import { AbstractGeneralView } from "../../Abstracts/entity.view.AbstractGeneralView";
 import { WpFunctionComposer } from "../../files/WpFunctionComposer";
+import { extensions } from "../../Enums/extension";
 
 export class Template extends AbstractGeneralView {
 
@@ -10,7 +11,7 @@ export class Template extends AbstractGeneralView {
 
     let parentAbsPath: string = themeAux.getInsideThemePath("");
     let viewsDefaultPrefix: string = "template-";
-    let extension ="php";
+    let extension = extensions.php;
     pageName = pageName.trim();
     if( pageName.includes(viewsDefaultPrefix) ) pageName = pageName.replace(viewsDefaultPrefix, "");
 

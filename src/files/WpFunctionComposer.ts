@@ -1,4 +1,6 @@
 import { identifierType } from "../Enums";
+import { extensions } from "../Enums/extension";
+import { IncludeFunctions } from "../Enums/includeFunctions";
 import { GeneralIdentifier } from "../Identifiers/GeneralIdentfier";
 import { IdentifierImport } from "../Identifiers/IdentifierImport";
 import { Identifiers } from "../Identifiers/Identifiers";
@@ -40,6 +42,6 @@ export class WpFunctionComposer {
    * @param path the path to include ( relative to the theme dir path )
    */
   static includeRelative(path: string): string {
-    return `<?php include(TEMPLATEPATH.'${path}');?>\n`;
+    return IncludeFunctions.include(path, extensions.php);
   }
 }

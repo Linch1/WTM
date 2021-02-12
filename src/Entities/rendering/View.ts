@@ -3,9 +3,11 @@ import { pageTypes } from "../../Enums/entities.visual.type";
 import { pagePath } from "../../Enums/entities.visual.path";
 import { FileReader, FileWriter, StringComposeReader, StringComposeWriter } from "../../files";
 import { AbstractGeneralView } from "../../Abstracts/entity.view.AbstractGeneralView";
+import { IncludeFunctions } from "../../Enums/includeFunctions";
+import { extensions } from "../../Enums/extension";
 
 export class View extends AbstractGeneralView {
-  constructor( parentAbsPath : string, pageName: string = "", extension: string = "php") {
+  constructor( parentAbsPath : string, pageName: string = "", extension: extensions = extensions.php) {
 
     let viewsDefaultFolder: string = 'Views';
     let viewsDefaultPrefix: string = "view-";
@@ -19,7 +21,7 @@ export class View extends AbstractGeneralView {
     let viewsDefaultJsonFolderPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}`);
     
     if( pageName.includes(viewsDefaultPrefix) ) pageName = pageName.replace(viewsDefaultPrefix, "");
-    extension = extension.trim();
+    extension = extension.trim() as extensions;
 
     let currentViewJsonPath = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/WTM-${pageName.toLowerCase().split(" ").join("-")}.json`);
     let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/common.json`);
@@ -38,6 +40,6 @@ export class View extends AbstractGeneralView {
     this.initialize();
   }
   getIncludeFunction(path: string): string {
-    return `<%-include (TEMPLATE_PATH +"${path}", {TEMPLATE_PATH: process.env.PWD})-%>`;
+    return IncludeFunctions.include(path, extensions.ejs);
   }
 }

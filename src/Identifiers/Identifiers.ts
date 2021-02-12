@@ -1,6 +1,8 @@
 import { identifierActions } from "../Enums/identifiers.actions";
+import { identifiersAttributes } from "../Enums/identifiers.attributes";
 import { identifierType } from "../Enums/identifiers.type";
 import { FileReader } from "../files/FileReader";
+import { identifiersAttributesType } from "../Types/identifiers.attributes";
 
 export class Identifiers {
   static IDENTIFIERS: identifierType[] = [
@@ -62,16 +64,41 @@ export class Identifiers {
   }
 
   /**
-   * @description get the identifier type and name
+   * @description get the identifier type, action and name
    * @param identifier the identifier to analyze
    * @returns array of strings [IDENTIFIER_TYPE, IDENTIFIER_NAME];
    */
   static getIdentifierTypeActionName(identifier: string): [identifierType, identifierActions, string] {
     identifier = identifier.substring(4, identifier.length - 1); // removes "[WTM" and "]"
-    let splitted = identifier.split("-");
+    let splitted: string[] = identifier.split("-");
     let TYPE = (splitted.shift() == undefined ? "" : splitted.shift()) as identifierType; // the first .shift() remove an empty char, the second get the type
     let ACTION = splitted.shift() as identifierActions;
-    let NAME = splitted.join("-");
+    let NAME_AND_ATTRIBUTES = splitted.join("-").split(" ");
+    let NAME = NAME_AND_ATTRIBUTES[0];
     return [TYPE, ACTION, NAME];
   }
+
+  /**
+   * @description based on a passed identifier it returns an object conaining it's attributes
+   * @param identifier the identifier to analyze
+   */
+  static getIdentifierAttributes(identifier: string): identifiersAttributesType{
+    identifier = identifier.substring(4, identifier.length - 1);
+    let attributes = identifier.split(" ");
+    attributes.shift() // remove the first elem that is the identifier type,action,name
+    let toReturn: identifiersAttributesType = {};
+
+    for ( let attribute of attributes ){
+      let attributeNameValue = attribute.split("=");
+      let attributeName = attributeNameValue[0];
+      let attributeValue = attributeNameValue[0].substring(1, identifier.length - 1); // substring removes the inital and end chars ( "", '', `` )
+      if( attributeName in identifiersAttributes ){
+        let castAttribute = attributeName as keyof typeof identifiersAttributes;
+        toReturn[castAttribute] = attributeValue;
+      }
+    }
+    
+    return toReturn;
+  }
+  
 }

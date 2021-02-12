@@ -1,5 +1,6 @@
 import { identifierActions } from "../Enums";
 import { renderTypes } from "../Enums/entity.visual.renderType";
+import { extensions } from "../Enums/extension";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { StringComposeWriter } from "../files/StringComposeWriter";
@@ -24,12 +25,14 @@ class VisualConverter {
     let newHtml: string = StringComposeWriter.replaceAllStaticIdentifiers(
       html,
       type,
-      json.identifiers[type][identifierActions.STATIC]
+      json.identifiers[type][identifierActions.STATIC],
+      this.visual.getExtension() as extensions
     );
     newHtml = StringComposeWriter.replaceAllExecutableIdentifiers(
       newHtml,
       type,
-      json.identifiers[type][identifierActions.EXECUTABLE]
+      json.identifiers[type][identifierActions.EXECUTABLE],
+      this.visual.getExtension() as extensions
     );
     FileWriter.writeFile(this.visual.RENDER_FILE_PATH, newHtml);
   }

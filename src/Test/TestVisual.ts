@@ -6,11 +6,12 @@ import { VisualConverter } from "../ManageVisual/VisualConverter";
 import { renderTypes } from "../Enums/entity.visual.renderType";
 import { Visual } from "../ManageVisual/Visual";
 import { BulkVisual } from "../ManageVisual/BulkVisual";
+import { extensions } from "../Enums/extension";
 
 
 let visualsFolder = "/home/pero/projects/WTM/LIB/visual"
 let testVisual = visualsFolder + "/testVisual-php";
-let visual: Visual = new Visual(testVisual, 'php');
+let visual: Visual = new Visual(testVisual, extensions.php);
 let visualWr: VisualWriter = visual.writer;
 let visualRd: VisualReader = visual.reader;
 let visualCv: VisualConverter= visual.converter;
