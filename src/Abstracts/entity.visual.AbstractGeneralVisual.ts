@@ -98,12 +98,6 @@ export abstract class AbstractGeneralVisual {
   public getScriptsDependencies(): string[]{
     return this.JSON_FILE_CONTENT.dependencies.scripts;
   }
-  public addStyleDependency(path: string): void{
-    this.JSON_FILE_CONTENT.dependencies.styles.push(path);
-  }
-  public addScriptDependency(path: string): void{
-    this.JSON_FILE_CONTENT.dependencies.scripts.push(path);
-  }
   /**
    * @description return the path of the visual based on the this.VISUALS_MAIN_FOLDER
    */

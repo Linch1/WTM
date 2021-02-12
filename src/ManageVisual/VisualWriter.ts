@@ -5,7 +5,7 @@ import { Identifiers } from "../Identifiers/Identifiers";
 import { Visual } from "./Visual";
 import { identifierActions, identifierType, renderTypes } from "../Enums";
 
-class VisualWriter {
+export class VisualWriter {
 
   public ERR_NOT_RENDER_IDENTIFIER = "During the population of the identifier was found a non registered RENDER identifier, check the enum renderTypes."
 
@@ -38,6 +38,22 @@ class VisualWriter {
       this.visual.JSON_FILE_PATH,
       JSON.stringify(this.visual.JSON_FILE_CONTENT)
     );
+  }
+  /**
+   * @description add the passed path as style dependency in the visual json
+   * @param path 
+   */
+  public addStyle(path: string): void{
+    this.visual.JSON_FILE_CONTENT.dependencies.styles.push(path.trim());
+    this.saveJson();
+  }
+  /**
+   * @description add the passed path as script dependency in the visual json
+   * @param path 
+   */
+  public addScript(path: string): void{
+    this.visual.JSON_FILE_CONTENT.dependencies.scripts.push(path.trim());
+    this.saveJson();
   }
 
   /**
@@ -76,10 +92,7 @@ class VisualWriter {
    */
   public editDefaultHtml(newHtml: string){
     if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
-
     FileWriter.writeFile(this.visual.DEFAULT_FILE_PATH, newHtml);
   }
 
 }
-
-export { VisualWriter };
