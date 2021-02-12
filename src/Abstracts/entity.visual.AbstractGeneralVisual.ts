@@ -2,7 +2,7 @@ import { FileReader } from "../files/FileReader";
 import { StringComposeReader } from "../files/StringComposeReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { visualJson } from "../Types/entity.visual.jsons";
-import { identifierActions } from "../Enums";
+import { extensions, identifierActions } from "../Enums";
 
 
 export abstract class AbstractGeneralVisual {
@@ -23,7 +23,7 @@ export abstract class AbstractGeneralVisual {
     this.JSON_FILE_NAME
   );
   public JSON_FILE_CONTENT: visualJson = {
-    visual: { name: "", extension: "" },
+    visual: { name: "", extension: extensions.php },
     identifiers: {
       HTML: {
         "!STATIC!": {},
@@ -47,7 +47,7 @@ export abstract class AbstractGeneralVisual {
    * @param VISUAL_FOLDER the folder where the visuale is ( or have to be ) containers
    * @param extension the typo of the visual ( php/ejs/html ... ) _without the dot_
    */
-  constructor(public VISUAL_FOLDER: string, extension: string = "php") {
+  constructor(public VISUAL_FOLDER: string, extension: extensions = extensions.php) {
     this.JSON_FILE_CONTENT.visual.name = StringComposeReader.getPathLastElem(
       this.VISUAL_FOLDER
     );
@@ -89,7 +89,7 @@ export abstract class AbstractGeneralVisual {
   /**
    * @description get the visual name from the VISUAL_FOLDER
    */
-  public getExtension(): string {
+  public getExtension(): extensions {
     return this.JSON_FILE_CONTENT.visual.extension;
   }
   public getStylesDependencies(): string[]{

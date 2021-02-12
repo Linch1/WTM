@@ -1,5 +1,5 @@
 import { extensions } from "../../Enums/extension";
-import { FileReader, StringComposeWriter } from "../../files";
+import { FileReader, StringComposeReader, StringComposeWriter } from "../../files";
 import { View } from "./View";
 
 export class BulkView {
@@ -17,7 +17,7 @@ export class BulkView {
             if(!viewFile.startsWith(this.prefix)) continue;
             let viewNameArr: string[] = viewFile.split(".");
             let extension = viewNameArr.pop() as extensions; // remove the extension from the file name
-            if(!(extension && (extension in extensions))) continue; // if not valid extension skip it
+            if(!StringComposeReader.checkValidExtension(extension)) continue; // if not valid extension skip it
             viewFile = viewNameArr.join(".");
             views.push(new View(this.VIEWS_FOLDER, viewFile, extension));
         }

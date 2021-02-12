@@ -1,4 +1,4 @@
-import { identifierActions, renderTypes } from "../Enums";
+import { extensions, identifierActions, renderTypes } from "../Enums";
 import { identifiersAttributesType } from "./identifiers.attributes";
 
 /* this keys are from the enum defined in ../Enums/manageVisual.visual.renderType.ts */
@@ -9,7 +9,7 @@ export type visualJsonIdentifiers = {
 export type visualJson = {
   visual: {
     name: string;
-    extension: string;
+    extension: extensions;
   };
   identifiers: visualJsonIdentifiers;
   dependencies: {
