@@ -6,6 +6,7 @@ import { identifiersAttributes } from "../Enums/identifiers.attributes";
 import { identifierType } from "../Enums/identifiers.type";
 import { FileReader } from "../files/FileReader";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
+import { IdentifiersAttributesParser } from "./IdentifiersAttributesParser";
 
 export class Identifiers {
   static IDENTIFIERS: identifierType[] = [
@@ -86,32 +87,7 @@ export class Identifiers {
    * @param identifier the identifier to analyze
    */
   static getIdentifierAttributes(identifier: string): identifiersAttributesType{
-    let attributes = [];
-    let foundAttributes = identifier.match(/(\w+)\s*=\s*((["'])(.*?)\3|([^>\s]*)(?=\s|\/>))/g);
-    if( foundAttributes ) attributes.push(...foundAttributes);
-    let toReturn: identifiersAttributesType = {};
-
-    for ( let attribute of attributes ){
-      let attributeNameValue = attribute.split("=");
-      let attributeName = attributeNameValue[0];
-      
-      let attributeValue = attributeNameValue[1]; // after removes the inital and end chars ( "", '', `` )
-      attributeValue = attributeValue.replace(/\"/g, "")
-      attributeValue = attributeValue.replace( /\'/g, "");
-      attributeValue = attributeValue.replace( /\`/g, "");
-
-      if( attributeName in identifiersAttributes ){
-        let castAttribute = attributeName as keyof typeof identifiersAttributes;
-        toReturn[castAttribute] = attributeValue;
-      }
-    }
-    
-    return toReturn;
-  }
-
-  static checkValidExtension( extension: string | extensions | undefined): boolean{
-    if( extension && extension in extensions) return true;
-    return false;
+    return IdentifiersAttributesParser.getIdentifierAttributes(identifier);;
   }
 
   /**
@@ -130,6 +106,11 @@ export class Identifiers {
     });
 
     return text;
+  }
+
+  static checkValidExtension( extension: string | extensions | undefined): boolean{
+    if( extension && extension in extensions) return true;
+    return false;
   }
   
 }

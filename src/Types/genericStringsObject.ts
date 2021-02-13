@@ -1,0 +1,1 @@
+export type genereicStringsObject = { [key: string]: string; }
