@@ -5,13 +5,14 @@ import { extensions } from "../Enums/extension";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { StringComposeWriter } from "../files/StringComposeWriter";
+import { IdentifierPlaceholder } from "../Identifiers";
 import { visualJson } from "../Types/entity.visual.jsons";
 import { replaceIdentifiersParams } from "../Types/files.StrCompWr.replaceIdentifiers";
 import { Visual } from "./Visual";
 
 class VisualConverter {
   constructor(public visual: Visual) {}
-  VISUALS_PATH = 'VISUALS-PATH'; // this is a param that will replaced whit the visuals directory path
+  VISUALS_PATH = IdentifierPlaceholder.getIdentifier('VISUALS-PATH', false); // this is a param that will replaced whit the visuals directory path
 
   /**
    * @description replace all the placholders in the inside **default.##**
