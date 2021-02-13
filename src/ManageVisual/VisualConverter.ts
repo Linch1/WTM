@@ -6,13 +6,14 @@ import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { IdentifierPlaceholder } from "../Identifiers";
+import { identifiersAttributesType, replaceAllParams } from "../Types";
 import { visualJson } from "../Types/entity.visual.jsons";
 import { replaceIdentifiersParams } from "../Types/files.StrCompWr.replaceIdentifiers";
 import { Visual } from "./Visual";
 
 class VisualConverter {
   constructor(public visual: Visual) {}
-  VISUALS_PATH = IdentifierPlaceholder.getIdentifier('VISUALS-PATH', false); // this is a param that will replaced whit the visuals directory path
+  VISUALS_PATH = 'VISUALS-PATH'; // this is a param that will replaced whit the visuals directory path
 
   /**
    * @description replace all the placholders in the inside **default.##**
@@ -48,27 +49,55 @@ class VisualConverter {
    * @param type the identifier type
    * @param name the identifier name
    */
-  getReplacingHtmlTag(identifier: string, action: identifierActions, type: renderTypes, name: string): string{
-    return `<div id="${identifier}" data-action="${action}" data-type="${type}" data-name="${name}"></div>`
-  }
-  /**
-   * @description return an html <div> that contains an include statement that replace the identifier in the render file
-   * @param identifier the identifier
-   * @param action the identifier action
-   * @param type the identifier type
-   * @param name the identifier name
-   * @param visualPath the path to the visual to include
-   * @param extension the extension, base on which the include statement will change
-   */
-  getReplacingHtmlTagWhitVisualInclude(identifier: string, action: identifierActions,type: renderTypes, name: string, visualPath: string, extension: extensions): string{
-    let addMainFolderInIncludeStatement = false;
-    if(!(visualPath.includes(this.VISUALS_PATH))) addMainFolderInIncludeStatement = true;
-    else visualPath = visualPath.replace(this.VISUALS_PATH, this.visual.getVisualsPath());
+  buildIdentifierReplacer(
+    identifier: string, 
+    action: identifierActions, 
+    type: renderTypes, 
+    name: string,
+    extension: extensions,
+    attributes: identifiersAttributesType,
+    ): string{
+      
+      // if there is the text attributes returns it directly
+      if(attributes.text) return attributes.text; 
 
-    return `
-    <div id="${identifier}" data-action="${action}" data-type="${type}" data-name="${name}">
-      ${IncludeFunctions.include(visualPath, extension, addMainFolderInIncludeStatement)} 
-    </div>`
+      // else build the html div tag
+      let tagClasses = `class="${attributes.parentClasses}"`
+      
+      let tagStart = `
+      <div 
+      id="${identifier}" 
+      data-action="${action}" 
+      data-type="${type}" 
+      data-name="${name}" 
+      ${ attributes.parentClasses ? tagClasses : ""}
+      >`.replace('\n', '');
+
+      let includeStatement = this.getIncludeStatement(attributes.visualTarget, extension);
+      let tagEnd = `</div>`;
+      return tagStart + includeStatement + tagEnd
+  }
+  
+  /**
+   * @description returns the include statement for the passed visual path ( visualTarget )
+   * @param visualTarget the path to the visual to include
+   * @param extension the extension of the visual
+   */
+  getIncludeStatement(visualTarget: string | undefined, extension: extensions){
+    let includeStatement = "";
+    if(visualTarget){
+      let addMainFolderInIncludeStatement: boolean;
+      if(visualTarget.includes(this.VISUALS_PATH)) {
+        addMainFolderInIncludeStatement = false;
+        let options: replaceAllParams = {}
+        options[this.VISUALS_PATH] = this.visual.getVisualsPath();
+        visualTarget = Identifiers.replaceAllIdentifiersPlaceholders( visualTarget, options );
+      } else {
+        addMainFolderInIncludeStatement = true;
+      }
+      includeStatement = IncludeFunctions.include(visualTarget, extension, addMainFolderInIncludeStatement)
+    }
+    return includeStatement;
   }
 
   /**
@@ -84,16 +113,13 @@ class VisualConverter {
     extension: extensions
   ): string {
     Object.keys(params).forEach((placeholder) => {
-      let identifierContent = params[placeholder];
+      let identifierAttributes = params[placeholder];
       let identifierName: string = placeholder;
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.STATIC, false);
-      
-      let newText: string = "";
-      if(identifierContent.text) newText = identifierContent.text;
-      else if(identifierContent.visualTarget) 
-        newText = this.getReplacingHtmlTagWhitVisualInclude(identifier, identifierActions.STATIC, type, identifierName, identifierContent.visualTarget, extension); 
-      if(!newText.length) return;
-      text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.STATIC}-${identifierName}(.*)\\]`, "g") , newText);
+      let newContent: string = "";
+      newContent = this.buildIdentifierReplacer(identifier, identifierActions.STATIC, type, identifierName, extension, identifierAttributes);
+      if(!newContent.length) return;
+      text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.STATIC}-${identifierName}(.*)\\]`, "g") , newContent);
     });
 
     return text;
@@ -112,18 +138,12 @@ class VisualConverter {
     extension: extensions
   ): string {
     Object.keys(params).forEach((placeholder) => {
-      
+      let identifierAttributes = params[placeholder];
       let identifierName: string = placeholder;
-      let identifierContent = params[placeholder];
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.EXECUTABLE, false);
-      
-      let newText: string = "";
-      if(identifierContent.text) newText = identifierContent.text;
-      else if(identifierContent.visualTarget) 
-        newText = this.getReplacingHtmlTagWhitVisualInclude(identifier, identifierActions.EXECUTABLE, type, identifierName, identifierContent.visualTarget, extension); 
-      else  newText = this.getReplacingHtmlTag(identifier, identifierActions.EXECUTABLE, type, identifierName);
-      if(!newText.length) return;
-      text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.EXECUTABLE}-${identifierName}(.*)\\]`, "g") , newText);
+      let newContent: string = "";
+      newContent = this.buildIdentifierReplacer(identifier, identifierActions.EXECUTABLE, type, identifierName, extension, identifierAttributes);
+      text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.EXECUTABLE}-${identifierName}(.*)\\]`, "g") , newContent);
     });
     return text;
   }
