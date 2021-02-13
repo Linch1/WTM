@@ -61,10 +61,13 @@ class VisualConverter {
    * @param extension the extension, base on which the include statement will change
    */
   getReplacingHtmlTagWhitVisualInclude(identifier: string, action: identifierActions,type: renderTypes, name: string, visualPath: string, extension: extensions): string{
-    visualPath = visualPath.replace(this.VISUALS_PATH, this.visual.getVisualsPath());
+    let addMainFolderInIncludeStatement = false;
+    if(!(visualPath.includes(this.VISUALS_PATH))) addMainFolderInIncludeStatement = true;
+    else visualPath = visualPath.replace(this.VISUALS_PATH, this.visual.getVisualsPath());
+
     return `
     <div id="${identifier}" data-action="${action}" data-type="${type}" data-name="${name}">
-      ${IncludeFunctions.include(visualPath, extension, false)} 
+      ${IncludeFunctions.include(visualPath, extension, addMainFolderInIncludeStatement)} 
     </div>`
   }
 
