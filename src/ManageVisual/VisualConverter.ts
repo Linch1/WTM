@@ -71,7 +71,9 @@ class VisualConverter {
       data-type="${type}" 
       data-name="${name}" 
       ${ attributes.parentClasses ? tagClasses : ""}
-      >`.replace('\n', '');
+      >`;
+      tagStart = tagStart.replace(/\n/g,' '); // removes the \n chars
+      tagStart = tagStart.replace(/[ \t]+/g,' '); // conver sequences of white spaces to a single white space
 
       let includeStatement = this.getIncludeStatement(attributes.visualTarget, extension);
       let tagEnd = `</div>`;
