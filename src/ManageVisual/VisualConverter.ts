@@ -64,7 +64,7 @@ class VisualConverter {
     visualPath = visualPath.replace(this.VISUALS_PATH, this.visual.getVisualsPath());
     return `
     <div id="${identifier}" data-action="${action}" data-type="${type}" data-name="${name}">
-      ${IncludeFunctions.include(visualPath, extension)} 
+      ${IncludeFunctions.include(visualPath, extension, false)} 
     </div>`
   }
 
