@@ -8,6 +8,7 @@ import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
 import { IdentifierId } from "../../../Identifiers/IdentifierId";
+import { Identifiers } from "../../../Identifiers/Identifiers";
 
 type params = settingsPageParams;
 class SettingsPage extends GeneralWpEntity<params> {
@@ -71,7 +72,7 @@ class SettingsPage extends GeneralWpEntity<params> {
     params[this.IDENTIFIER_SETTINGS_PAGE_SLUG] = this.SETTINGS_PAGE_SLUG;
 
     let newContent: string = defaultContent;
-    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(
+    newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params
     );

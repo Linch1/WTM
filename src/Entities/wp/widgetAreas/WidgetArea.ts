@@ -7,6 +7,7 @@ import { customPartType } from "../../../Enums/entities.wp.type";
 import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
+import { Identifiers } from "../../../Identifiers/Identifiers";
 
 type params = widgetAreaParams;
 class WidgetArea extends GeneralWpEntity<params> {
@@ -53,7 +54,7 @@ class WidgetArea extends GeneralWpEntity<params> {
     params[this.IDENTIFIER_NAME] = this.getInformations.widgetAreaName;
 
     let newContent: string = defaultContent;
-    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(
+    newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params
     );

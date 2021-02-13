@@ -9,6 +9,7 @@ import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
 import { IdentifierId } from "../../../Identifiers/IdentifierId";
+import { Identifiers } from "../../../Identifiers/Identifiers";
 
 type params = menuMainPageParams;
 class MenuMainPage extends GeneralWpEntity<params> {
@@ -115,7 +116,7 @@ class MenuMainPage extends GeneralWpEntity<params> {
     params[this.IDENTIFIER_MENU_SLUG] = this.getMenuSlug;
 
     let newContent: string = defaultContent;
-    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(
+    newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params
     );

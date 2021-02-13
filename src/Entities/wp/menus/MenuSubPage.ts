@@ -7,6 +7,7 @@ import { customPartType } from "../../../Enums/entities.wp.type";
 import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
+import { Identifiers } from "../../../Identifiers/Identifiers";
 
 type params = menuSubPageParams;
 class MenuSubPage extends GeneralWpEntity<params> {
@@ -113,7 +114,7 @@ class MenuSubPage extends GeneralWpEntity<params> {
     ] = `${this.getMenuName}-${this.informations.pageName}`;
 
     let newContent: string = defaultContent;
-    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(
+    newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params
     );

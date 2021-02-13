@@ -7,6 +7,7 @@ import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { postTypeParams } from "../../../Types/entity.wp.postType";
 import { GeneralWpEntity } from "../GeneralWpEntity";
+import { Identifiers } from "../../../Identifiers/Identifiers";
 
 type params = postTypeParams;
 class PostType  extends GeneralWpEntity<params> {
@@ -62,7 +63,7 @@ class PostType  extends GeneralWpEntity<params> {
     ] = this.getInformations.postTypeNameSingular;
 
     let newContent: string = defaultContent;
-    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(
+    newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params
     );

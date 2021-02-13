@@ -105,6 +105,14 @@ export abstract class AbstractGeneralVisual {
     return StringComposeWriter.concatenatePaths(this.VISUAL_FOLDER);
   }
   /**
+   * @description return the path of the visual based on the this.VISUALS_MAIN_FOLDER
+   */
+  public getVisualsPath(): string {
+    let parentDirPaths = this.VISUAL_FOLDER.split('/');
+    parentDirPaths.pop()
+    return parentDirPaths.join('/');
+  }
+  /**
    * @description return the abs path of the visual default file
    */
   public getDefaultFilePath(): string{

@@ -1,3 +1,5 @@
+import { IdentifierPlaceholder } from ".";
+import { replaceAllParams } from "..";
 import { extensions } from "../Enums";
 import { identifierActions } from "../Enums/identifiers.actions";
 import { identifiersAttributes } from "../Enums/identifiers.attributes";
@@ -110,6 +112,24 @@ export class Identifiers {
   static checkValidExtension( extension: string | extensions | undefined): boolean{
     if( extension && extension in extensions) return true;
     return false;
+  }
+
+  /**
+   * @description replace all the occurences of a placeholder identifier with a given word
+   * @param text the text that contains the words to replace
+   * @param params an object with this structure { placholder_identifier_name: new_text_to_put_over_identifier }
+   */
+  static replaceAllIdentifiersPlaceholders(
+    text: string,
+    params: replaceAllParams
+  ): string {
+    Object.keys(params).forEach((placeholder) => {
+      let newText = params[placeholder];
+      placeholder = IdentifierPlaceholder.getIdentifier(placeholder, false);
+      text = text.split(placeholder).join(newText);
+    });
+
+    return text;
   }
   
 }

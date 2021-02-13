@@ -8,6 +8,7 @@ import { informationsJson } from "../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { addBlockParams } from "../Types/entity.rendering.params.addBlock";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
+import { Identifiers } from "../Identifiers";
 
 export abstract class AbstractGeneralView {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -177,7 +178,7 @@ export abstract class AbstractGeneralView {
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER] = this.getDefaultFooter();
 
     let newContent: string = defaultContent;
-    newContent = StringComposeWriter.replaceAllIdentifiersPlaceholders(
+    newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params
     );
