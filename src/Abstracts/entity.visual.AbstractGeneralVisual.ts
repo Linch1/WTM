@@ -17,6 +17,9 @@ export abstract class AbstractGeneralVisual {
   public readonly INIT_RENDER_FILE_CONTENT: string = "";
   public readonly INIT_DEFAULT_FILE_CONTENT: string = "";
 
+  public readonly STYLES_RELATIVE_PATH = '/assets/css/'
+  public readonly SCRIPTS_RELATIVE_PATH = '/assets/js/'
+
   public readonly JSON_FILE_NAME: string = "WTM.json";
   public readonly JSON_FILE_PATH: string = StringComposeWriter.concatenatePaths(
     this.getDirPath(),
@@ -92,9 +95,33 @@ export abstract class AbstractGeneralVisual {
   public getExtension(): extensions {
     return this.JSON_FILE_CONTENT.visual.extension;
   }
+  /**
+   * @description get the visual styles folder path
+   */
+  public getStylesDirPath(): string {
+    return StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      this.STYLES_RELATIVE_PATH
+    );
+  }
+  /**
+   * @description return the current visual styles dependencies
+   */
   public getStylesDependencies(): string[]{
     return this.JSON_FILE_CONTENT.dependencies.styles;
   }
+  /**
+   * @description get the visual scripts folder path
+   */
+  public getScriptsDirPath(): string {
+    return StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      this.SCRIPTS_RELATIVE_PATH
+    );
+  }
+  /**
+   * @description return the current visual scripts dependencies
+   */
   public getScriptsDependencies(): string[]{
     return this.JSON_FILE_CONTENT.dependencies.scripts;
   }
@@ -124,9 +151,15 @@ export abstract class AbstractGeneralVisual {
   public getRenderFilePath(): string{
     return this.RENDER_FILE_PATH;
   }
+  /**
+   * @description get the text contained in the _default.**_ file
+   */
   public getHtmlDefault(): string{
     return FileReader.readFile(this.DEFAULT_FILE_PATH);
   }
+  /**
+   * @description get the text contained in the _render.**_ file
+   */
   public getHtmlRender(): string{
     return FileReader.readFile(this.RENDER_FILE_PATH);
   }
