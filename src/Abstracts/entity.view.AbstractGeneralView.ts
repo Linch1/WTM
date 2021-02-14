@@ -164,7 +164,7 @@ export abstract class AbstractGeneralView {
     return Object.keys(this.JSON_INFORMATIONS.blocks);
   }
   public getBlocks(): informationsJson["blocks"] {
-    return {...this.JSON_INFORMATIONS.blocks};
+    return JSON.parse(JSON.stringify(this.JSON_INFORMATIONS.blocks)); 
   }
   public setBlocks( newBlocks: informationsJson["blocks"] ): void {
     this.JSON_INFORMATIONS.blocks = newBlocks;
