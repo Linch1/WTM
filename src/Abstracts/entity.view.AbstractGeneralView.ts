@@ -166,6 +166,10 @@ export abstract class AbstractGeneralView {
   public getBlocks(): informationsJson["blocks"] {
     return this.JSON_INFORMATIONS.blocks;
   }
+  public setBlocks( newBlocks: informationsJson["blocks"] ): void {
+    this.JSON_INFORMATIONS.blocks = newBlocks;
+    this.saveJson();
+  }
 
   /**
    * @description create the single/template and populate it's header/footer with the default ones
