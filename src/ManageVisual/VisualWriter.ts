@@ -21,7 +21,12 @@ export class VisualWriter {
     if (FileReader.existsPath(visualPath)) {
       throw new Error(this.visual.ERR_VISUAL_ALREADY_EXISTS);
     }
+    
     FileWriter.createDirectory(visualPath);
+    FileWriter.createDirectory(this.visual.getAssetsDirPath());
+    FileWriter.createDirectory(this.visual.getScriptsDirPath());
+    FileWriter.createDirectory(this.visual.getStylesDirPath());
+
     FileWriter.createFile(
       this.visual.RENDER_FILE_PATH,
       this.visual.INIT_RENDER_FILE_CONTENT
@@ -31,6 +36,7 @@ export class VisualWriter {
       this.visual.INIT_DEFAULT_FILE_CONTENT
     );
     this.saveJson();
+    
     return visualPath;
   }
 

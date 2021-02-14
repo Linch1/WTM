@@ -12,15 +12,22 @@ export abstract class AbstractGeneralVisual {
   public readonly ERR_VISUAL_NOT_CREATED =
     "ERR: Before calling this method create the visual with the myVisual.writer.createVisual() method";
 
+  public readonly ASSETS_RELATIVE_PATH: string = '/assets/css/';
+  public readonly STYLES_RELATIVE_PATH: string = '/assets/css/';
+  public readonly SCRIPTS_RELATIVE_PATH: string = '/assets/js/';
+  public readonly JSON_FILE_NAME: string = "WTM.json";
+  public readonly HTML_DEFAULT_FILE_NAME: string  = "default";
+  public readonly HTML_RENDERED_FILE_NAME: string  = "render";
+
   public readonly RENDER_FILE_PATH: string;
   public readonly DEFAULT_FILE_PATH: string;
+  public readonly ASSETS_PATH: string;
+  public readonly STYLES_PATH: string;
+  public readonly SCRIPTS_PATH: string;
+
   public readonly INIT_RENDER_FILE_CONTENT: string = "";
   public readonly INIT_DEFAULT_FILE_CONTENT: string = "";
 
-  public readonly STYLES_RELATIVE_PATH = '/assets/css/'
-  public readonly SCRIPTS_RELATIVE_PATH = '/assets/js/'
-
-  public readonly JSON_FILE_NAME: string = "WTM.json";
   public readonly JSON_FILE_PATH: string = StringComposeWriter.concatenatePaths(
     this.getDirPath(),
     this.JSON_FILE_NAME
@@ -57,14 +64,25 @@ export abstract class AbstractGeneralVisual {
     this.JSON_FILE_CONTENT.visual.extension = extension;
 
     this.init();
-
     this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
-      "render." + this.getExtension()
+      this.HTML_RENDERED_FILE_NAME + "." + this.getExtension()
     );
     this.DEFAULT_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
-      "default." + this.getExtension()
+      this.HTML_DEFAULT_FILE_NAME + "." + this.getExtension()
+    );
+    this.ASSETS_PATH = StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      this.ASSETS_RELATIVE_PATH
+    );
+    this.SCRIPTS_PATH = StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      this.SCRIPTS_RELATIVE_PATH
+    );
+    this.STYLES_PATH = StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      this.STYLES_RELATIVE_PATH
     );
     
   }
@@ -96,13 +114,16 @@ export abstract class AbstractGeneralVisual {
     return this.JSON_FILE_CONTENT.visual.extension;
   }
   /**
+   * @description get the visual assets folder path
+   */
+  public getAssetsDirPath(): string {
+    return this.ASSETS_PATH;
+  }
+  /**
    * @description get the visual styles folder path
    */
   public getStylesDirPath(): string {
-    return StringComposeWriter.concatenatePaths(
-      this.getDirPath(),
-      this.STYLES_RELATIVE_PATH
-    );
+    return this.STYLES_PATH;
   }
   /**
    * @description return the current visual styles dependencies
@@ -114,10 +135,7 @@ export abstract class AbstractGeneralVisual {
    * @description get the visual scripts folder path
    */
   public getScriptsDirPath(): string {
-    return StringComposeWriter.concatenatePaths(
-      this.getDirPath(),
-      this.SCRIPTS_RELATIVE_PATH
-    );
+    return this.SCRIPTS_PATH;
   }
   /**
    * @description return the current visual scripts dependencies
