@@ -67,9 +67,9 @@ export class Identifiers {
   }
 
   /**
-   * @description get the identifier type, action and name
+   * @description get the identifier type, action and name of an identifier with action
    * @param identifier the identifier to analyze
-   * @returns array of strings [IDENTIFIER_TYPE, IDENTIFIER_NAME];
+   * @returns array of strings [IDENTIFIER_TYPE, ACTION, IDENTIFIER_NAME];
    */
   static getIdentifierTypeActionName(identifier: string): [identifierType, identifierActions, string] {
     identifier = identifier.substring(4, identifier.length - 1); // removes "[WTM" and "]"
@@ -79,6 +79,19 @@ export class Identifiers {
     let NAME_AND_ATTRIBUTES = splitted.join("-").split(" ");
     let NAME = NAME_AND_ATTRIBUTES[0];
     return [TYPE, ACTION, NAME];
+  }
+
+  /**
+   * @description get the identifier type and name of an identifier  ( without action )
+   * @param identifier the identifier to analyze
+   * @returns array of strings [IDENTIFIER_TYPE, IDENTIFIER_NAME];
+   */
+  static getIdentifierTypeName(identifier: string): [identifierType, string] {
+    identifier = identifier.substring(4, identifier.length - 1); // removes "[WTM" and "]"
+    let splitted: string[] = identifier.split("-");
+    let TYPE = (splitted.shift() == undefined ? "" : splitted.shift()) as identifierType; // the first .shift() remove an empty char, the second get the type
+    let NAME = splitted.shift() as string;
+    return [TYPE, NAME];
   }
 
   /**
