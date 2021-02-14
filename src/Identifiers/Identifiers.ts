@@ -21,13 +21,12 @@ export class Identifiers {
    * @description check if a given word is a comment identifier
    * @param word the word that has to be analized for check if it is a comment identifier
    */
-  static checkCommentIdentifier(word: string): string {
+  static checkCommentIdentifier(word: string): boolean {
     for (let identifierType of this.IDENTIFIERS) {
-      let identifierKeyword = this.getIdentifier(identifierType);
-      if (word.includes(identifierKeyword) && word.startsWith("//"))
-        return identifierKeyword;
+      let re = new RegExp(`\/\/\\[${this.getIdentifier(identifierType)}-.*\]`, "g"); // match a string like: //[WTM-HTML-*]
+      if( re.test(word) ) return true
     }
-    return "";
+    return false;
   }
 
   /**

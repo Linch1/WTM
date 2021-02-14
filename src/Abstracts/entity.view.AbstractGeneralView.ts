@@ -160,8 +160,11 @@ export abstract class AbstractGeneralView {
   /**
    * @description get the existing view blocks
    */
-  public getBlocks(): string[] {
+  public getBlocksNames(): string[] {
     return Object.keys(this.JSON_INFORMATIONS.blocks);
+  }
+  public getBlocks(): informationsJson["blocks"] {
+    return this.JSON_INFORMATIONS.blocks;
   }
 
   /**
