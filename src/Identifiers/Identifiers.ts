@@ -72,6 +72,7 @@ export class Identifiers {
    * @returns array of strings [IDENTIFIER_TYPE, ACTION, IDENTIFIER_NAME];
    */
   static getIdentifierTypeActionName(identifier: string): [identifierType, identifierActions, string] {
+    if( Identifiers.checkCommentIdentifier(identifier) ) identifier = identifier.substring(2); // removed the intial slashes '//'
     identifier = identifier.substring(4, identifier.length - 1); // removes "[WTM" and "]"
     let splitted: string[] = identifier.split("-");
     let TYPE = (splitted.shift() == undefined ? "" : splitted.shift()) as identifierType; // the first .shift() remove an empty char, the second get the type
@@ -87,6 +88,7 @@ export class Identifiers {
    * @returns array of strings [IDENTIFIER_TYPE, IDENTIFIER_NAME];
    */
   static getIdentifierTypeName(identifier: string): [identifierType, string] {
+    if( Identifiers.checkCommentIdentifier(identifier) ) identifier = identifier.substring(2); // removed the intial slashes '//'
     identifier = identifier.substring(4, identifier.length - 1); // removes "[WTM" and "]"
     let splitted: string[] = identifier.split("-");
     let TYPE = (splitted.shift() == undefined ? "" : splitted.shift()) as identifierType; // the first .shift() remove an empty char, the second get the type
