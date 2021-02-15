@@ -161,10 +161,16 @@ export abstract class AbstractGeneralView {
   }
   /**
    * @description set the project type of the view
-   * @param extension 
+   * @param type 
    */
   public setProjectType(type: ProjectTypes) {
     this.JSON_INFORMATIONS.view.projectType = type;
+  }
+  /**
+   * @description get the project type of the view
+   */
+  public getProjectType(type: ProjectTypes): ProjectTypes {
+    return this.JSON_INFORMATIONS.view.projectType;
   }
   /**
    * @description returns the view file name ( not the path ) 
