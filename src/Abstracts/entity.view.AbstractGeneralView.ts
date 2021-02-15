@@ -64,7 +64,7 @@ export abstract class AbstractGeneralView {
   abstract getIncludeFunction(path: string): string;
 
   /**
-   * @description create the needed file/directories
+   * @description create the needed files and directories
    */
   public initialize(): void {
     FileWriter.createDirectory(this.PARENT_DIR_PATH);
@@ -89,12 +89,22 @@ export abstract class AbstractGeneralView {
     }
   }
   
+  /**
+   * @description get the default content to add in all the newly created views,
+   * it is taken from inside the file: this.COMMON_DEFAULT_BUILD_FILE_PATH
+   */
   getDefaultBuild(): string {
     return this.COMMON_DEFAULT_BUILD;
   }
+  /**
+   * @description get the common header ( it is inside the this.JSON_COMMON_INFORMATIONS_FILE_PATH)
+   */
   getDefaultHeader(): string {
     return this.JSON_COMMON_INFORMATIONS.header;
   }
+  /**
+   * @description get the common footer ( it is inside the this.JSON_COMMON_INFORMATIONS_FILE_PATH)
+   */
   getDefaultFooter(): string {
     return this.JSON_COMMON_INFORMATIONS.footer;
   }
@@ -123,7 +133,7 @@ export abstract class AbstractGeneralView {
     );
   }
   /**
-   * @description get the absolute path to the main file of the single/template
+   * @description get the absolute path to the main file of the view
    */
   public getPath(): string {
     return StringComposeWriter.concatenatePaths(
@@ -131,18 +141,35 @@ export abstract class AbstractGeneralView {
       this.getFileName()
     );
   }
+  /**
+   * @description get the name of the view
+   */
   public getName(): string {
     return this.JSON_INFORMATIONS.view.name;
   }
+  /**
+   * @description set the name of the view
+   * @param name 
+   */
   public setName(name: string) {
     this.JSON_INFORMATIONS.view.name = name;
   }
+  /**
+   * @description get the extension of the view
+   */
   public getExtension(): string {
     return this.JSON_INFORMATIONS.view.extension;
   }
+  /**
+   * @description set the extension of the view
+   * @param extension 
+   */
   public setExtension(extension: string) {
     this.JSON_INFORMATIONS.view.extension = extension;
   }
+  /**
+   * @description returns the view file name ( not the path ) 
+   */
   public getFileName(): string {
     return (
       this.PAGE_PREFIX +
@@ -156,26 +183,82 @@ export abstract class AbstractGeneralView {
   public getPathJson(): string {
     return this.JSON_FILE_PATH;
   }
-
   /**
    * @description get the existing view blocks
    */
   public getBlocksNames(): string[] {
     return Object.keys(this.JSON_INFORMATIONS.blocks);
   }
+  /**
+   * @description returns the blocks object of the view
+   */
   public getBlocks(): informationsJson["blocks"] {
     return JSON.parse(JSON.stringify(this.JSON_INFORMATIONS.blocks)); 
   }
+  /**
+   * @description set the blocks object to the view with the passed one
+   * @param newBlocks 
+   */
   public setBlocks( newBlocks: informationsJson["blocks"] ): void {
     this.JSON_INFORMATIONS.blocks = newBlocks;
     this.saveJson();
   }
 
+  public reCreate(): void {
+
+    this.create(true);
+    let blocks = this.getBlocks();
+    this.reCreateBlocksRecursive(
+      blocks,
+      'BODY'
+    );
+
+  }
+  /**
+   * 
+   * @param blocks the blocks object of this.JSON_INFORMATIONS.
+   * @param currentBlock the block to analize
+   * @param blockInfo informations of the custom block to add 
+   * @param blockInfo.identifier_name the parent of the block the create
+   * @param blockInfo.blockName the name of the block
+   * @param blockInfo.open how the block start
+   * @param blockInfo.close how the block end
+   */
+  private reCreateBlocksRecursive(
+    blocks: informationsJson["blocks"], 
+    currentBlock: string, 
+    blockInfo?: addBlockParams
+     ): void {
+    // if the current block is also inside in another block it should have the data-path attribute
+    if ( blockInfo ) {
+      this.addBlock(blockInfo);
+    } 
+    for ( let pathToInclude of blocks[currentBlock].include ){
+      if( Identifiers.checkCommentIdentifier(pathToInclude) ){
+        let blockToAddName = Identifiers.getIdentifierTypeName(pathToInclude)[1];
+        this.reCreateBlocksRecursive(
+          blocks, 
+          blockToAddName, 
+          {
+            identifier_name: currentBlock,
+            blockName: blockToAddName,
+            open: blocks[blockToAddName].open,
+            close: blocks[blockToAddName].close,
+          }
+        );
+      } else {
+        this.includeRelative(currentBlock, pathToInclude);
+      }
+    }
+  }
+
   /**
    * @description create the single/template and populate it's header/footer with the default ones
+   * @param continueIfAlreadyExists if set to true the create method doesn't throw an error if the view already exists
+   *  
    */
-  public create(): void {
-    if (this.isCreated()) {
+  public create( continueIfAlreadyExists: boolean = false): void {
+    if (this.isCreated() && !continueIfAlreadyExists) {
       throw new Error(this.ERR_VIEW_ALREADY_EXISTS);
     }
     let defaultContent: string = this.getDefaultBuild();
@@ -190,12 +273,11 @@ export abstract class AbstractGeneralView {
       params
     );
     this.setName(this.PAGE_NAME);
-    FileWriter.createFile(
+    FileWriter.writeFile(
       this.JSON_FILE_PATH,
       JSON.stringify(this.JSON_INFORMATIONS)
     );
     FileWriter.writeFile(this.getPath(), newContent);
-
     this.saveJson();
   }
 
