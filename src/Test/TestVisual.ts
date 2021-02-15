@@ -3,20 +3,20 @@ import { StringComposeWriter } from "../files/StringComposeWriter";
 import { VisualWriter } from "../ManageVisual/VisualWriter";
 import { VisualReader } from "../ManageVisual/VisualReader";
 import { VisualConverter } from "../ManageVisual/VisualConverter";
-import { renderTypes } from "../Enums/entity.visual.renderType";
+import { renderTypes } from "../Enums/manageVisual.renderType";
 import { Visual } from "../ManageVisual/Visual";
 import { BulkVisual } from "../ManageVisual/BulkVisual";
-import { extensions } from "../Enums/extension";
+import { ProjectTypes } from "../Enums";
 
 
 let visualsFolder = "/home/pero/projects/WTM/LIB/visual"
 let testVisual = visualsFolder + "/testVisual-php";
-let visual: Visual = new Visual(testVisual, extensions.php);
+let visual: Visual = new Visual(testVisual, ProjectTypes.wordpress);
 let visualWr: VisualWriter = visual.writer;
 let visualRd: VisualReader = visual.reader;
 let visualCv: VisualConverter= visual.converter;
 
-let bulkVisual: BulkVisual = new BulkVisual(visualsFolder);
+let bulkVisual: BulkVisual = new BulkVisual(visualsFolder, ProjectTypes.wordpress);
 
 let StrCompW = StringComposeWriter;
 

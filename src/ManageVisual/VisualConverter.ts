@@ -1,14 +1,11 @@
 import { Identifiers } from "..";
 import { identifierActions, identifierToClass, identifierType, IncludeFunctions } from "../Enums";
-import { renderTypes } from "../Enums/entity.visual.renderType";
-import { extensions } from "../Enums/extension";
+import { renderTypes } from "../Enums/manageVisual.renderType";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
-import { StringComposeWriter } from "../files/StringComposeWriter";
-import { IdentifierPlaceholder } from "../Identifiers";
 import { identifiersAttributesType, replaceAllParams } from "../Types";
 import { visualJson } from "../Types/entity.visual.jsons";
-import { replaceIdentifiersParams } from "../Types/files.StrCompWr.replaceIdentifiers";
+import { replaceIdentifiersParams } from "../Types/files.StringComposerWriter.replaceIdentifiers";
 import { Visual } from "./Visual";
 
 class VisualConverter {
@@ -30,14 +27,12 @@ class VisualConverter {
     let newHtml: string = this.replaceAllStaticIdentifiers(
       html,
       type,
-      json.identifiers[type][identifierActions.STATIC],
-      this.visual.getExtension() as extensions
+      json.identifiers[type][identifierActions.STATIC]
     );
     newHtml = this.replaceAllExecutableIdentifiers(
       newHtml,
       type,
-      json.identifiers[type][identifierActions.EXECUTABLE],
-      this.visual.getExtension() as extensions
+      json.identifiers[type][identifierActions.EXECUTABLE]
     );
     FileWriter.writeFile(this.visual.RENDER_FILE_PATH, newHtml);
   }
@@ -48,13 +43,13 @@ class VisualConverter {
    * @param action the identifier action
    * @param type the identifier type
    * @param name the identifier name
+   * @param attributes attributes of the identifier
    */
   buildIdentifierReplacer(
     identifier: string, 
     action: identifierActions, 
     type: renderTypes, 
     name: string,
-    extension: extensions,
     attributes: identifiersAttributesType,
     ): string{
       
@@ -75,7 +70,7 @@ class VisualConverter {
       tagStart = tagStart.replace(/\n/g,' '); // removes the \n chars
       tagStart = tagStart.replace(/[ \t]+/g,' '); // conver sequences of white spaces to a single white space
 
-      let includeStatement = this.getIncludeStatement(attributes.visualTarget, extension);
+      let includeStatement = this.getIncludeStatement(attributes.visualTarget);
       let tagEnd = `</div>`;
       return tagStart + includeStatement + tagEnd
   }
@@ -83,9 +78,8 @@ class VisualConverter {
   /**
    * @description returns the include statement for the passed visual path ( visualTarget )
    * @param visualTarget the path to the visual to include
-   * @param extension the extension of the visual
    */
-  getIncludeStatement(visualTarget: string | undefined, extension: extensions){
+  getIncludeStatement(visualTarget: string | undefined){
     let includeStatement = "";
     if(visualTarget){
       let addMainFolderInIncludeStatement: boolean;
@@ -97,7 +91,7 @@ class VisualConverter {
       } else {
         addMainFolderInIncludeStatement = true;
       }
-      includeStatement = IncludeFunctions.include(visualTarget, extension, addMainFolderInIncludeStatement)
+      includeStatement = IncludeFunctions.include(visualTarget, this.visual.getProjectType(), addMainFolderInIncludeStatement)
     }
     return includeStatement;
   }
@@ -105,6 +99,7 @@ class VisualConverter {
   /**
    * @description replace all the occurences of a _STATIC_ identifier with a given word
    * @param text the text that contains the words to replace
+   * @param type render type of the visual
    * @param params an object with the following structure  
    * - _{[key: string]: identifiersAttributesType}_ 
    */
@@ -112,14 +107,13 @@ class VisualConverter {
     text: string,
     type: renderTypes,
     params: replaceIdentifiersParams,
-    extension: extensions
   ): string {
     Object.keys(params).forEach((placeholder) => {
       let identifierAttributes = params[placeholder];
       let identifierName: string = placeholder;
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.STATIC, false);
       let newContent: string = "";
-      newContent = this.buildIdentifierReplacer(identifier, identifierActions.STATIC, type, identifierName, extension, identifierAttributes);
+      newContent = this.buildIdentifierReplacer(identifier, identifierActions.STATIC, type, identifierName, identifierAttributes);
       if(!newContent.length) return;
       text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.STATIC}-${identifierName}(.*)\\]`, "g") , newContent);
     });
@@ -130,21 +124,21 @@ class VisualConverter {
   /**
    * @description replace all the occurences of a _EXECUTABLE_ identifier with a predefined html tag
    * @param text the text that contains the words to replace
+   * @param type render type of the visual
    * @param params an object with the following structure 
    * - _{[key: string]: identifiersAttributesType}_ 
    */
   replaceAllExecutableIdentifiers(
     text: string,
     type: renderTypes,
-    params: replaceIdentifiersParams,
-    extension: extensions
+    params: replaceIdentifiersParams
   ): string {
     Object.keys(params).forEach((placeholder) => {
       let identifierAttributes = params[placeholder];
       let identifierName: string = placeholder;
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.EXECUTABLE, false);
       let newContent: string = "";
-      newContent = this.buildIdentifierReplacer(identifier, identifierActions.EXECUTABLE, type, identifierName, extension, identifierAttributes);
+      newContent = this.buildIdentifierReplacer(identifier, identifierActions.EXECUTABLE, type, identifierName, identifierAttributes);
       text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.EXECUTABLE}-${identifierName}(.*)\\]`, "g") , newContent);
     });
     return text;

@@ -1,3 +1,5 @@
+import { ProjectTypes } from "../Enums";
+
 export type defaultJson = {
   post: {
     header: string;
@@ -22,6 +24,6 @@ export type informationsJson = {
   };
   view: { 
     name: string, 
-    extension: string
+    projectType: ProjectTypes
   }
 };

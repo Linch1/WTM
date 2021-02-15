@@ -1,14 +1,13 @@
 import { FileReader } from "../files/FileReader";
-import { StringComposeReader } from "../files/StringComposeReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { visualJson } from "../Types/entity.visual.jsons";
-import { identifierActions } from "../Enums";
+import { extensions,  ProjectTypes } from "../Enums";
 import { FileWriter } from "../files/FileWriter";
 import { informationsJson } from "../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { addBlockParams } from "../Types/entity.rendering.params.addBlock";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
 import { Identifiers } from "../Identifiers";
+import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
 
 export abstract class AbstractGeneralView {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -23,7 +22,7 @@ export abstract class AbstractGeneralView {
 
   public JSON_INFORMATIONS: informationsJson = {
     blocks: { BODY: { open: "", close: "", include: [] } },
-    view: { name: "", extension: "php" },
+    view: { name: "", projectType: ProjectTypes.ejs },
   };
   public JSON_COMMON_INFORMATIONS: {
     header: string;
@@ -44,7 +43,7 @@ export abstract class AbstractGeneralView {
    */
   constructor(
     public PAGE_NAME: string,
-    public PAGE_EXTENSION: string,
+    public PAGE_PROJECT_TYPE: ProjectTypes,
     public PARENT_DIR_PATH: string,
     public PAGE_PREFIX: string,
     public JSON_FOLDER_PATH: string,
@@ -53,7 +52,7 @@ export abstract class AbstractGeneralView {
     public COMMON_DEFAULT_BUILD_FILE_PATH: string
   ) {
     this.JSON_INFORMATIONS.view.name = PAGE_NAME;
-    this.JSON_INFORMATIONS.view.extension = PAGE_EXTENSION;
+    this.JSON_INFORMATIONS.view.projectType = PAGE_PROJECT_TYPE;
   }
 
   /**
@@ -157,15 +156,15 @@ export abstract class AbstractGeneralView {
   /**
    * @description get the extension of the view
    */
-  public getExtension(): string {
-    return this.JSON_INFORMATIONS.view.extension;
+  public getExtension(): extensions {
+    return checkMapProjectTypeToExtension(this.JSON_INFORMATIONS.view.projectType);
   }
   /**
-   * @description set the extension of the view
+   * @description set the project type of the view
    * @param extension 
    */
-  public setExtension(extension: string) {
-    this.JSON_INFORMATIONS.view.extension = extension;
+  public setProjectType(type: ProjectTypes) {
+    this.JSON_INFORMATIONS.view.projectType = type;
   }
   /**
    * @description returns the view file name ( not the path ) 
@@ -287,6 +286,7 @@ export abstract class AbstractGeneralView {
    * @param path
    */
   public includeRelative(parentBlockName: string, path: string): void {
+    if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
     this.buildIncludeRelative(parentBlockName, path);
     this.JSON_INFORMATIONS.blocks[parentBlockName].include.push(path);
     this.saveJson();
@@ -300,7 +300,6 @@ export abstract class AbstractGeneralView {
   public buildIncludeRelative(parentBlockName: string, path: string): void {
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(parentBlockName))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
-    if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
       this.getIncludeFunction(path),

@@ -1,17 +1,17 @@
-import { ThemeAux } from "../../ManageTheme/ThemeAux";
-import { pageTypes } from "../../Enums/entities.visual.type";
-import { pagePath } from "../../Enums/entities.visual.path";
-import { FileReader, FileWriter, StringComposeReader, StringComposeWriter } from "../../files";
+import { StringComposeReader, StringComposeWriter } from "../../files";
 import { AbstractGeneralView } from "../../Abstracts/entity.view.AbstractGeneralView";
-import { IncludeFunctions } from "../../Enums/includeFunctions";
-import { extensions } from "../../Enums/extension";
+import { IncludeFunctions } from "../../Enums/common.includeFunctions";
+import { extensions } from "../../Enums/common.extension";
+import { checkMapProjectTypeToExtension } from "../../Checkers/check.mapProjectTypeToExtension";
+import { ProjectTypes } from "../..";
 
 export class View extends AbstractGeneralView {
-  constructor( parentAbsPath : string, pageName: string = "", extension: extensions = extensions.php) {
+  constructor( parentAbsPath : string, pageName: string = "", projectType: ProjectTypes) {
 
     let viewsDefaultFolder: string = 'Views';
     let viewsDefaultPrefix: string = "view-";
     let viewsDefaultJsonFolder: string = "views-json";
+    let extension: extensions = checkMapProjectTypeToExtension(projectType);
 
     parentAbsPath = parentAbsPath.trim();
     if( !(StringComposeReader.getPathLastElem(parentAbsPath) == viewsDefaultFolder))
@@ -29,7 +29,7 @@ export class View extends AbstractGeneralView {
     
     super(
       pageName,
-      extension,
+      projectType,
       parentAbsPath,
       viewsDefaultPrefix,
       viewsDefaultJsonFolderPath,
@@ -40,6 +40,6 @@ export class View extends AbstractGeneralView {
     this.initialize();
   }
   getIncludeFunction(path: string): string {
-    return IncludeFunctions.include(path, extensions.ejs);
+    return IncludeFunctions.include(path, ProjectTypes.ejs);
   }
 }

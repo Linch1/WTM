@@ -2,7 +2,8 @@ import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { pagePath } from "../../Enums/entities.visual.path";
 import { AbstractGeneralView } from "../../Abstracts/entity.view.AbstractGeneralView";
 import { WpFunctionComposer } from "../../files/WpFunctionComposer";
-import { extensions } from "../../Enums/extension";
+import { ProjectTypes } from "../../Enums";
+import { checkMapProjectTypeToExtension } from "../../Checkers/check.mapProjectTypeToExtension";
 
 export class Single extends AbstractGeneralView {
 
@@ -11,8 +12,9 @@ export class Single extends AbstractGeneralView {
 
     let parentAbsPath: string = themeAux.getInsideThemePath("");
     let viewsDefaultPrefix: string = "single-";
-    let extension = extensions.php;
+    let projectType = ProjectTypes.wordpress;
     pageName = pageName.trim();
+    let extension = checkMapProjectTypeToExtension(projectType);
     if( pageName.includes(viewsDefaultPrefix) ) pageName = pageName.replace(viewsDefaultPrefix, "");
 
     let currentViewJsonPath = themeAux.getInsideWTMPath(
@@ -27,19 +29,9 @@ export class Single extends AbstractGeneralView {
     let viewsCommonDefaultBuildPath: string = themeAux.getInsideThemePath(
       `common.${extension}`
     );
-    console.log(
-      pageName,
-      extension,
-      parentAbsPath,
-      viewsDefaultPrefix,
-      viewsDefaultJsonFolderPath,
-      currentViewJsonPath,
-      viewsCommonJsonPath,
-      viewsCommonDefaultBuildPath
-    )
     super(
       pageName,
-      extension,
+      projectType,
       parentAbsPath,
       viewsDefaultPrefix,
       viewsDefaultJsonFolderPath,

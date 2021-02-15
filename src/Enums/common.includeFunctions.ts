@@ -1,4 +1,4 @@
-import { extensions } from "./extension";
+import { ProjectTypes } from "./common.projectTypes";
 
 export class IncludeFunctions{
 
@@ -7,7 +7,7 @@ export class IncludeFunctions{
             if( !initIncludePathWithMainFolderPath ) return `<%-include ("${path}", {TEMPLATE_PATH: process.env.PWD})-%>\n`;
             else return `<%-include (TEMPLATE_PATH +"${path}", {TEMPLATE_PATH: process.env.PWD})-%>\n`;
         },
-        php: ( path: string, initIncludePathWithMainFolderPath: boolean = true): string => {
+        wordpress: ( path: string, initIncludePathWithMainFolderPath: boolean = true): string => {
             if( !initIncludePathWithMainFolderPath ) return `<?php include('${path}');?>\n`
             else return `<?php include(TEMPLATEPATH.'${path}');?>\n`;
         }
@@ -21,7 +21,7 @@ export class IncludeFunctions{
      * @param extension the extension 
      * @param initIncludePathWithMainFolderPath if the included path has to start with the main template/project forlder _default: **true**_
      */
-    static include(path: string, extension: extensions, initIncludePathWithMainFolderPath: boolean = true){
-        return IncludeFunctions.functions[extension](path, initIncludePathWithMainFolderPath);
+    static include(path: string, projectType: ProjectTypes, initIncludePathWithMainFolderPath: boolean = true){
+        return IncludeFunctions.functions[projectType](path, initIncludePathWithMainFolderPath);
     }
 }

@@ -1,10 +1,4 @@
-import { IdentifierPlaceholder } from ".";
-import { replaceAllParams } from "..";
-import { extensions } from "../Enums";
-import { identifierActions } from "../Enums/identifiers.actions";
 import { identifiersAttributes } from "../Enums/identifiers.attributes";
-import { identifierType } from "../Enums/identifiers.type";
-import { FileReader } from "../files/FileReader";
 import { genereicStringsObject } from "../Types/genericStringsObject";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
 

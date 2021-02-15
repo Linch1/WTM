@@ -2,7 +2,8 @@ import { FileReader } from "../files/FileReader";
 import { StringComposeReader } from "../files/StringComposeReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { visualJson } from "../Types/entity.visual.jsons";
-import { extensions, identifierActions } from "../Enums";
+import { extensions, ProjectTypes } from "../Enums";
+import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
 
 
 export abstract class AbstractGeneralVisual {
@@ -33,7 +34,7 @@ export abstract class AbstractGeneralVisual {
     this.JSON_FILE_NAME
   );
   public JSON_FILE_CONTENT: visualJson = {
-    visual: { name: "", extension: extensions.php },
+    visual: { name: "", projectType: ProjectTypes.ejs },
     identifiers: {
       HTML: {
         "!STATIC!": {},
@@ -55,13 +56,13 @@ export abstract class AbstractGeneralVisual {
   /**
    * @description create a visual with the given informations
    * @param VISUAL_FOLDER the folder where the visuale is ( or have to be ) containers
-   * @param extension the typo of the visual ( php/ejs/html ... ) _without the dot_
+   * @param projectType the typo of the project where the visual will be included
    */
-  constructor(public VISUAL_FOLDER: string, extension: extensions = extensions.php) {
+  constructor(public VISUAL_FOLDER: string, projectType: ProjectTypes) {
     this.JSON_FILE_CONTENT.visual.name = StringComposeReader.getPathLastElem(
       this.VISUAL_FOLDER
     );
-    this.JSON_FILE_CONTENT.visual.extension = extension;
+    this.JSON_FILE_CONTENT.visual.projectType = projectType;
 
     this.init();
     this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(
@@ -110,8 +111,14 @@ export abstract class AbstractGeneralVisual {
   /**
    * @description get the visual name from the VISUAL_FOLDER
    */
+  public getProjectType(): ProjectTypes {
+    return this.JSON_FILE_CONTENT.visual.projectType;
+  }
+  /**
+   * @description get the visual name from the VISUAL_FOLDER
+   */
   public getExtension(): extensions {
-    return this.JSON_FILE_CONTENT.visual.extension;
+    return checkMapProjectTypeToExtension(this.JSON_FILE_CONTENT.visual.projectType);
   }
   /**
    * @description get the visual assets folder path

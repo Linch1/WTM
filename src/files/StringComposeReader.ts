@@ -1,4 +1,4 @@
-import { extensions } from "../Enums/extension";
+import { extensions } from "../Enums/common.extension";
 import { FileReader } from "./FileReader";
 import { StringComposeWriter } from "./StringComposeWriter";
 
@@ -69,14 +69,5 @@ export class StringComposeReader {
     let lastElem = path.match(/([^\/]*)\/*$/);
     if (lastElem == null) throw new Error(this.ERR_CANNOT_GET_LAST_ELEM);
     else return lastElem[1];
-  }
-
-  /**
-   * @description check if a passed string is a valid supported extension
-   * @param extension 
-   */
-  static checkValidExtension( extension: string | extensions | undefined): boolean{
-    if( extension && extension in extensions) return true;
-    return false;
   }
 }

@@ -1,17 +1,17 @@
 import { AbstractGeneralVisual } from "../Abstracts/entity.visual.AbstractGeneralVisual";
-import { renderTypes } from "../Enums/entity.visual.renderType";
-import { extensions } from "../Enums/extension";
+import { renderTypes } from "../Enums/manageVisual.renderType";
 import { VisualConverter } from "./VisualConverter";
 import { VisualReader } from "./VisualReader";
 import { VisualWriter } from "./VisualWriter";
+import { ProjectTypes } from "../Enums";
 
 export class Visual extends AbstractGeneralVisual {
   public reader: VisualReader;
   public writer: VisualWriter;
   public converter: VisualConverter;
 
-  constructor(public VISUAL_FOLDER: string, extension?: extensions) {
-    super(VISUAL_FOLDER, extension);
+  constructor(public VISUAL_FOLDER: string, projectType: ProjectTypes) {
+    super(VISUAL_FOLDER, projectType);
     this.reader = new VisualReader(this);
     this.writer = new VisualWriter(this);
     this.converter = new VisualConverter(this);

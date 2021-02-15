@@ -1,23 +1,22 @@
-import { extensions } from "../Enums/extension";
+import { ProjectTypes } from "../Enums";
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { visualJson } from "../Types";
 import { Visual } from "./Visual";
 
 export class BulkVisual {
     
     /**
      * @param VISUALS_FOLDER the folder where the visual are contained
-     * @param extension the extension of the visual files ( php, ejs, html etc...) _without the dot_
+     * @param projectType the type of the project where the visual will be included
      */
-    constructor(public VISUALS_FOLDER: string, public extension?: extensions){}
+    constructor(public VISUALS_FOLDER: string, public projectType: ProjectTypes){}
 
     public getAllVisuals(): Visual[]{
         let visuals: Visual[] = []; 
         let visualsFolders = FileReader.getDirectories(this.VISUALS_FOLDER);
         for ( let visualFolder of visualsFolders){
             let visualFolderPath = StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, visualFolder);
-            visuals.push(new Visual(visualFolderPath, this.extension));
+            visuals.push(new Visual(visualFolderPath, this.projectType));
         }
         return visuals;
     }

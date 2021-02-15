@@ -1,6 +1,7 @@
 import {View} from "../Entities/rendering/View";
+import { ProjectTypes } from "../Enums";
 
-let view = new View("/home/pero/projects/WTM/LIB", "home");
+let view = new View("/home/pero/projects/WTM/LIB", "home", ProjectTypes.ejs);
 /**
  * @description class to perform tests on the lib
  */

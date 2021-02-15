@@ -1,9 +1,6 @@
-import { identifierType } from "../Enums";
-import { extensions } from "../Enums/extension";
-import { IncludeFunctions } from "../Enums/includeFunctions";
-import { GeneralIdentifier } from "../Identifiers/GeneralIdentfier";
+import { identifierType, ProjectTypes } from "../Enums";
+import { IncludeFunctions } from "../Enums/common.includeFunctions";
 import { IdentifierImport } from "../Identifiers/IdentifierImport";
-import { Identifiers } from "../Identifiers/Identifiers";
 import { StringComposeWriter } from "./StringComposeWriter";
 
 export class WpFunctionComposer {
@@ -42,6 +39,6 @@ export class WpFunctionComposer {
    * @param path the path to include ( relative to the theme dir path )
    */
   static includeRelative(path: string): string {
-    return IncludeFunctions.include(path, extensions.php);
+    return IncludeFunctions.include(path, ProjectTypes.wordpress);
   }
 }
