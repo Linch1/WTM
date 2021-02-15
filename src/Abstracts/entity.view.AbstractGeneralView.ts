@@ -169,7 +169,7 @@ export abstract class AbstractGeneralView {
   /**
    * @description get the project type of the view
    */
-  public getProjectType(type: ProjectTypes): ProjectTypes {
+  public getProjectType(): ProjectTypes {
     return this.JSON_INFORMATIONS.view.projectType;
   }
   /**
