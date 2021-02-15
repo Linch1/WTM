@@ -1,5 +1,5 @@
 export type addBlockParams = {
-    identifier_name: string,
+    parentBlockName: string,
     blockName: string,
     open?: string | null | undefined,
     close?: string | null | undefined

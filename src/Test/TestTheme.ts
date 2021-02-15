@@ -104,13 +104,13 @@ class TestTheme {
   static addBlockInSingle() {
     writer.renderingPageAddBlocks(single, [
       {
-        identifier_name: "BODY",
+        parentBlockName: "BODY",
         blockName: "PRIMO-DIV",
         open: "<div id='ciao' class='come' >",
         close: "</div>",
       },
       {
-        identifier_name: "PRIMO-DIV",
+        parentBlockName: "PRIMO-DIV",
         blockName: "SECONDO-DIV",
         open: "<div id='ciao-SECONDO' class='come' >",
         close: "</div>",
@@ -127,13 +127,13 @@ class TestTheme {
   static addBlockInTemplate() {
     writer.renderingPageAddBlocks(template, [
       {
-        identifier_name: "BODY",
+        parentBlockName: "BODY",
         blockName: "PRIMO-DIV",
         open: "<div id='ciao' class='come' >",
         close: "</div>",
       },
       {
-        identifier_name: "PRIMO-DIV",
+        parentBlockName: "PRIMO-DIV",
         blockName: "SECONDO-DIV",
         open: "<div id='ciao-SECONDO' class='come' >",
         close: "</div>",

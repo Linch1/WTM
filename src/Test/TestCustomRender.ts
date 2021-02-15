@@ -12,13 +12,13 @@ class TestCustomRender {
   }
   static addBlockInTemplate() {
     view.addBlock({
-        identifier_name: "BODY",
+      parentBlockName: "BODY",
         blockName: "PRIMO-DIV",
         open: "<div id='ciao-PRIMO' class='come' >",
         close: "</div>",
       });
       view.addBlock({
-        identifier_name: "PRIMO-DIV",
+        parentBlockName: "PRIMO-DIV",
         blockName: "SECONDO-DIV",
         open: "<div id='ciao-SECONDO' class='come' >",
         close: "</div>",

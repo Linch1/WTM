@@ -12,7 +12,7 @@ import { Identifiers } from "../Identifiers";
 
 export abstract class AbstractGeneralView {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
-    "ERR: The passed Html block identified by the passed identifier_name doesn't exists in the (template/single) file";
+    "ERR: The passed Html block identified by the passed parentBlockName doesn't exists in the (template/single) file";
   public readonly ERR_VIEW_NOT_CREATED =
     "ERR: Before calling this method create the view with the .create() method";
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
@@ -219,7 +219,7 @@ export abstract class AbstractGeneralView {
    * @param blocks the blocks object of this.JSON_INFORMATIONS.
    * @param currentBlock the block to analize
    * @param blockInfo informations of the custom block to add 
-   * @param blockInfo.identifier_name the parent of the block the create
+   * @param blockInfo.parentBlockName the parent of the block the create
    * @param blockInfo.blockName the name of the block
    * @param blockInfo.open how the block start
    * @param blockInfo.close how the block end
@@ -231,7 +231,7 @@ export abstract class AbstractGeneralView {
      ): void {
     // if the current block is also inside in another block it should have the data-path attribute
     if ( blockInfo ) {
-      this.addBlock(blockInfo);
+      this.buildAddBlock(blockInfo);
     } 
     for ( let pathToInclude of blocks[currentBlock].include ){
       if( Identifiers.checkCommentIdentifier(pathToInclude) ){
@@ -240,14 +240,14 @@ export abstract class AbstractGeneralView {
           blocks, 
           blockToAddName, 
           {
-            identifier_name: currentBlock,
+            parentBlockName: currentBlock,
             blockName: blockToAddName,
             open: blocks[blockToAddName].open,
             close: blocks[blockToAddName].close,
           }
         );
       } else {
-        this.includeRelative(currentBlock, pathToInclude);
+        this.buildIncludeRelative(currentBlock, pathToInclude);
       }
     }
   }
@@ -282,42 +282,77 @@ export abstract class AbstractGeneralView {
   }
 
   /**
-   * @description include the given path in the block identified by the passed identifier_name
-   * - the aviable blocks can be viewed from _this.IDENTIFIERS_HTML_BLOCKS_
-   * @param identifier_name
+   * @description build and include the passed path inside the paren block **and saves it into the view's json**
+   * @param parentBlockName
    * @param path
    */
-  public includeRelative(identifier_name: string, path: string): void {
-    if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(identifier_name))
+  public includeRelative(parentBlockName: string, path: string): void {
+    this.buildIncludeRelative(parentBlockName, path);
+    this.JSON_INFORMATIONS.blocks[parentBlockName].include.push(path);
+    this.saveJson();
+  }
+  /**
+   * @description include the given path in the block identified by the passed parentBlockName **without** saving it into the view's json
+   * - for save it also in the json call this.includeRelative()
+   * @param parentBlockName
+   * @param path
+   */
+  public buildIncludeRelative(parentBlockName: string, path: string): void {
+    if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(parentBlockName))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
       this.getIncludeFunction(path),
-      IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[0],
-      IdentifierHtml.getIdentifierPairHtmlComment(identifier_name)[1]
+      IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[0],
+      IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[1]
     );
-    this.JSON_INFORMATIONS.blocks[identifier_name].include.push(path);
-    this.saveJson();
   }
 
   /**
-   * @description add a block in the template/single ( like the BODY block  )
+   * @description add a block in the template/single ( like the BODY block  ) **and saves it into the view's json**
    * - a block starts and ends with an _HTML comment identifier_
-   * @param blockInfo.identifier_name the parent of the block the create
+   * @param blockInfo.parentBlockName the parent of the block the create
    * @param blockInfo.blockName the name of the block
    * @param blockInfo.open how the block start
    * @param blockInfo.close how the block end
+   * @param addToJson true if the include has also to be stored in the json, _duafult: true_
    */
   public addBlock(blockInfo: addBlockParams): void {
+    
+    if (!this.isCreated()) { throw new Error(this.ERR_VIEW_NOT_CREATED); }
+    
+    this.buildAddBlock(blockInfo);
+    this.JSON_INFORMATIONS.blocks[blockInfo.parentBlockName].include.push(
+      IdentifierHtml.getIdentifier(blockInfo.blockName)
+    );
+    blockInfo.open = blockInfo.open ? blockInfo.open : "";
+    blockInfo.close = blockInfo.close ? blockInfo.close : "";
+    this.JSON_INFORMATIONS.blocks[blockInfo.blockName] = {
+      open: blockInfo.open,
+      close: blockInfo.close,
+      include: [],
+    };
+    this.saveJson();
+   
+    
+  }
+  /**
+   * @description add a block in the view ( like the BODY block  ) **without** saving it into the view's json
+   * - a block starts and ends with an _HTML comment identifier_
+   * - for save it also in the json call this.addBlock()
+   * @param blockInfo.parentBlockName the parent of the block the create
+   * @param blockInfo.blockName the name of the block
+   * @param blockInfo.open how the block start
+   * @param blockInfo.close how the block end
+   * @param addToJson true if the include has also to be stored in the json, _duafult: true_
+   */
+  public buildAddBlock(blockInfo: addBlockParams): void {
     if (
       !Object.keys(this.JSON_INFORMATIONS.blocks).includes(
-        blockInfo.identifier_name
+        blockInfo.parentBlockName
       )
-    )
-      throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
-    if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
-
+    ) { throw new Error(this.ERR_NOT_VALID_HTML_BLOCK); }
     blockInfo.open = blockInfo.open ? blockInfo.open : "";
     blockInfo.close = blockInfo.close ? blockInfo.close : "";
 
@@ -330,18 +365,9 @@ ${blockInfo.close}
     StringComposeWriter.appendBeetweenChars(
       this.getPath(),
       toAdd,
-      IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.identifier_name)[0],
-      IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.identifier_name)[1]
+      IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.parentBlockName)[0],
+      IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.parentBlockName)[1]
     );
-    this.JSON_INFORMATIONS.blocks[blockInfo.identifier_name].include.push(
-      IdentifierHtml.getIdentifier(blockInfo.blockName)
-    );
-    this.JSON_INFORMATIONS.blocks[blockInfo.blockName] = {
-      open: blockInfo.open,
-      close: blockInfo.close,
-      include: [],
-    };
-    this.saveJson();
     StringComposeWriter.makePretty(this.getPath());
   }
 }
