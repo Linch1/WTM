@@ -52,7 +52,7 @@ export class Identifiers {
    * @param action the identifier action ( !ACTION! )
    */
   static getIdentifierWithActionRegex( identifier: string, action: identifierActions ): RegExp{
-    return new RegExp(`\\[${identifier}-${action}-[\\s\\S]*\\]`, "g")
+    return new RegExp(`\\[${identifier}-${action}-[\\s\\S]*?\\]`, "g")
   }
 
   /**
