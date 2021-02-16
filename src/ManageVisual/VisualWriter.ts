@@ -86,6 +86,8 @@ export class VisualWriter {
         identifiersJson[castType][ACTION][NAME] = ATTRIBUTES ;
       }
     }
+    this.visual.JSON_FILE_CONTENT.identifiers = identifiersJson;
+    
     FileWriter.writeFile(
       this.visual.JSON_FILE_PATH,
       JSON.stringify(this.visual.JSON_FILE_CONTENT)
