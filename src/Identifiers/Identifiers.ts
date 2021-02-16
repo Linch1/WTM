@@ -39,12 +39,20 @@ export class Identifiers {
       let actionVal: identifierActions = (<any>identifierActions)[action];
       if( identifierAction !=  identifierActions.ALL && actionVal != identifierAction) continue;
       for (let identifierType of this.IDENTIFIERS) {
-        identifiersRegex.push( new RegExp(`\\[${this.getIdentifier(identifierType)}-${actionVal}-[\\s\\S]*\\]`, "g") );
+        identifiersRegex.push( Identifiers.getIdentifierWithActionRegex(this.getIdentifier(identifierType), actionVal) );
       } 
       
     }
     
     return identifiersRegex;
+  }
+  /**
+   * @description get the regex for find an identifier with action 
+   * @param identifier the identifier type ( WTM-TYPE )
+   * @param action the identifier action ( !ACTION! )
+   */
+  static getIdentifierWithActionRegex( identifier: string, action: identifierActions ): RegExp{
+    return new RegExp(`\\[${identifier}-${action}-[\\s\\S]*\\]`, "g")
   }
 
   /**

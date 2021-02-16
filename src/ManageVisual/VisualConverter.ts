@@ -137,7 +137,7 @@ class VisualConverter {
       let newContent: string = "";
       newContent = this.buildIdentifierReplacer(identifier, identifierActions.STATIC, type, identifierName, identifierAttributes);
       if(!newContent.length) return;
-      text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.STATIC}-${identifierName}(.*)\\]`, "g") , newContent);
+      text = text.replace( Identifiers.getIdentifierWithActionRegex(Identifiers.getIdentifier(type as unknown as identifierType), identifierActions.STATIC), newContent);
     });
 
     return text;
@@ -161,7 +161,7 @@ class VisualConverter {
       let identifier: string = identifierToClass[type].getIdentifierWithAction(identifierName, identifierActions.EXECUTABLE, false);
       let newContent: string = "";
       newContent = this.buildIdentifierReplacer(identifier, identifierActions.EXECUTABLE, type, identifierName, identifierAttributes);
-      text = text.replace( new RegExp(`\\[${Identifiers.getIdentifier(type as unknown as identifierType)}-${identifierActions.EXECUTABLE}-${identifierName}(.*)\\]`, "g") , newContent);
+      text = text.replace( Identifiers.getIdentifierWithActionRegex(Identifiers.getIdentifier(type as unknown as identifierType), identifierActions.EXECUTABLE), newContent);
     });
     return text;
   }
