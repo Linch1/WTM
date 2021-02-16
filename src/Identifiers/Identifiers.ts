@@ -50,9 +50,11 @@ export class Identifiers {
    * @description get the regex for find an identifier with action 
    * @param identifier the identifier type ( WTM-TYPE )
    * @param action the identifier action ( !ACTION! )
+   * @param identifierName the name of the identifier to find ( optional )
    */
-  static getIdentifierWithActionRegex( identifier: string, action: identifierActions ): RegExp{
-    return new RegExp(`\\[${identifier}-${action}-[\\s\\S]*?\\]`, "g")
+  static getIdentifierWithActionRegex( identifierType: string, action: identifierActions, identifierName?: string ): RegExp{
+    if( identifierName ) return new RegExp(`\\[${identifierType}-${action}-${identifierName}[\\s\\S]*?\\]`, "g")
+    else return new RegExp(`\\[${identifierType}-${action}-[\\s\\S]*?\\]`, "g")
   }
 
   /**
