@@ -34,20 +34,21 @@ export abstract class AbstractGeneralVisual {
     this.getDirPath(),
     this.JSON_FILE_NAME
   );
+  public JSON_DEFAULT_IDENTIFIERS_CONTENT = {
+    HTML: {
+      "!STATIC!": {},
+      "!ALL!": {},
+      "!EXEC!": {}
+    },
+    ACF: {
+      "!STATIC!": {},
+      "!ALL!": {},
+      "!EXEC!": {}
+    }
+  }
   public JSON_FILE_CONTENT: visualJson = {
     visual: { name: "", projectType: ProjectTypes.ejs },
-    identifiers: {
-      HTML: {
-        "!STATIC!": {},
-        "!ALL!": {},
-        "!EXEC!": {}
-      },
-      ACF: {
-        "!STATIC!": {},
-        "!ALL!": {},
-        "!EXEC!": {}
-      },
-    },
+    identifiers: this.getDefaultIdentifiersObj(),
     dependencies: {
       scripts: [],
       styles: []
@@ -104,6 +105,10 @@ export abstract class AbstractGeneralVisual {
     if(FileReader.existsPath(this.JSON_FILE_PATH)){
       this.JSON_FILE_CONTENT = JSON.parse(FileReader.readFile(this.JSON_FILE_PATH));
     }
+  }
+
+  public getDefaultIdentifiersObj(){
+    return this.JSON_DEFAULT_IDENTIFIERS_CONTENT;
   }
 
   /**

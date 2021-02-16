@@ -3,9 +3,8 @@ import { FileReader } from "../files/FileReader";
 import { visualJsonIdentifiers } from "../Types/manageVisual.jsons";
 import { Identifiers } from "../Identifiers/Identifiers";
 import { Visual } from "./Visual";
-import { identifierActions, identifierType, ProjectTypes, renderTypes } from "../Enums";
+import { identifierActions, renderTypes } from "../Enums";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
-import { BulkVisual } from "./BulkVisual";
 
 export class VisualWriter {
 
@@ -70,7 +69,7 @@ export class VisualWriter {
   public populateIdentifiers() {
     if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
     
-    let identifiersJson: visualJsonIdentifiers = this.visual.JSON_FILE_CONTENT.identifiers;
+    let identifiersJson: visualJsonIdentifiers = this.visual.getDefaultIdentifiersObj();
     let identfiers: string[] = Identifiers.getContainedIdentifiers(
       this.visual.DEFAULT_FILE_PATH,
       identifierActions.ALL
@@ -84,7 +83,6 @@ export class VisualWriter {
           throw new Error(this.ERR_NOT_RENDER_IDENTIFIER);
         }
         let castType = TYPE as unknown as renderTypes;
-        
         identifiersJson[castType][ACTION][NAME] = ATTRIBUTES ;
       }
     }
@@ -92,22 +90,6 @@ export class VisualWriter {
       this.visual.JSON_FILE_PATH,
       JSON.stringify(this.visual.JSON_FILE_CONTENT)
     );
-  }
-
-  /**
-   * @description connect another visual to the one from where the method is called
-   * - the visual to connect must be in the same visuals folder
-   * @param visualName the name of the visual to connect
-   * @param visualPath the path to the visual to
-   * @param projectType the projectType of the visual to connect
-   */
-  public connectVisual( visualName: string, visualPath: string, projectType: ProjectTypes ){
-    if( !this.visual.JSON_FILE_CONTENT.connected[projectType] ) this.visual.JSON_FILE_CONTENT.connected[projectType] = {};
-    //@ts-ignore ignored becouse the following object will neve be undefined becouse, if it is, it is initalized in the line above
-    this.visual.JSON_FILE_CONTENT.connected[projectType][visualName] = {
-      path: visualPath
-    }
-    this.saveJson();
   }
 
   /**
