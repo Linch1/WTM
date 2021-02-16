@@ -1,6 +1,6 @@
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { extensions,  ProjectTypes } from "../Enums";
+import { extensions,  ProjectTypes, WTMPathsAndConstants } from "../Enums";
 import { FileWriter } from "../files/FileWriter";
 import { informationsJson } from "../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
@@ -16,19 +16,13 @@ export abstract class AbstractGeneralView {
     "ERR: Before calling this method create the view with the .create() method";
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
 
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = "PAGE-NAME";
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = "PAGE-HEADER";
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = "PAGE-FOOTER";
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = WTMPathsAndConstants.viewsIdentifierPageName;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = WTMPathsAndConstants.viewsIdentifierPageHeader;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = WTMPathsAndConstants.viewsIdentifierPageFooter;
 
-  public JSON_INFORMATIONS: informationsJson = {
-    blocks: { BODY: { open: "", close: "", include: [] } },
-    view: { name: "", projectType: ProjectTypes.ejs },
-  };
-  public JSON_COMMON_INFORMATIONS: {
-    header: string;
-    footer: string;
-  } = { 'header': '', 'footer': ''}
-  public COMMON_DEFAULT_BUILD = "";
+  public JSON_INFORMATIONS: informationsJson = WTMPathsAndConstants.viewsJsonInformations;
+  public JSON_COMMON_INFORMATIONS = WTMPathsAndConstants.viewsCommonJsonInformations;
+  public COMMON_DEFAULT_BUILD = WTMPathsAndConstants.viewsCommonContent; // modified in wp themes and singles
 
   /**
    * 
@@ -215,7 +209,7 @@ export abstract class AbstractGeneralView {
     let blocks = this.getBlocks();
     this.reCreateBlocksRecursive(
       blocks,
-      'BODY'
+      'BODY' HERE
     );
 
   }

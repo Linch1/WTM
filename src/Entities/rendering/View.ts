@@ -3,19 +3,22 @@ import { AbstractGeneralView } from "../../Abstracts/AbstractGeneralView";
 import { IncludeFunctions } from "../../Enums/common.includeFunctions";
 import { extensions } from "../../Enums/common.extension";
 import { checkMapProjectTypeToExtension } from "../../Checkers/check.mapProjectTypeToExtension";
-import { ProjectTypes } from "../..";
+import { ProjectTypes, WTMPathsAndConstants } from "../..";
 
 export class View extends AbstractGeneralView {
   constructor( parentAbsPath : string, pageName: string = "", projectType: ProjectTypes) {
 
-    let viewsDefaultFolder: string = 'Views';
-    let viewsDefaultPrefix: string = "view-";
-    let viewsDefaultJsonFolder: string = "views-json";
+    let viewsDefaultFolder: string = WTMPathsAndConstants.visualsDirectory;
+    let viewsDefaultPrefix: string = WTMPathsAndConstants.viewsPrefix;
+    let viewsDefaultJsonFolder: string = WTMPathsAndConstants.viewsJsonDirectory;
+
     let extension: extensions = checkMapProjectTypeToExtension(projectType);
 
+    // the parentAbsPath point to the views directory, if not the default viewsFolderName is at the end of the path and the directory will be created
     parentAbsPath = parentAbsPath.trim();
-    if( !(StringComposeReader.getPathLastElem(parentAbsPath) == viewsDefaultFolder))
+    if( !(StringComposeReader.getPathLastElem(parentAbsPath) == viewsDefaultFolder) )
       parentAbsPath = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultFolder);
+
     pageName = pageName.trim();
 
     let viewsDefaultJsonFolderPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}`);
@@ -23,9 +26,9 @@ export class View extends AbstractGeneralView {
     if( pageName.includes(viewsDefaultPrefix) ) pageName = pageName.replace(viewsDefaultPrefix, "");
     extension = extension.trim() as extensions;
 
-    let currentViewJsonPath = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/WTM-${pageName.toLowerCase().split(" ").join("-")}.json`);
-    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/common.json`);
-    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `common.${extension}`);
+    let currentViewJsonPath = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/${pageName.toLowerCase().split(" ").join("-")}.json`);
+    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultJsonFolder, WTMPathsAndConstants.viewsCommonJsonFile);
+    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${WTMPathsAndConstants.viewsCommonContentFileName}.${extension}`);
     
     super(
       pageName,

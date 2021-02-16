@@ -2,14 +2,6 @@ import { FileReader } from "./FileReader";
 import { FileWriter } from "./FileWriter";
 import * as prettier from "prettier";
 import { StringComposeReader } from "./StringComposeReader";
-import { replaceAllParams } from "../Types/files.StringComposerWriter";
-import { IdentifierPlaceholder } from "../Identifiers/IdentifierPlaceholder";
-import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
-import { identifierActions, identifierToClass, identifierType, renderTypes } from "../Enums";
-import { GeneralIdentifier, Identifiers } from "../Identifiers";
-import { replaceIdentifiersParams } from "../Types/files.StringComposerWriter.replaceIdentifiers";
-import { IncludeFunctions } from "../Enums/common.includeFunctions";
-import { extensions } from "../Enums/common.extension";
 
 export class StringComposeWriter {
   /**

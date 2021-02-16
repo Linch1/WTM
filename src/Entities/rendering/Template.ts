@@ -3,30 +3,30 @@ import { pagePath } from "../../Enums/entities.visual.path";
 import { AbstractGeneralView } from "../../Abstracts/AbstractGeneralView";
 import { WpFunctionComposer } from "../../files/WpFunctionComposer";
 import { ProjectTypes } from "../..";
-import { MapProjectTypeToExtension } from "../../Enums";
+import { MapProjectTypeToExtension, WTMPathsAndConstants } from "../../Enums";
 
 export class Template extends AbstractGeneralView {
 
 
   constructor( themeAux: ThemeAux, pageName: string ) {
 
-    let parentAbsPath: string = themeAux.getInsideThemePath("");
-    let viewsDefaultPrefix: string = "template-";
+    let parentAbsPath: string = themeAux.getInsideThemePath(WTMPathsAndConstants.wpTemplatesDirectory);
+    let viewsDefaultPrefix: string = WTMPathsAndConstants.wpTemplatePrefix;
     let projectType = ProjectTypes.wordpress;
     pageName = pageName.trim();
     if( pageName.includes(viewsDefaultPrefix) ) pageName = pageName.replace(viewsDefaultPrefix, "");
 
     let currentViewJsonPath = themeAux.getInsideWTMPath(
       pagePath.PAGE,
-      `WTM-${pageName.toLowerCase().split(" ").join("-")}.json`
+      `${pageName.toLowerCase().split(" ").join("-")}.json`
     );
     let viewsDefaultJsonFolderPath: string = themeAux.getInsideWTMPath(pagePath.PAGE);
     let viewsCommonJsonPath: string = themeAux.getInsideWTMPath(
-      "theme-rendering",
-      `common.json`
+      WTMPathsAndConstants.viewsJsonDirectory,
+      `${WTMPathsAndConstants.wpTemplatePrefix}-${WTMPathsAndConstants.viewsCommonJsonFile}` // if the prefix is removed the singles common file and templates common file overlaps ( becouse they use the same name )
     );
     let viewsCommonDefaultBuildPath: string = themeAux.getInsideThemePath(
-      `common.${MapProjectTypeToExtension[projectType]}`
+      `${WTMPathsAndConstants.viewsCommonContentFileName}.${MapProjectTypeToExtension[projectType]}`
     );
     
     super(
@@ -39,7 +39,7 @@ export class Template extends AbstractGeneralView {
       viewsCommonJsonPath,
       viewsCommonDefaultBuildPath
     );
-
+    this.COMMON_DEFAULT_BUILD = WTMPathsAndConstants.wpTemplateCommonContent; // change the default content used to create the custom view
     this.initialize();
   }
   

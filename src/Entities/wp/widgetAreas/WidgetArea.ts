@@ -8,7 +8,7 @@ import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
 import { Identifiers } from "../../../Identifiers/Identifiers";
-
+HERE
 type params = widgetAreaParams;
 class WidgetArea extends GeneralWpEntity<params> {
   

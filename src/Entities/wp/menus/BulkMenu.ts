@@ -1,10 +1,10 @@
 
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
 import { Menu } from "./Menu";
-
+HERE
 class BulkMenu {
   
-  public readonly EMPTY_QUEUE = "ERROR: There the queue is empty";
+  public readonly ERR_EMPTY_QUEUE = "ERROR: There the queue is empty";
   public QUEUE: Menu[] = [];
 
   constructor(public themeAux: ThemeAux) {}
@@ -14,7 +14,7 @@ class BulkMenu {
    * @param removeFromQueueOnCreation set this to true for remove the creates menu from the this.QUEUE array
    */
   public importAll(removeFromQueueOnCreation: boolean = false): void {
-    if (!this.QUEUE.length) throw new Error(this.EMPTY_QUEUE);
+    if (!this.QUEUE.length) throw new Error(this.ERR_EMPTY_QUEUE);
     let i;
     for (i = 0; i < this.QUEUE.length; i++) {
       let menu = this.QUEUE[i];
@@ -40,7 +40,7 @@ class BulkMenu {
    * @param removeFromQueueOnCreation set this to true for remove the created menus from the this.PAGES array
    */
   public createAll(removeFromQueueOnCreation: boolean = false): void {
-    if (!this.QUEUE.length) throw new Error(this.EMPTY_QUEUE);
+    if (!this.QUEUE.length) throw new Error(this.ERR_EMPTY_QUEUE);
     let i;
     for (i = 0; i < this.QUEUE.length; i++) {
       let menu = this.QUEUE[i];

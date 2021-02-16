@@ -1,7 +1,7 @@
 export * from './common.includeFunctions';
 export * from './common.extension';
 export * from './common.mapProjectTypeToExtension';
-export * from './common.paths';
+export * from './common.pathsAndConstants';
 export * from './common.projectTypes';
 
 export * from './entities.visual.path';

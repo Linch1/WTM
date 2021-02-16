@@ -5,7 +5,7 @@ import { WpFunctionComposer } from "../../files/WpFunctionComposer";
 import { customPartType } from "../../Enums/entities.wp.type";
 import { InterfaceWpEntity } from "../../Interfaces/entity.wp.InterfaceGeneralWpEntity";
 import { IdentifierImport } from "../../Identifiers/IdentifierImport";
-
+HERE
 export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements InterfaceWpEntity {
   
   public readonly ERR_NO_VALID_INFORMATIONS = "ERR: the informations attribute of this class are not correctly initalized";

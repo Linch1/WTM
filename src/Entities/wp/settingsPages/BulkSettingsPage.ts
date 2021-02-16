@@ -4,7 +4,7 @@ import { SettingsPage } from "./SettingsPage"
 
 class BulkSettingsPage {
   
-  public readonly EMPTY_QUEUE = "ERROR: There the queue is empty";
+  public readonly ERR_EMPTY_QUEUE = "ERROR: There the queue is empty";
   public QUEUE: SettingsPage[] = [];
 
   /**
@@ -28,7 +28,7 @@ class BulkSettingsPage {
    * @param removeFromQueueOnCreation set this to true for remove the create pages from the this.QUEUE array
    */
   public importAll(removeFromQueueOnCreation: boolean = false): void {
-    if (!this.QUEUE.length) throw new Error(this.EMPTY_QUEUE);
+    if (!this.QUEUE.length) throw new Error(this.ERR_EMPTY_QUEUE);
     let i;
     for (i = 0; i < this.QUEUE.length; i++) {
       let settings_page = this.QUEUE[i];
@@ -44,7 +44,7 @@ class BulkSettingsPage {
    * @param removeFromQueueOnCreation set this to true for remove the create pages from the this.QUEUE array
    */
   public createAll(removeFromQueueOnCreation: boolean = false): void {
-    if (!this.QUEUE.length) throw new Error(this.EMPTY_QUEUE);
+    if (!this.QUEUE.length) throw new Error(this.ERR_EMPTY_QUEUE);
     let i;
     for (i = 0; i < this.QUEUE.length; i++) {
       let settings_page = this.QUEUE[i];

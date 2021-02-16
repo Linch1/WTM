@@ -18,7 +18,7 @@ import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
 import { Single } from "../Entities/rendering/Single";
 import { Template } from "../Entities/rendering/Template";
 import { ThemeAux } from "./ThemeAux";
-
+HERE
 /**
  * This class is used to perform the read actions on the Theme
  * Like reading a custom post type or a page or other things like that

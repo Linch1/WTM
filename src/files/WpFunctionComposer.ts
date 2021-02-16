@@ -2,7 +2,7 @@ import { identifierType, ProjectTypes } from "../Enums";
 import { IncludeFunctions } from "../Enums/common.includeFunctions";
 import { IdentifierImport } from "../Identifiers/IdentifierImport";
 import { StringComposeWriter } from "./StringComposeWriter";
-
+HERE
 export class WpFunctionComposer {
   static IDENTIFIER_IMPORTED = IdentifierImport;
   /**

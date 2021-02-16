@@ -2,12 +2,9 @@ import * as fs from "fs";
 
 import { StringComposeWriter } from "./StringComposeWriter";
 import { FileReader } from "./FileReader";
-import { Identifiers } from "../Identifiers/Identifiers";
-import { GeneralIdentifier } from "../Identifiers/GeneralIdentfier";
-import { identifierType } from "../Enums";
 
 export class FileWriter {
-  static EMPTY_TEXT: string = "ERR: Empty text in the body";
+  static ERR_EMPTY_TEXT: string = "ERR: Empty text in the body";
 
   /**
    * @description modify the content of a text in a file
@@ -26,7 +23,7 @@ export class FileWriter {
      * adding the line to the function
      */
     let fileContent = FileReader.readFile(filePath);
-    if (!oldContent.trim()) throw new Error(this.EMPTY_TEXT);
+    if (!oldContent.trim()) throw new Error(this.ERR_EMPTY_TEXT);
     this.writeFile(filePath, fileContent.replace(oldContent, newContent));
   }
 

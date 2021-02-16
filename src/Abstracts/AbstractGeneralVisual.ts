@@ -2,7 +2,7 @@ import { FileReader } from "../files/FileReader";
 import { StringComposeReader } from "../files/StringComposeReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { visualJson } from "../Types/manageVisual.jsons";
-import { extensions, ProjectTypes } from "../Enums";
+import { extensions, ProjectTypes, WTMPathsAndConstants } from "../Enums";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
 
 
@@ -12,14 +12,20 @@ export abstract class AbstractGeneralVisual {
     "ERR: Cannot retrive the visual name from the given path";
   public readonly ERR_VISUAL_NOT_CREATED =
     "ERR: Before calling this method create the visual with the myVisual.writer.createVisual() method";
-  public readonly NO_PROJECT_TYPE_PROVIDED = "Please provide the visual project type. If not provided it means that the visual already exists and it can be take from it's json, in this case the visual doesn't exists so this cannot be done."
+  public readonly WERR_NO_PROJECT_TYPE_PROVIDED = "Please provide the visual project type. If not provided it means that the visual already exists and it can be take from it's json, in this case the visual doesn't exists so this cannot be done."
 
-  public readonly ASSETS_RELATIVE_PATH: string = '/assets/css/';
-  public readonly STYLES_RELATIVE_PATH: string = '/assets/css/';
-  public readonly SCRIPTS_RELATIVE_PATH: string = '/assets/js/';
-  public readonly JSON_FILE_NAME: string = "WTM.json";
-  public readonly HTML_DEFAULT_FILE_NAME: string  = "default";
-  public readonly HTML_RENDERED_FILE_NAME: string  = "render";
+  public readonly ASSETS_RELATIVE_PATH: string = WTMPathsAndConstants.visualsAssetsDirectory;
+  public readonly STYLES_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
+    WTMPathsAndConstants.visualsAssetsDirectory,
+    WTMPathsAndConstants.visaulsAssetsCssDirectory
+  );
+  public readonly SCRIPTS_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
+    WTMPathsAndConstants.visualsAssetsDirectory,
+    WTMPathsAndConstants.visualsAssetsJsDirectory
+  );;
+  public readonly JSON_FILE_NAME: string = WTMPathsAndConstants.visualsJsonFile;
+  public readonly HTML_DEFAULT_FILE_NAME: string  = WTMPathsAndConstants.visualsHtmlDefaultFileName;
+  public readonly HTML_RENDERED_FILE_NAME: string  = WTMPathsAndConstants.visualsHtmlRenderFileName;
 
   public readonly RENDER_FILE_PATH: string;
   public readonly DEFAULT_FILE_PATH: string;
@@ -27,34 +33,15 @@ export abstract class AbstractGeneralVisual {
   public readonly STYLES_PATH: string;
   public readonly SCRIPTS_PATH: string;
 
-  public readonly INIT_RENDER_FILE_CONTENT: string = "";
-  public readonly INIT_DEFAULT_FILE_CONTENT: string = "";
+  public readonly INIT_RENDER_FILE_CONTENT: string = WTMPathsAndConstants.visualsHtmlRenderContent;
+  public readonly INIT_DEFAULT_FILE_CONTENT: string = WTMPathsAndConstants.visualsHtmlDefaultContent;
 
   public readonly JSON_FILE_PATH: string = StringComposeWriter.concatenatePaths(
     this.getDirPath(),
     this.JSON_FILE_NAME
   );
-  public JSON_DEFAULT_IDENTIFIERS_CONTENT = {
-    HTML: {
-      "!STATIC!": {},
-      "!ALL!": {},
-      "!EXEC!": {}
-    },
-    ACF: {
-      "!STATIC!": {},
-      "!ALL!": {},
-      "!EXEC!": {}
-    }
-  }
-  public JSON_FILE_CONTENT: visualJson = {
-    visual: { name: "", projectType: ProjectTypes.ejs },
-    identifiers: this.getDefaultIdentifiersObj(),
-    dependencies: {
-      scripts: [],
-      styles: []
-    },
-    connected: {}
-  };
+
+  public JSON_FILE_CONTENT: visualJson = WTMPathsAndConstants.visualsJsonContent;
 
   /**
    * @description create a visual with the given informations
@@ -66,7 +53,7 @@ export abstract class AbstractGeneralVisual {
       this.VISUAL_FOLDER
     );
     if( !FileReader.existsPath(this.JSON_FILE_PATH) && !projectType ){
-      throw new Error(this.NO_PROJECT_TYPE_PROVIDED);
+      throw new Error(this.WERR_NO_PROJECT_TYPE_PROVIDED);
     }
     this.JSON_FILE_CONTENT.visual.projectType = projectType as ProjectTypes;
 
@@ -105,10 +92,6 @@ export abstract class AbstractGeneralVisual {
     if(FileReader.existsPath(this.JSON_FILE_PATH)){
       this.JSON_FILE_CONTENT = JSON.parse(FileReader.readFile(this.JSON_FILE_PATH));
     }
-  }
-
-  public getDefaultIdentifiersObj(){
-    return this.JSON_DEFAULT_IDENTIFIERS_CONTENT;
   }
 
   /**

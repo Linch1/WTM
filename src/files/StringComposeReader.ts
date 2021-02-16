@@ -3,10 +3,9 @@ import { FileReader } from "./FileReader";
 import { StringComposeWriter } from "./StringComposeWriter";
 
 export class StringComposeReader {
-  static readonly NoStartCharFound =
+  static readonly ERR_NO_START_CHAR_FOUND =
     "ERR: The given start char is not present in the file";
   static readonly ERR_CANNOT_GET_LAST_ELEM: "ERR: Cannot get the last element of the given Path";
-  static readonly NoContentFound = null;
 
   /**
    * @description read the text contained beetween to chars/phrases ( and check if the text that start with a specific phrase/word optionally )
@@ -51,7 +50,7 @@ export class StringComposeReader {
     );
 
     let startCharSplit: string[] = fileTextSingleLine.split(startChar);
-    if (startCharSplit.length <= 1) throw new Error(this.NoStartCharFound);
+    if (startCharSplit.length <= 1) throw new Error(this.ERR_NO_START_CHAR_FOUND);
     let foundContent: string = "";
     for (let i = 0; i < startCharSplit.length; i++) {
       let content: string = startCharSplit[i].trim();

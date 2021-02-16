@@ -6,5 +6,5 @@ import { extensions, MapProjectTypeToExtension, ProjectTypes } from "../Enums";
  */
 export function checkMapProjectTypeToExtension( type: ProjectTypes): extensions{
     if( type in MapProjectTypeToExtension ){ return MapProjectTypeToExtension[type] as unknown as extensions; }
-    else throw new Error(" NOT A VALID MAPPED PROJECT TYPE ");
+    else throw new Error(" ERR NOT A VALID MAPPED PROJECT TYPE ");
 }

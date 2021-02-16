@@ -8,7 +8,7 @@ import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { postTypeParams } from "../../../Types/entity.wp.postType";
 import { GeneralWpEntity } from "../GeneralWpEntity";
 import { Identifiers } from "../../../Identifiers/Identifiers";
-
+HERE
 type params = postTypeParams;
 class PostType  extends GeneralWpEntity<params> {
 

@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import { nestedStringsArrays } from "../Types/files.FileReader";
 
-
+HERE
 export class FileReader {
-  static readonly NoFunctionFoundErr =
+  static readonly ERR_NO_FUNCTION_FOUND =
     "NO FUNCTION FOUND: no function was found with the given name";
 
   /**
@@ -100,7 +100,7 @@ export class FileReader {
       // return all this vars for let easier and faster the function changes in ThemeWriter
       return functionBody;
     }
-    throw new Error(this.NoFunctionFoundErr);
+    throw new Error(this.ERR_NO_FUNCTION_FOUND);
   }
 
 

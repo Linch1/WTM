@@ -1,15 +1,14 @@
-import { checkMapProjectTypeToExtension, Identifiers, StringComposeWriter } from "..";
-import { checkValidProjectType, checkValidProjectTypeWithError } from "../Checkers";
+import { Identifiers, StringComposeWriter } from "..";
 import { identifierActions, identifierToClass, identifierType, IncludeFunctions, ProjectTypes } from "../Enums";
 import { renderTypes } from "../Enums/manageVisual.renderType";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
-import { identifiersAttributesType, replaceAllParams, visualJson } from "../Types";
+import { identifiersAttributesType, visualJson } from "../Types";
 import { replaceIdentifiersParams } from "../Types/files.StringComposerWriter.replaceIdentifiers";
 import { Visual } from "./Visual";
 
 class VisualConverter {
-  constructor(public visual: Visual) {}
+  constructor(public visual: Visual) {}HERE
   VISUALS_PATH = 'VISUALS-PATH'; // this is a param that will replaced whit the visuals directory path
 
   /**

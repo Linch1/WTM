@@ -6,7 +6,7 @@ import { StringComposeWriter } from "../files/StringComposeWriter";
 import { nestedStringsArrays } from "../Types/files.FileReader";
 import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
 
-
+HERE
 class Theme {
   public ERR_PATH_ALREADY_PRESERNT = "ERR: The given path is already required/imported"
 
