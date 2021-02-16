@@ -12,7 +12,7 @@ export enum identifiersAttributes {
     text = 'text',
 
     /**
-     * @description the path to the visual to include inside the _container_
+     * @description the name of the visual to include inside the _container_
      */
     visualTarget = 'visualTarget',
 

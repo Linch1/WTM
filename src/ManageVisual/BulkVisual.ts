@@ -6,10 +6,11 @@ import { Visual } from "./Visual";
 export class BulkVisual {
     
     /**
-     * @param VISUALS_FOLDER the folder where the visual are contained
-     * @param projectType the type of the project where the visual will be included
+     * @param VISUALS_FOLDER the path to the visual**s** folder
+     * @param projectType the type of the visuals to be read
+     * - if empty all the visuals of all the types are readed
      */
-    constructor(public VISUALS_FOLDER: string, public projectType: ProjectTypes){}
+    constructor(public VISUALS_FOLDER: string, public projectType?: ProjectTypes){}
 
     public getAllVisuals(): Visual[]{
         let visuals: Visual[] = []; 
@@ -19,6 +20,14 @@ export class BulkVisual {
             visuals.push(new Visual(visualFolderPath, this.projectType));
         }
         return visuals;
+    }
+
+    public findVisual( visualName: string): Visual {
+        let visualFolder = StringComposeWriter.concatenatePaths(
+            this.VISUALS_FOLDER,
+            visualName
+        );
+        return new Visual( visualFolder );
     }
  
 }

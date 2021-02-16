@@ -15,6 +15,13 @@ export type visualJson = {
   dependencies: {
     scripts: string[];
     styles: string[];
+  },
+  connected: {
+    -readonly [ projectType in  keyof typeof ProjectTypes]?: {
+      [visualName: string]: {
+        path: string
+      };
+    }
   }
 };
 

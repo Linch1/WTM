@@ -1,5 +1,5 @@
 import { StringComposeReader, StringComposeWriter } from "../../files";
-import { AbstractGeneralView } from "../../Abstracts/entity.view.AbstractGeneralView";
+import { AbstractGeneralView } from "../../Abstracts/AbstractGeneralView";
 import { IncludeFunctions } from "../../Enums/common.includeFunctions";
 import { extensions } from "../../Enums/common.extension";
 import { checkMapProjectTypeToExtension } from "../../Checkers/check.mapProjectTypeToExtension";

@@ -39,7 +39,7 @@ export class Identifiers {
       let actionVal: identifierActions = (<any>identifierActions)[action];
       if( identifierAction !=  identifierActions.ALL && actionVal != identifierAction) continue;
       for (let identifierType of this.IDENTIFIERS) {
-        identifiersRegex.push( new RegExp(`\\[${this.getIdentifier(identifierType)}-${actionVal}-(.*)\\]`, "g") );
+        identifiersRegex.push( new RegExp(`\\[${this.getIdentifier(identifierType)}-${actionVal}-[\\s\\S]*\\]`, "g") );
       } 
       
     }

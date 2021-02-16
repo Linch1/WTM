@@ -1,6 +1,6 @@
 import { ThemeAux } from "../../ManageTheme/ThemeAux";
 import { pagePath } from "../../Enums/entities.visual.path";
-import { AbstractGeneralView } from "../../Abstracts/entity.view.AbstractGeneralView";
+import { AbstractGeneralView } from "../../Abstracts/AbstractGeneralView";
 import { WpFunctionComposer } from "../../files/WpFunctionComposer";
 import { ProjectTypes } from "../../Enums";
 import { checkMapProjectTypeToExtension } from "../../Checkers/check.mapProjectTypeToExtension";

@@ -1,3 +1,3 @@
-export * from './entity.visual.AbstractGeneralVisual';
-export * from './entity.view.AbstractGeneralView';
-export * from './identifiers.AbstractGeneralIdentifier';
+export * from './AbstractGeneralVisual';
+export * from './AbstractGeneralView';
+export * from './AbstractGeneralIdentifier';

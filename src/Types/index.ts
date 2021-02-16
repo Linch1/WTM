@@ -1,6 +1,6 @@
 export * from './entity.rendering.jsons';
 export * from './entity.rendering.params.addBlock';
-export * from './entity.visual.jsons';
+export * from './manageVisual.jsons';
 
 export * from './entity.wp.menuMainPage';
 export * from './entity.wp.menuSubPage';

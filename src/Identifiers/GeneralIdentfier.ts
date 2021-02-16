@@ -1,6 +1,6 @@
 import { ValidateIdentifierMethods } from "../Decorators";
 import { identifierType } from "../Enums/identifiers.type";
-import { AbstractGeneralIdentifier } from "../Abstracts/identifiers.AbstractGeneralIdentifier";
+import { AbstractGeneralIdentifier } from "../Abstracts/AbstractGeneralIdentifier";
 import { identifierActions } from "../Enums";
 
 export class GeneralIdentifier implements AbstractGeneralIdentifier {

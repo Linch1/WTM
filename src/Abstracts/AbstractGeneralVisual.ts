@@ -1,7 +1,7 @@
 import { FileReader } from "../files/FileReader";
 import { StringComposeReader } from "../files/StringComposeReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { visualJson } from "../Types/entity.visual.jsons";
+import { visualJson } from "../Types/manageVisual.jsons";
 import { extensions, ProjectTypes } from "../Enums";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
 
@@ -12,6 +12,7 @@ export abstract class AbstractGeneralVisual {
     "ERR: Cannot retrive the visual name from the given path";
   public readonly ERR_VISUAL_NOT_CREATED =
     "ERR: Before calling this method create the visual with the myVisual.writer.createVisual() method";
+  public readonly NO_PROJECT_TYPE_PROVIDED = "Please provide the visual project type. If not provided it means that the visual already exists and it can be take from it's json, in this case the visual doesn't exists so this cannot be done."
 
   public readonly ASSETS_RELATIVE_PATH: string = '/assets/css/';
   public readonly STYLES_RELATIVE_PATH: string = '/assets/css/';
@@ -50,19 +51,23 @@ export abstract class AbstractGeneralVisual {
     dependencies: {
       scripts: [],
       styles: []
-    }
+    },
+    connected: {}
   };
 
   /**
    * @description create a visual with the given informations
-   * @param VISUAL_FOLDER the folder where the visuale is ( or have to be ) containers
+   * @param VISUAL_FOLDER the path to the visual folder
    * @param projectType the typo of the project where the visual will be included
    */
-  constructor(public VISUAL_FOLDER: string, projectType: ProjectTypes) {
+  constructor(public VISUAL_FOLDER: string, projectType?: ProjectTypes) {
     this.JSON_FILE_CONTENT.visual.name = StringComposeReader.getPathLastElem(
       this.VISUAL_FOLDER
     );
-    this.JSON_FILE_CONTENT.visual.projectType = projectType;
+    if( !FileReader.existsPath(this.JSON_FILE_PATH) && !projectType ){
+      throw new Error(this.NO_PROJECT_TYPE_PROVIDED);
+    }
+    this.JSON_FILE_CONTENT.visual.projectType = projectType as ProjectTypes;
 
     this.init();
     this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(
@@ -102,20 +107,20 @@ export abstract class AbstractGeneralVisual {
   }
 
   /**
-   * @description get the visual name from the VISUAL_FOLDER
+   * @description get the visual name 
    */
   public getName(): string {
     return this.JSON_FILE_CONTENT.visual.name;
   }
 
   /**
-   * @description get the visual name from the VISUAL_FOLDER
+   * @description get the visual project type
    */
   public getProjectType(): ProjectTypes {
     return this.JSON_FILE_CONTENT.visual.projectType;
   }
   /**
-   * @description get the visual name from the VISUAL_FOLDER
+   * @description get the visual extension
    */
   public getExtension(): extensions {
     return checkMapProjectTypeToExtension(this.JSON_FILE_CONTENT.visual.projectType);
@@ -151,7 +156,7 @@ export abstract class AbstractGeneralVisual {
     return this.JSON_FILE_CONTENT.dependencies.scripts;
   }
   /**
-   * @description return the path of the visual based on the this.VISUALS_MAIN_FOLDER
+   * @description returns the path to the visual folder
    */
   public getDirPath(): string {
     return StringComposeWriter.concatenatePaths(this.VISUAL_FOLDER);
@@ -175,6 +180,12 @@ export abstract class AbstractGeneralVisual {
    */
   public getRenderFilePath(): string{
     return this.RENDER_FILE_PATH;
+  }
+  /**
+   * @description return the name of the render file ( _without the extension_ )
+   */
+  public getRenderFileName(): string{
+    return this.HTML_RENDERED_FILE_NAME;
   }
   /**
    * @description get the text contained in the _default.**_ file

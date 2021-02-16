@@ -1,10 +1,10 @@
-import { Identifiers } from "..";
-import { identifierActions, identifierToClass, identifierType, IncludeFunctions } from "../Enums";
+import { checkMapProjectTypeToExtension, Identifiers, StringComposeWriter } from "..";
+import { checkValidProjectType, checkValidProjectTypeWithError } from "../Checkers";
+import { identifierActions, identifierToClass, identifierType, IncludeFunctions, ProjectTypes } from "../Enums";
 import { renderTypes } from "../Enums/manageVisual.renderType";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
-import { identifiersAttributesType, replaceAllParams } from "../Types";
-import { visualJson } from "../Types/entity.visual.jsons";
+import { identifiersAttributesType, replaceAllParams, visualJson } from "../Types";
 import { replaceIdentifiersParams } from "../Types/files.StringComposerWriter.replaceIdentifiers";
 import { Visual } from "./Visual";
 
@@ -70,28 +70,50 @@ class VisualConverter {
       tagStart = tagStart.replace(/\n/g,' '); // removes the \n chars
       tagStart = tagStart.replace(/[ \t]+/g,' '); // conver sequences of white spaces to a single white space
 
-      let includeStatement = this.getIncludeStatement(attributes.visualTarget);
+      let includeStatement = this.getIncludeStatement(attributes.visualTarget,);
       let tagEnd = `</div>`;
       return tagStart + includeStatement + tagEnd
   }
   
   /**
-   * @description returns the include statement for the passed visual path ( visualTarget )
+   * @description given a visual name and a projectType it searches for a visual that hase the following name: *visualName*-*projectType*; 
+   * - it returns the visual if exists
+   * - it returns undefined if the visual doesn't exists
+   * @param visualTargetName 
+   * @param projectType 
+   */
+  getVisualBasedOnType( visualTargetName: string, projectType: ProjectTypes): Visual | undefined{
+    let visualTargetFolderBasedOneProjectTypeRenderPath = StringComposeWriter.concatenatePaths(
+      this.visual.getVisualsPath(),
+      visualTargetName + '-' + this.visual.getProjectType()
+    );
+    let visualTargetObjectBasedOneProjectTypeRenderPath: undefined | Visual = undefined;
+    try {
+      visualTargetObjectBasedOneProjectTypeRenderPath = new Visual( visualTargetFolderBasedOneProjectTypeRenderPath );
+    } catch (error) {}
+    return visualTargetObjectBasedOneProjectTypeRenderPath;
+  }
+
+  /**
+   * @description returns the include statement for the passed visual name ( visualTarget )
+   * - it is also based on the current projectType, it means that by default the searched visual to include has not directly the passed name but has the following name *visualTarget*-*projectType*. If the visual with that name doesn't exists, the one with _visualTarget_ as name is searched.
    * @param visualTarget the path to the visual to include
    */
   getIncludeStatement(visualTarget: string | undefined){
+
     let includeStatement = "";
     if(visualTarget){
-      let addMainFolderInIncludeStatement: boolean;
-      if(visualTarget.includes(this.VISUALS_PATH)) {
-        addMainFolderInIncludeStatement = false;
-        let options: replaceAllParams = {}
-        options[this.VISUALS_PATH] = this.visual.getVisualsPath();
-        visualTarget = Identifiers.replaceAllIdentifiersPlaceholders( visualTarget, options );
+      let visualBasedOnType = this.getVisualBasedOnType(visualTarget, this.visual.getProjectType());
+      if( visualBasedOnType ) {
+        includeStatement = IncludeFunctions.include(visualBasedOnType.getRenderFilePath(), this.visual.getProjectType(), false);
       } else {
-        addMainFolderInIncludeStatement = true;
+        let visualTargetFolder = StringComposeWriter.concatenatePaths(
+          this.visual.getVisualsPath(),
+          visualTarget
+        );
+        let visualTargetObject = new Visual( visualTargetFolder );
+        includeStatement = IncludeFunctions.include(visualTargetObject.getRenderFilePath(), this.visual.getProjectType(), false);
       }
-      includeStatement = IncludeFunctions.include(visualTarget, this.visual.getProjectType(), addMainFolderInIncludeStatement)
     }
     return includeStatement;
   }
