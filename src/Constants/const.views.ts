@@ -1,5 +1,7 @@
+import { ProjectTypes } from "../Enums/common.projectTypes";
+import { informationsJson } from "../Types/entity.rendering.jsons";
 
-import { informationsJson, ProjectTypes } from "..";
+
 /**
  * @description in this class are stored all the  values and the files names/prefixes
  * - this is a class and not an enum to support also non strings/numeric values.
