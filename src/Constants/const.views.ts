@@ -6,7 +6,7 @@ import { informationsJson, ProjectTypes } from "..";
  */
 export class ConstViews {
   static viewsDirectory = "WTM-VIEWS";
-  static viewsPrefix = "views-";
+  static viewsPrefix = "view-";
   static viewsJsonDirectory = "views-json";
   static viewsCommonJsonFile = "common.json";
   static viewsCommonJsonInformations: {
