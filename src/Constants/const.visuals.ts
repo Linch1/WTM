@@ -1,5 +1,5 @@
-import { ProjectTypes } from "..";
-import { visualJson } from "..";
+import { ProjectTypes } from "../Enums/common.projectTypes";
+import { visualJson } from "../Types/manageVisual.jsons";
 /**
  * @description in this class are stored all the  values and the files names/prefixes
  * - this is a class and not an enum to support also non strings/numeric values.
