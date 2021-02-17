@@ -1,6 +1,7 @@
 import { StringComposeWriter, FileWriter, extensions, BulkVisual, ProjectTypes } from "..";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
-import { WTMPathsAndConstants } from "../Enums/common.pathsAndConstants";
+import { ConstProjects } from "../Constants/const.projects";
+
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
 
 
@@ -15,11 +16,11 @@ export class Project{
 
         this.PROJECT_JSON_DIR_PATH = StringComposeWriter.concatenatePaths(
             this.getPath(),
-            WTMPathsAndConstants.jsonPathInProjectDirectory,
+            ConstProjects.jsonPathInProjectDirectory,
         )
         this.PROJECT_JSON_FILE_PATH = StringComposeWriter.concatenatePaths(
             this.PROJECT_JSON_DIR_PATH,
-            WTMPathsAndConstants.jsonProjectFile
+            ConstProjects.jsonProjectFile
         )
         this.initalize();
     }

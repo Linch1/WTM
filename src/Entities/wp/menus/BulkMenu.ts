@@ -1,7 +1,7 @@
 
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
 import { Menu } from "./Menu";
-HERE
+
 class BulkMenu {
   
   public readonly ERR_EMPTY_QUEUE = "ERROR: There the queue is empty";

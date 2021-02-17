@@ -5,13 +5,14 @@ import { WpFunctionComposer } from "../../files/WpFunctionComposer";
 import { customPartType } from "../../Enums/entities.wp.type";
 import { InterfaceWpEntity } from "../../Interfaces/entity.wp.InterfaceGeneralWpEntity";
 import { IdentifierImport } from "../../Identifiers/IdentifierImport";
-HERE
+
 export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements InterfaceWpEntity {
   
   public readonly ERR_NO_VALID_INFORMATIONS = "ERR: the informations attribute of this class are not correctly initalized";
   public readonly ERR_ALREADY_PRESENT = "ERR: The custom part area already exists";
   public readonly ERR_INVALID_TYPE = "ERR: The custom part has an invalid type"
 
+  // This empty properties are populated in the classes that extends the 'GeneralWpEntity' class.
   public PARENT_DIR_PATH: string = "";
   public DEFAULT_BUILD_PATH: string = "";
   protected FILE_NAME = "";
@@ -19,7 +20,7 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
   protected JSON_FILE_PATH = "";
   protected IDENTIFIER_NAME = "";
   protected CUSTOM_PART_NAME = "";
-  protected CUSTOM_PART_TYPE: customPartType = customPartType.NONE
+  protected CUSTOM_PART_TYPE: customPartType = customPartType.NONE;
 
   /**
    * @description intialize the class
@@ -57,18 +58,10 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
   }
 
   /**
-   * @description return the name of the function used to import files of structure(html)/styles(.css) in the given WpEntity
-   * @param page the menu page where to import the files
-   */
-  public renderFileFunction(page: string): string {
-    return `render_file_${page}`;
-  }
-
-  /**
    * @description get the path to the dircetory that contains the WpEntity
    */
   getDirectory(): string {
-    return this.themeAux.getInsideThemeAssetsPath(this.PARENT_DIR_PATH);
+    return this.themeAux.getPathInsideThemeAssetsFolder(this.PARENT_DIR_PATH);
   }
   /**
    * @description creates the element directory
@@ -88,7 +81,7 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
    */
   public getPath(): string {
     return this.getInsideDirectory(
-      this.CUSTOM_PART_NAME + "-" + this.FILE_NAME
+      this.CUSTOM_PART_NAME + this.FILE_NAME
     );
   }
   /**

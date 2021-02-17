@@ -152,8 +152,8 @@ class ThemeWriter {
     filePath: string,
     functionDeclaration: string,
     toAppend: string
-  ): void {HERE
-    StringComposeWriter.appendBeetweenChars(filePath, toAppend, 'function', '}', functionDeclaration );
+  ): void {
+    StringComposeWriter.appendBeetweenChars(filePath, toAppend, 'function', '}', functionDeclaration ); // static 
   }
 }
 

@@ -1,7 +1,5 @@
 import { FileReader } from "../../../files/FileReader";
 import { FileWriter } from "../../../files/FileWriter";
-import { StringComposeWriter } from "../../../files/StringComposeWriter";
-import { WpFunctionComposer } from "../../../files/WpFunctionComposer";
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
 import { menuMainPageParams } from "../../../Types/entity.wp.menuMainPage";
 import { customPartType } from "../../../Enums/entities.wp.type";
@@ -10,49 +8,45 @@ import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
 import { IdentifierId } from "../../../Identifiers/IdentifierId";
 import { Identifiers } from "../../../Identifiers/Identifiers";
-HERE
+import { ConstWordpressMenuMainPage } from "../../../Constants/wordpress/const.wp.menu.mainPage";
+
 type params = menuMainPageParams;
 class MenuMainPage extends GeneralWpEntity<params> {
   public readonly ERR_NO_MENU_SLUG_GIVEN =
     "ERROR: The menu has not the MENU_SLUG initalized. Porbably the main menu page wasn't created.";
 
-  public readonly IDENTIFIER_NAME = "MENU";
-  public readonly IDENTIFIER_MENU_SLUG = "MENU-SLUG";
+  public readonly IDENTIFIER_MENU_SLUG = ConstWordpressMenuMainPage.IdentifierSlug;
+  public readonly IDENTIFIER_NAME = ConstWordpressMenuMainPage.IdentifierName;
+  public readonly IDENTIFIER_MAIN_PAGE_NAME_DISPLAY = ConstWordpressMenuMainPage.IdentifierNameToDisplay;
+  public readonly IDENTIFIER_MAIN_PAGE_BROWSER_TITLE = ConstWordpressMenuMainPage.IdentifierBrowserTitle;
+  public readonly FILE_NAME = ConstWordpressMenuMainPage.File;
+  public readonly DEFAULT_CONTENT = ConstWordpressMenuMainPage.Content;
 
-  public readonly IDENTIFIER_MAIN_PAGE_NAME = "MENU-MAIN-PAGE-NAME";
-  public readonly IDENTIFIER_MAIN_PAGE_NAME_DISPLAY =
-    "MENU-MAIN-PAGE-NAME-DISPLAY";
-  public readonly IDENTIFIER_MAIN_PAGE_BROWSER_TITLE =
-    "MENU-MAIN-PAGE-BROWSER-TITLE";
-
-  public MENU_SLUG: string =
-    ""; /* populated in this.createMainPage() it's replaced as an id identifier with the menu name */
-  public get getMenuSlug(): string {
-    return this.MENU_SLUG;
-  }
-  public set setMenuSlug(newMenuSlug: string) {
-    this.MENU_SLUG = newMenuSlug;
-  }
+  public MENU_SLUG: string = ""; // populated in this.createMainPage() it's replaced as an id identifier with the menu name
 
   /**
    * @description intialize the class
    * @param themeAux
-   * @param informations the field pageName should also be a valid function name
+   * @param informations the field menuName should also be a valid function name, so without spaces and hyphens
    */
   constructor(public themeAux: ThemeAux, protected informations: params) {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.menuName;
     this.CUSTOM_PART_TYPE = customPartType.MENU;
-    this.FILE_NAME = "WTM-MAIN-PAGE.php";
-    this.IDENTIFIER_NAME = "MENU";
     this.PARENT_DIR_PATH = customPartPath.MENU;
-    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, "default-mainpage.php");
-    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH);
-    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.JSON_PATH = this.themeAux.getPathInsideJsonFolder(this.PARENT_DIR_PATH);
+    this.JSON_FILE_PATH = this.themeAux.getPathInsideJsonFolder(this.PARENT_DIR_PATH, `${this.CUSTOM_PART_NAME}.json`);
     this.setMenuSlug = IdentifierId.getIdentifier(
       this.getInformations.menuName,
       false
     );
+  }
+
+  public get getMenuSlug(): string {
+    return this.MENU_SLUG;
+  }
+  public set setMenuSlug(newMenuSlug: string) {
+    this.MENU_SLUG = newMenuSlug;
   }
 
   /**
@@ -66,7 +60,7 @@ class MenuMainPage extends GeneralWpEntity<params> {
    * @description get the path to the dircetory that contains the custom part
    */
   getDirectory(): string {
-    return this.themeAux.getInsideThemeAssetsPath(
+    return this.themeAux.getPathInsideThemeAssetsFolder(
       this.PARENT_DIR_PATH,
       this.getInformations.menuName
     );
@@ -98,15 +92,8 @@ class MenuMainPage extends GeneralWpEntity<params> {
     )
       throw new Error(this.ERR_ALREADY_PRESENT);
 
-    let defaultContent: string = FileReader.readFile(
-      StringComposeWriter.concatenatePaths(
-        this.themeAux.ASSETS_CUSTOM_PATH,
-        this.DEFAULT_BUILD_PATH
-      )
-    );
-
     let params: replaceAllParams = {};
-    params[this.IDENTIFIER_MAIN_PAGE_NAME] = this.getInformations.menuName;
+    params[this.IDENTIFIER_NAME] = this.getInformations.menuName;
     params[
       this.IDENTIFIER_MAIN_PAGE_NAME_DISPLAY
     ] = this.getInformations.menuDisplayedName;
@@ -115,7 +102,7 @@ class MenuMainPage extends GeneralWpEntity<params> {
     ] = this.getInformations.pageBrowserTitle;
     params[this.IDENTIFIER_MENU_SLUG] = this.getMenuSlug;
 
-    let newContent: string = defaultContent;
+    let newContent: string = this.DEFAULT_CONTENT;
     newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params

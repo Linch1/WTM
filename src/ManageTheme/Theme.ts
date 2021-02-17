@@ -1,3 +1,4 @@
+import { ConstWordpressTheme } from "../Constants/wordpress/const.wp.theme";
 import { customPartType } from "../Enums/entities.wp.type";
 import { functionsJsonKeys, importsJsonKeys } from "../Enums/manageTheme.jsons";
 import { FileReader } from "../files/FileReader";
@@ -6,29 +7,27 @@ import { StringComposeWriter } from "../files/StringComposeWriter";
 import { nestedStringsArrays } from "../Types/files.FileReader";
 import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
 
-HERE
 class Theme {
   public ERR_PATH_ALREADY_PRESERNT = "ERR: The given path is already required/imported"
 
   public themeStructure: nestedStringsArrays = [];
-  public readonly IMPORT_STYLES_FUNCTION_NAME: string = "add_styles()";
-  public readonly IMPORT_FONTS_FUNCTION_NAME: string = "add_fonts()";
-  public readonly IMPORT_SCRIPTS_FUNCTION_NAME: string = "add_scripts()";
+  public readonly IMPORT_STYLES_FUNCTION_NAME: string = ConstWordpressTheme.FunctionAddStyle;
+  public readonly IMPORT_FONTS_FUNCTION_NAME: string = ConstWordpressTheme.FunctionAddFonts;
+  public readonly IMPORT_SCRIPTS_FUNCTION_NAME: string = ConstWordpressTheme.FunctionAddScripts;
 
-  public readonly ASSETS_CUSTOM_PATH: string = this.getInsideThemePath(
-    "assets/functions/"
+  public readonly ASSETS_WP_CONFIGURATION_PATH: string = this.getPathInsideThemeFolder(
+    ConstWordpressTheme.PathConfigurationDirectory
   );
-  public readonly WTM_CUSTOM_PATH: string = this.getInsideThemePath("WTM");
-  public readonly ASSETS_IMPORT_FILE_PATH: string = this.getInsideThemeAssetsPath(
-    "imports.php"
+  public readonly WTM_CUSTOM_PATH: string = this.getPathInsideThemeFolder(ConstWordpressTheme.jsonDirectory);
+  public readonly ASSETS_IMPORT_FILE_PATH: string = this.getPathInsideThemeAssetsFolder(
+    ConstWordpressTheme.importsFile
   );
-  public readonly THEME_FUNCTIONS_FILE: string = this.getInsideThemePath(
-    "functions.php"
+  public readonly THEME_FUNCTIONS_FILE: string = this.getPathInsideThemeFolder(
+    ConstWordpressTheme.functionsFile
   );
-
-  public readonly JSON_FUNCTIONS_PATH = this.getInsideWTMPath("functions.json");
+  public readonly JSON_FUNCTIONS_PATH = this.getPathInsideJsonFolder(ConstWordpressTheme.jsonFunctionsFile);
   public readonly JSON_FUNCTIONS: functionsJson;
-  public readonly JSON_IMPORTS_PATH = this.getInsideWTMPath("imports.json");
+  public readonly JSON_IMPORTS_PATH = this.getPathInsideJsonFolder(ConstWordpressTheme.jsonImportsFile);
   public readonly JSON_IMPORTS: importsJson;
 
   constructor(public THEME_MAIN_FOLDER: string) {
@@ -43,7 +42,7 @@ class Theme {
    * @description returns the absolute path of a file/directory inside the THEME folder
    * @param path the relative path inside the THEME folder
    */
-  public getInsideThemePath(...paths: string[]): string {
+  public getPathInsideThemeFolder(...paths: string[]): string {
     let path = this.THEME_MAIN_FOLDER;
     for (let subPath of paths) {
       path = StringComposeWriter.concatenatePaths(path, subPath);
@@ -54,8 +53,8 @@ class Theme {
    * @description returns the absolute path of a file/directory inside the ASSETS folder
    * @param path the relative path inside the ASSETS folder
    */
-  public getInsideThemeAssetsPath(...paths: string[]): string {
-    let path = this.ASSETS_CUSTOM_PATH;
+  public getPathInsideThemeAssetsFolder(...paths: string[]): string {
+    let path = this.ASSETS_WP_CONFIGURATION_PATH;
     for (let subPath of paths) {
       path = StringComposeWriter.concatenatePaths(path, subPath);
     }
@@ -65,7 +64,7 @@ class Theme {
    * @description returns the absolute path of a file/directory inside the WTM folder
    * @param path the relative path inside the WTM folder
    */
-  public getInsideWTMPath(...paths: string[]): string {
+  public getPathInsideJsonFolder(...paths: string[]): string {
     let path = this.WTM_CUSTOM_PATH;
     for (let subPath of paths) {
       path = StringComposeWriter.concatenatePaths(path, subPath);

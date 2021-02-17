@@ -1,5 +1,6 @@
 import { StringComposeWriter, FileWriter } from "..";
-import { WTMPathsAndConstants } from "../Enums/common.pathsAndConstants";
+import { ConstProjects } from "../Constants/const.projects";
+
 import { FileReader } from "../files";
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
 import { ProjectsJson } from "../Types/manageProject.jsonProjects";
@@ -12,11 +13,11 @@ export class BulkProjects{
     public PROJECTS_CACHE: ProjectsCache = {};
     public PROJECTS_JSON_DIR_PATH = StringComposeWriter.concatenatePaths(
         this.PROJECT_DIR_PATH,
-        WTMPathsAndConstants.jsonProjectsDirectory
+        ConstProjects.jsonProjectsDirectory
     );
     public PROJECTS_JSON_FILE_PATH = StringComposeWriter.concatenatePaths(
         this.PROJECTS_JSON_DIR_PATH,
-        WTMPathsAndConstants.jsonProjectsFile
+        ConstProjects.jsonProjectsFile
     );
     public PROJECTS_JSON_INFORMATIONS: ProjectsJson = {
         projectPaths: []
@@ -51,8 +52,8 @@ export class BulkProjects{
                 FileReader.readFile(
                     StringComposeWriter.concatenatePaths(
                         projectPath,
-                        WTMPathsAndConstants.jsonPathInProjectDirectory,
-                        WTMPathsAndConstants.jsonProjectFile
+                        ConstProjects.jsonPathInProjectDirectory,
+                        ConstProjects.jsonProjectFile
                     )
                 )
             );

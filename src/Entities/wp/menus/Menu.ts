@@ -51,7 +51,7 @@ class Menu {
    */
   public createMenuDirectory() {
     FileWriter.createDirectory(
-      this.themeAux.getInsideThemeAssetsPath(
+      this.themeAux.getPathInsideThemeAssetsFolder(
         this.mainPage.PARENT_DIR_PATH,
         this.MENU_NAME
       )

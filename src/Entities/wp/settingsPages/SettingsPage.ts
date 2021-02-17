@@ -9,20 +9,20 @@ import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
 import { IdentifierId } from "../../../Identifiers/IdentifierId";
 import { Identifiers } from "../../../Identifiers/Identifiers";
-HERE
+import { ConstWordpressSettingsPage } from "../../../Constants/wordpress/const.wp.settingsPage";
+
 type params = settingsPageParams;
 class SettingsPage extends GeneralWpEntity<params> {
 
-  public readonly IDENTIFIER_SETTINGS_PAGE_SLUG = "SETTINGS-PAGE-SLUG";
-  public readonly IDENTIFIER_SETTINGS_PAGE_NAME = "SETTINGS-PAGE-NAME";
-  public readonly IDENTIFIER_SETTINGS_PAGE_NAME_DISPLAY =
-    "SETTINGS-PAGE-NAME-DISPLAY";
-  public readonly IDENTIFIER_SETTINGS_PAGE_BROWSER_TITLE =
-    "SETTINGS-PAGE-BROWSER-TITLE";
+  public readonly IDENTIFIER_SETTINGS_PAGE_SLUG = ConstWordpressSettingsPage.IdentifierSlug;
+  public readonly IDENTIFIER_NAME = ConstWordpressSettingsPage.IdentifierName;
+  public readonly IDENTIFIER_SETTINGS_PAGE_NAME_DISPLAY = ConstWordpressSettingsPage.IdentifierNameToDisplay;
+  public readonly IDENTIFIER_SETTINGS_PAGE_BROWSER_TITLE = ConstWordpressSettingsPage.IdentifierBrowserTitle;
+  public readonly FILE_NAME = ConstWordpressSettingsPage.File;
+  public readonly DEFAULT_CONTENT = ConstWordpressSettingsPage.Content;
 
 
-  public SETTINGS_PAGE_SLUG =
-    ""; /* populated in this.createSettingsPage() it's replaced as an id identifier with the page name */
+  public SETTINGS_PAGE_SLUG = ""; /* populated in this.createSettingsPage() it's replaced as an id identifier with the page name */
 
   /**
    * @description intialize the class
@@ -33,13 +33,10 @@ class SettingsPage extends GeneralWpEntity<params> {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.pageName;
     this.CUSTOM_PART_TYPE = customPartType.SETTINGS_PAGE;
-    this.FILE_NAME = "WTM-SETTINGS-PAGE.php";
     this.PARENT_DIR_PATH = customPartPath.SETTINGS_PAGE;
-    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, "default.php");
-    this.IDENTIFIER_NAME = "SETTINGS-PAGE";
 
-    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH);
-    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.JSON_PATH = this.themeAux.getPathInsideJsonFolder(this.PARENT_DIR_PATH);
+    this.JSON_FILE_PATH = this.themeAux.getPathInsideJsonFolder(this.PARENT_DIR_PATH, `${this.CUSTOM_PART_NAME}.json`);
     this.initialize();
   }
 
@@ -57,12 +54,8 @@ class SettingsPage extends GeneralWpEntity<params> {
     if (FileReader.existsPath(settingsPagePath) && !this.getInformations.skipIfExists)
       throw new Error(this.ERR_ALREADY_PRESENT);
 
-    let defaultContent: string = FileReader.readFile(
-      this.themeAux.getInsideThemeAssetsPath(this.DEFAULT_BUILD_PATH)
-    );
-
     let params: replaceAllParams = {};
-    params[this.IDENTIFIER_SETTINGS_PAGE_NAME] = this.getInformations.pageName;
+    params[this.IDENTIFIER_NAME] = this.getInformations.pageName;
     params[
       this.IDENTIFIER_SETTINGS_PAGE_NAME_DISPLAY
     ] = this.getInformations.pageDisplayedName;
@@ -71,7 +64,7 @@ class SettingsPage extends GeneralWpEntity<params> {
     ] = this.getInformations.pageBrowserTitle;
     params[this.IDENTIFIER_SETTINGS_PAGE_SLUG] = this.SETTINGS_PAGE_SLUG;
 
-    let newContent: string = defaultContent;
+    let newContent: string = this.DEFAULT_CONTENT;
     newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params

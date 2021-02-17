@@ -2,14 +2,14 @@ import { identifierType, ProjectTypes } from "../Enums";
 import { IncludeFunctions } from "../Enums/common.includeFunctions";
 import { IdentifierImport } from "../Identifiers/IdentifierImport";
 import { StringComposeWriter } from "./StringComposeWriter";
-HERE
+
 export class WpFunctionComposer {
   static IDENTIFIER_IMPORTED = IdentifierImport;
   /**
    * @description return the syntax of the function for correctly import a style file in wordpress
    * @param fileToImport the file path to import in the WP theme
    */
-  static enqueueStyleFunction(fileToImport: string): string {
+  static enqueueStyleFunction(fileToImport: string): string { // static
     fileToImport = StringComposeWriter.addInitialSlash(fileToImport);
     return `wp_enqueue_style( '${WpFunctionComposer.IDENTIFIER_IMPORTED.getIdentifier(
       fileToImport, false
@@ -19,7 +19,7 @@ export class WpFunctionComposer {
    * @description return the syntax of the function for correctly import a script file in wordpress
    * @param fileToImport the file path to import in the WP theme
    */
-  static enqueueScriptFunction(fileToImport: string): string {
+  static enqueueScriptFunction(fileToImport: string): string { // static
     fileToImport = StringComposeWriter.addInitialSlash(fileToImport);
     return `wp_enqueue_script( '${WpFunctionComposer.IDENTIFIER_IMPORTED.getIdentifier(
       fileToImport, false
@@ -29,7 +29,7 @@ export class WpFunctionComposer {
    * @description return the syntax of the function for correctly require a file in functions.php
    * @param fileToImport the file path to import in the WP theme
    */
-  static requirePhpFile(fileToImport: string): string {
+  static requirePhpFile(fileToImport: string): string { // static
     fileToImport = StringComposeWriter.addInitialSlash(fileToImport);
     return `require_once(get_template_directory_uri() . '${fileToImport}.php');\n`;
   }
@@ -38,7 +38,7 @@ export class WpFunctionComposer {
    * @description return the syntax of the function for correctly include a fine in a template/single
    * @param path the path to include ( relative to the theme dir path )
    */
-  static includeRelative(path: string): string {
+  static includeRelative(path: string): string { 
     return IncludeFunctions.include(path, ProjectTypes.wordpress);
   }
 }

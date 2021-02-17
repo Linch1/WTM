@@ -26,8 +26,6 @@ export interface InterfaceWpEntity {
 
   validInformations(): boolean;
 
-  renderFileFunction(page: string): string;
-
   getDirectory(): string;
 
   createDirectory(): void;

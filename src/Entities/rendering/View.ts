@@ -3,14 +3,15 @@ import { AbstractGeneralView } from "../../Abstracts/AbstractGeneralView";
 import { IncludeFunctions } from "../../Enums/common.includeFunctions";
 import { extensions } from "../../Enums/common.extension";
 import { checkMapProjectTypeToExtension } from "../../Checkers/check.mapProjectTypeToExtension";
-import { ProjectTypes, WTMPathsAndConstants } from "../..";
+import { ProjectTypes } from "../..";
+import { ConstViews } from "../../Constants/const.views";
 
 export class View extends AbstractGeneralView {
   constructor( parentAbsPath : string, pageName: string = "", projectType: ProjectTypes) {
 
-    let viewsDefaultFolder: string = WTMPathsAndConstants.visualsDirectory;
-    let viewsDefaultPrefix: string = WTMPathsAndConstants.viewsPrefix;
-    let viewsDefaultJsonFolder: string = WTMPathsAndConstants.viewsJsonDirectory;
+    let viewsDefaultFolder: string = ConstViews.viewsDirectory;
+    let viewsDefaultPrefix: string = ConstViews.viewsPrefix;
+    let viewsDefaultJsonFolder: string = ConstViews.viewsJsonDirectory;
 
     let extension: extensions = checkMapProjectTypeToExtension(projectType);
 
@@ -27,8 +28,8 @@ export class View extends AbstractGeneralView {
     extension = extension.trim() as extensions;
 
     let currentViewJsonPath = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/${pageName.toLowerCase().split(" ").join("-")}.json`);
-    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultJsonFolder, WTMPathsAndConstants.viewsCommonJsonFile);
-    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${WTMPathsAndConstants.viewsCommonContentFileName}.${extension}`);
+    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultJsonFolder, ConstViews.viewsCommonJsonFile);
+    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${ConstViews.viewsCommonContentFileName}.${extension}`);
     
     super(
       pageName,

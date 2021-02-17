@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import { nestedStringsArrays } from "../Types/files.FileReader";
 
-HERE
 export class FileReader {
   static readonly ERR_NO_FUNCTION_FOUND =
     "NO FUNCTION FOUND: no function was found with the given name";
@@ -86,7 +85,7 @@ export class FileReader {
    */
   static readFunctionBody(filePath: string, functionName: string): string {
     let fileText: string = FileReader.readFile(filePath);
-    let functions: string[] = fileText.split("function"); // get all the texts between the function words
+    let functions: string[] = fileText.split("function"); // get all the texts between the function words // static
     let functionBody: string = "";
     for (let i = 0; i < functions.length; i++) {
       let func: string = functions[i].trim();

@@ -2,8 +2,9 @@ import { FileReader } from "../files/FileReader";
 import { StringComposeReader } from "../files/StringComposeReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { visualJson } from "../Types/manageVisual.jsons";
-import { extensions, ProjectTypes, WTMPathsAndConstants } from "../Enums";
+import { extensions, ProjectTypes } from "../Enums";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
+import { ConstVisuals } from "../Constants/const.visuals";
 
 
 export abstract class AbstractGeneralVisual {
@@ -14,18 +15,18 @@ export abstract class AbstractGeneralVisual {
     "ERR: Before calling this method create the visual with the myVisual.writer.createVisual() method";
   public readonly WERR_NO_PROJECT_TYPE_PROVIDED = "Please provide the visual project type. If not provided it means that the visual already exists and it can be take from it's json, in this case the visual doesn't exists so this cannot be done."
 
-  public readonly ASSETS_RELATIVE_PATH: string = WTMPathsAndConstants.visualsAssetsDirectory;
+  public readonly ASSETS_RELATIVE_PATH: string = ConstVisuals.visualsAssetsDirectory;
   public readonly STYLES_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
-    WTMPathsAndConstants.visualsAssetsDirectory,
-    WTMPathsAndConstants.visaulsAssetsCssDirectory
+    ConstVisuals.visualsAssetsDirectory,
+    ConstVisuals.visaulsAssetsCssDirectory
   );
   public readonly SCRIPTS_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
-    WTMPathsAndConstants.visualsAssetsDirectory,
-    WTMPathsAndConstants.visualsAssetsJsDirectory
+    ConstVisuals.visualsAssetsDirectory,
+    ConstVisuals.visualsAssetsJsDirectory
   );;
-  public readonly JSON_FILE_NAME: string = WTMPathsAndConstants.visualsJsonFile;
-  public readonly HTML_DEFAULT_FILE_NAME: string  = WTMPathsAndConstants.visualsHtmlDefaultFileName;
-  public readonly HTML_RENDERED_FILE_NAME: string  = WTMPathsAndConstants.visualsHtmlRenderFileName;
+  public readonly JSON_FILE_NAME: string = ConstVisuals.visualsJsonFile;
+  public readonly HTML_DEFAULT_FILE_NAME: string  = ConstVisuals.visualsHtmlDefaultFileName;
+  public readonly HTML_RENDERED_FILE_NAME: string  = ConstVisuals.visualsHtmlRenderFileName;
 
   public readonly RENDER_FILE_PATH: string;
   public readonly DEFAULT_FILE_PATH: string;
@@ -33,15 +34,15 @@ export abstract class AbstractGeneralVisual {
   public readonly STYLES_PATH: string;
   public readonly SCRIPTS_PATH: string;
 
-  public readonly INIT_RENDER_FILE_CONTENT: string = WTMPathsAndConstants.visualsHtmlRenderContent;
-  public readonly INIT_DEFAULT_FILE_CONTENT: string = WTMPathsAndConstants.visualsHtmlDefaultContent;
+  public readonly INIT_RENDER_FILE_CONTENT: string = ConstVisuals.visualsHtmlRenderContent;
+  public readonly INIT_DEFAULT_FILE_CONTENT: string = ConstVisuals.visualsHtmlDefaultContent;
 
   public readonly JSON_FILE_PATH: string = StringComposeWriter.concatenatePaths(
     this.getDirPath(),
     this.JSON_FILE_NAME
   );
 
-  public JSON_FILE_CONTENT: visualJson = WTMPathsAndConstants.visualsJsonContent;
+  public JSON_FILE_CONTENT: visualJson = ConstVisuals.visualsJsonContent;
 
   /**
    * @description create a visual with the given informations

@@ -8,7 +8,8 @@ import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
 import { Identifiers } from "../../../Identifiers/Identifiers";
-HERE
+import { ConstWordpressMenuSubPage } from "../../../Constants/wordpress/const.wp.menu.subPage";
+
 type params = menuSubPageParams;
 class MenuSubPage extends GeneralWpEntity<params> {
   public readonly ERR_NO_MENU_SLUG_GIVEN =
@@ -16,17 +17,16 @@ class MenuSubPage extends GeneralWpEntity<params> {
   public readonly ERR_NO_MENU_NAME =
     "ERROR: Please assign a menu to the subpage by setting a menu name this.setMenuName( string ); ";
 
-  public readonly IDENTIFIER_MENU_SLUG = "MENU-SLUG";
+  public readonly IDENTIFIER_MENU_SLUG = ConstWordpressMenuSubPage.IdentifierParentMenuSlug;
+  public readonly IDENTIFIER_NAME = ConstWordpressMenuSubPage.IdentifierName;
+  public readonly IDENTIFIER_SUB_PAGE_NAME_DISPLAY = ConstWordpressMenuSubPage.IdentifierNameToDisplay;
+  public readonly IDENTIFIER_SUB_PAGE_SLUG = ConstWordpressMenuSubPage.IdentifierSlug;
+  public readonly IDENTIFIER_SUB_PAGE_BROWSER_TITLE = ConstWordpressMenuSubPage.IdentifierBrowserTitle;
+  public readonly FILE_NAME = ConstWordpressMenuSubPage.File;
+  public readonly DEFAULT_CONTENT = ConstWordpressMenuSubPage.Content;
 
-  public readonly IDENTIFIER_SUB_PAGE_NAME = "MENU-SUB-PAGE-NAME";
-  public readonly IDENTIFIER_SUB_PAGE_NAME_DISPLAY =
-    "MENU-SUB-PAGE-NAME-DISPLAY";
-  public readonly IDENTIFIER_SUB_PAGE_SLUG = "SUB-PAGE-SLUG";
-  public readonly IDENTIFIER_SUB_PAGE_BROWSER_TITLE =
-    "MENU-SUB-PAGE-BROWSER-TITLE";
-
-  public MENU_SLUG: string = "";
-  public MENU_NAME: string = "";
+  public MENU_SLUG: string = ""; // populated in './Menu.ts' at .createSubPages();
+  public MENU_NAME: string = ""; // populated in './Menu.ts' at .createSubPages();
 
   /**
    * @description intialize the class
@@ -37,12 +37,9 @@ class MenuSubPage extends GeneralWpEntity<params> {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.pageName;
     this.CUSTOM_PART_TYPE = customPartType.MENU;
-    this.FILE_NAME = "WTM-SUB-PAGE.php";
-    this.IDENTIFIER_NAME = "MENU";
     this.PARENT_DIR_PATH = customPartPath.MENU;
-    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, "default-subpage.php");
-    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH);
-    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.JSON_PATH = this.themeAux.getPathInsideJsonFolder(this.PARENT_DIR_PATH);
+    this.JSON_FILE_PATH = this.themeAux.getPathInsideJsonFolder(this.PARENT_DIR_PATH, `${this.CUSTOM_PART_NAME}.json`);
   }
 
   public get getMenuName(): string {
@@ -68,7 +65,7 @@ class MenuSubPage extends GeneralWpEntity<params> {
    * @description get the path to the dircetory that contains the custom part
    */
   getDirectory(): string {
-    return this.themeAux.getInsideThemeAssetsPath(
+    return this.themeAux.getPathInsideThemeAssetsFolder(
       this.PARENT_DIR_PATH,
       this.MENU_NAME
     );
@@ -92,19 +89,11 @@ class MenuSubPage extends GeneralWpEntity<params> {
 
     if (FileReader.existsPath(subPagePath) && !this.getInformations.skipIfExists)
       throw new Error(this.ERR_ALREADY_PRESENT);
-
-    let defaultContent: string = FileReader.readFile(
-      StringComposeWriter.concatenatePaths(
-        this.themeAux.ASSETS_CUSTOM_PATH,
-        this.DEFAULT_BUILD_PATH
-      )
-    );
-
     let params: replaceAllParams = {};
     params[
       this.IDENTIFIER_SUB_PAGE_NAME_DISPLAY
     ] = this.getInformations.pageNameDisplayed;
-    params[this.IDENTIFIER_SUB_PAGE_NAME] = this.getInformations.pageName;
+    params[this.IDENTIFIER_NAME] = this.getInformations.pageName;
     params[
       this.IDENTIFIER_SUB_PAGE_BROWSER_TITLE
     ] = this.getInformations.pageBrowserTitle;
@@ -113,7 +102,7 @@ class MenuSubPage extends GeneralWpEntity<params> {
       this.IDENTIFIER_SUB_PAGE_SLUG
     ] = `${this.getMenuName}-${this.informations.pageName}`;
 
-    let newContent: string = defaultContent;
+    let newContent: string = this.DEFAULT_CONTENT;
     newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params

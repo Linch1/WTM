@@ -8,8 +8,7 @@ import { replaceIdentifiersParams } from "../Types/files.StringComposerWriter.re
 import { Visual } from "./Visual";
 
 class VisualConverter {
-  constructor(public visual: Visual) {}HERE
-  VISUALS_PATH = 'VISUALS-PATH'; // this is a param that will replaced whit the visuals directory path
+  constructor(public visual: Visual) {}
 
   /**
    * @description replace all the placholders in the inside **default.##**

@@ -8,10 +8,15 @@ import { customPartPath } from "../../../Enums/entities.wp.path";
 import { replaceAllParams } from "../../../Types/files.StringComposerWriter";
 import { GeneralWpEntity } from "../GeneralWpEntity";
 import { Identifiers } from "../../../Identifiers/Identifiers";
-HERE
+import { ConstWordpressWidgetArea } from "../../../Constants/wordpress/const.wp.widgetArea";
+
 type params = widgetAreaParams;
 class WidgetArea extends GeneralWpEntity<params> {
   
+  public FILE_NAME = ConstWordpressWidgetArea.File;
+  public IDENTIFIER_NAME = ConstWordpressWidgetArea.IdentifierName;
+  public DEFAULT_CONTENT = ConstWordpressWidgetArea.Content;
+
   /**
    * @description intialize the class
    * @param themeAux
@@ -21,14 +26,9 @@ class WidgetArea extends GeneralWpEntity<params> {
     super(themeAux, informations);
     this.CUSTOM_PART_NAME = this.getInformations.widgetAreaName;
     this.CUSTOM_PART_TYPE = customPartType.WIDGET_AREA;
-    this.FILE_NAME = "WTM-WIDGET-AREA.php";
-    
-    this.IDENTIFIER_NAME = "WIDGET-AREA";
     this.PARENT_DIR_PATH = customPartPath.WIDGET_AREA;
-    this.DEFAULT_BUILD_PATH = StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, "default.php");
-
-    this.JSON_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH);
-    this.JSON_FILE_PATH = this.themeAux.getInsideWTMPath(this.PARENT_DIR_PATH, `WTM-${this.CUSTOM_PART_NAME}.json`);
+    this.JSON_PATH = this.themeAux.getPathInsideJsonFolder(this.PARENT_DIR_PATH);
+    this.JSON_FILE_PATH = this.themeAux.getPathInsideJsonFolder(this.PARENT_DIR_PATH, `${this.CUSTOM_PART_NAME}.json`);
     this.initialize();
   }
 
@@ -46,14 +46,10 @@ class WidgetArea extends GeneralWpEntity<params> {
     )
       throw new Error(this.ERR_ALREADY_PRESENT);
 
-    let defaultContent: string = FileReader.readFile(
-      this.themeAux.getInsideThemeAssetsPath(this.DEFAULT_BUILD_PATH)
-    );
-
     let params: replaceAllParams = {};
     params[this.IDENTIFIER_NAME] = this.getInformations.widgetAreaName;
 
-    let newContent: string = defaultContent;
+    let newContent: string = this.DEFAULT_CONTENT;
     newContent = Identifiers.replaceAllIdentifiersPlaceholders(
       newContent,
       params

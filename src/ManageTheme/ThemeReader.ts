@@ -18,13 +18,13 @@ import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
 import { Single } from "../Entities/rendering/Single";
 import { Template } from "../Entities/rendering/Template";
 import { ThemeAux } from "./ThemeAux";
-HERE
+import { ConstCommon } from "../Constants/const.common";
+
 /**
  * This class is used to perform the read actions on the Theme
  * Like reading a custom post type or a page or other things like that
  */
 class ThemeReader {
-  public JSON_PREFIX = "WTM-";
 
   constructor(public themeAux: ThemeAux) {}
 
@@ -33,7 +33,7 @@ class ThemeReader {
 
   public getPostTypes(): PostType[] {
     let elements: PostType[] = [];
-    let path = this.themeAux.getInsideWTMPath(customPartPath.POST_TYPE);
+    let path = this.themeAux.getPathInsideJsonFolder(customPartPath.POST_TYPE);
     let files = FileReader.getFiles(path);
     for (let file of files) {
       let json: postTypeParams = JSON.parse(
@@ -51,7 +51,7 @@ class ThemeReader {
   }
   public getSettingsPages(): SettingsPage[] {
     let elements: SettingsPage[] = [];
-    let path = this.themeAux.getInsideWTMPath(customPartPath.SETTINGS_PAGE);
+    let path = this.themeAux.getPathInsideJsonFolder(customPartPath.SETTINGS_PAGE);
     let files = FileReader.getFiles(path);
     for (let file of files) {
       let json: settingsPageParams = JSON.parse(
@@ -70,7 +70,7 @@ class ThemeReader {
 
   public getWidgetAreas(): WidgetArea[] {
     let elements: WidgetArea[] = [];
-    let path = this.themeAux.getInsideWTMPath(customPartPath.WIDGET_AREA);
+    let path = this.themeAux.getPathInsideJsonFolder(customPartPath.WIDGET_AREA);
     let files = FileReader.getFiles(path);
     for (let file of files) {
       let json: widgetAreaParams = JSON.parse(
@@ -88,7 +88,7 @@ class ThemeReader {
   }
   public getMenus(): Menu[] {
     let elements: Menu[] = [];
-    let path = this.themeAux.getInsideWTMPath(customPartPath.MENU);
+    let path = this.themeAux.getPathInsideJsonFolder(customPartPath.MENU);
     let files = FileReader.getFiles(path);
     for (let file of files) {
       let json: {
@@ -100,7 +100,7 @@ class ThemeReader {
       let subPages: MenuSubPage[] = [];
       for (let key in json) {
         let currentParams = json[key];
-        if ("menuName" in currentParams) {
+        if ("menuName" in currentParams) { // static 
           mainPage = this.themeAux.composer.buildMenuMainPage(currentParams);
         } else if ("pageName" in currentParams) {
           subPages.push(this.themeAux.composer.buildMenuSubPage(currentParams));
@@ -120,7 +120,7 @@ class ThemeReader {
 
   public getSingles(): Single[] {
     let elements: Single[] = [];
-    let path = this.themeAux.getInsideWTMPath(pagePath.POST);
+    let path = this.themeAux.getPathInsideJsonFolder(pagePath.POST);
     let files = FileReader.getFiles(path);
     for (let file of files) {
       let json: informationsJson = JSON.parse(
@@ -140,7 +140,7 @@ class ThemeReader {
   }
   public getTemplates(): Template[] {
     let elements: Template[] = [];
-    let path = this.themeAux.getInsideWTMPath(pagePath.PAGE);
+    let path = this.themeAux.getPathInsideJsonFolder(pagePath.PAGE);
     let files = FileReader.getFiles(path);
     for (let file of files) {
       let json: informationsJson = JSON.parse(

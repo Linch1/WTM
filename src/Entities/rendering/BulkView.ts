@@ -1,7 +1,7 @@
 import { checkValidExtension } from "../../Checkers/check.validExtension";
 import { ProjectTypes } from "../../Enums";
 import { extensions } from "../../Enums/common.extension";
-import { FileReader, StringComposeReader, StringComposeWriter } from "../../files";
+import { FileReader } from "../../files";
 import { View } from "./View";
 
 export class BulkView {

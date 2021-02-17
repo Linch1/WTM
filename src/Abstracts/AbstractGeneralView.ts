@@ -1,6 +1,6 @@
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { extensions,  ProjectTypes, WTMPathsAndConstants } from "../Enums";
+import { extensions,  ProjectTypes } from "../Enums";
 import { FileWriter } from "../files/FileWriter";
 import { informationsJson } from "../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
@@ -8,6 +8,7 @@ import { addBlockParams } from "../Types/entity.rendering.params.addBlock";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
 import { Identifiers } from "../Identifiers";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
+import { ConstViews } from "../Constants/const.views";
 
 export abstract class AbstractGeneralView {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -16,13 +17,13 @@ export abstract class AbstractGeneralView {
     "ERR: Before calling this method create the view with the .create() method";
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
 
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = WTMPathsAndConstants.viewsIdentifierPageName;
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = WTMPathsAndConstants.viewsIdentifierPageHeader;
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = WTMPathsAndConstants.viewsIdentifierPageFooter;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = ConstViews.viewsIdentifierPageName;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = ConstViews.viewsIdentifierPageHeader;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = ConstViews.viewsIdentifierPageFooter;
 
-  public JSON_INFORMATIONS: informationsJson = WTMPathsAndConstants.viewsJsonInformations;
-  public JSON_COMMON_INFORMATIONS = WTMPathsAndConstants.viewsCommonJsonInformations;
-  public COMMON_DEFAULT_BUILD = WTMPathsAndConstants.viewsCommonContent; // modified in wp themes and singles
+  public JSON_INFORMATIONS: informationsJson = ConstViews.viewsJsonInformations;
+  public JSON_COMMON_INFORMATIONS = ConstViews.viewsCommonJsonInformations;
+  public COMMON_DEFAULT_BUILD = ConstViews.viewsCommonContent; // modified in wp themes and singles
 
   /**
    * 
@@ -209,7 +210,7 @@ export abstract class AbstractGeneralView {
     let blocks = this.getBlocks();
     this.reCreateBlocksRecursive(
       blocks,
-      'BODY' HERE
+      ConstViews.viewsCommonBaseBlock
     );
 
   }

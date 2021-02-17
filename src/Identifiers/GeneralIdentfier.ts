@@ -2,7 +2,8 @@ import { ValidateIdentifierMethods } from "../Decorators";
 import { identifierType } from "../Enums/identifiers.type";
 import { AbstractGeneralIdentifier } from "../Abstracts/AbstractGeneralIdentifier";
 import { identifierActions } from "../Enums";
-HERE
+import { ConstIdentifiers } from "../Constants/const.identifiers";
+
 export class GeneralIdentifier implements AbstractGeneralIdentifier {
   static ERR_MISSING_IDENTIFIER_TYPE =
     "The IDENTIFIER_TYPE was not correctly initalized, it is undefined on empty";
@@ -11,6 +12,7 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
   static ERR_PROTECTED_NAME =
     "The given name is used by default from the library, please choose another one";
 
+  static IDENTIFIER_PREFIX = ConstIdentifiers.identifierPrefix;
   static PROTECTED_NAMES: string[] = [];
   static IDENTIFIER_TYPE: identifierType;
   
@@ -23,7 +25,7 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
    */
   @ValidateIdentifierMethods
   static getIdentifier(name: string, addInitialSlash: boolean = true): string {
-    let identifier = `[WTM-${this.IDENTIFIER_TYPE}-${name}]`;
+    let identifier = `[${this.IDENTIFIER_PREFIX}-${this.IDENTIFIER_TYPE}-${name}]`;
     return addInitialSlash ? `//` + identifier : identifier;
   }
   /**
@@ -33,8 +35,8 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
   @ValidateIdentifierMethods
   static getIdentifierPairJsComment(name: string): string[] {
     return [
-      `//<[WTM-${this.IDENTIFIER_TYPE}-${name}]`,
-      `//[WTM-${this.IDENTIFIER_TYPE}-${name}]>`,
+      `//<[${this.IDENTIFIER_PREFIX}-${this.IDENTIFIER_TYPE}-${name}]`,
+      `//[${this.IDENTIFIER_PREFIX}-${this.IDENTIFIER_TYPE}-${name}]>`,
     ];
   }
   /**
@@ -44,8 +46,8 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
   @ValidateIdentifierMethods
   static getIdentifierPairHtmlComment(name: string): string[] {
     return [
-      `<!--<[WTM-${this.IDENTIFIER_TYPE}-${name}]-->`,
-      `<!--[WTM-${this.IDENTIFIER_TYPE}-${name}]>-->`,
+      `<!--<[${this.IDENTIFIER_PREFIX}-${this.IDENTIFIER_TYPE}-${name}]-->`,
+      `<!--[${this.IDENTIFIER_PREFIX}-${this.IDENTIFIER_TYPE}-${name}]>-->`,
     ];
   }
   /**
@@ -59,7 +61,7 @@ export class GeneralIdentifier implements AbstractGeneralIdentifier {
     action: identifierActions,
     addInitialSlash: boolean = true
   ): string {
-    let identifier = `[WTM-${this.IDENTIFIER_TYPE}-${action}-${name}]`;
+    let identifier = `[${this.IDENTIFIER_PREFIX}-${this.IDENTIFIER_TYPE}-${action}-${name}]`;
     return addInitialSlash ? `//` + identifier : identifier;
   }
   

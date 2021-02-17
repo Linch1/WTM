@@ -5,7 +5,7 @@ import { Identifiers } from "../Identifiers/Identifiers";
 import { Visual } from "./Visual";
 import { identifierActions, renderTypes } from "../Enums";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
-HERE
+
 export class VisualWriter {
 
   public ERR_NOT_RENDER_IDENTIFIER = "During the population of the identifier was found a non registered RENDER identifier, check the enum renderTypes."

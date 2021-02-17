@@ -2,10 +2,10 @@ import { TestTheme } from "./Test/TestTheme";
 import { TestVisual } from "./Test/TestVisual";
 import { TestCustomRender } from "./Test/TestCustomRender";
 
-TestCustomRender.createView();
-TestCustomRender.addBlockInTemplate();
-TestCustomRender.includeFileInTemplate();
-TestCustomRender.delete();
+// TestCustomRender.createView();
+// TestCustomRender.addBlockInTemplate();
+// TestCustomRender.includeFileInTemplate();
+// TestCustomRender.delete();
 
 /* TEST FOR MANAGE THEME SINGLE/TEMPLATE
 TestTheme.createSingle();
@@ -39,7 +39,24 @@ TestVisual.visualRenderAcf();
 TestVisual.visualRead();
 */
 
-
-
 // TestTheme.wpImportsTest();
 // TestVisual.bulkGetAllVisuals();
+
+
+// class Parent { 
+//     NAME = "MARCO";
+//     constructor(){
+//         this.readName();
+//     }
+//     public readName(){
+//         console.log(this.NAME);
+//     }
+// }
+// class Child extends Parent{
+//     NAME = "GUILIO"
+//     constructor(){
+//         super();
+//         this.readName();
+//     }
+// }
+// new Child().readName();
