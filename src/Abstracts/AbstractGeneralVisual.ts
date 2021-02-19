@@ -40,7 +40,7 @@ export abstract class AbstractGeneralVisual {
   public readonly INIT_DEFAULT_FILE_CONTENT: string = ConstVisuals.visualsHtmlDefaultContent;
 
   public readonly JSON_FILE_PATH: string;
-  public JSON_FILE_CONTENT: visualJson = ConstVisuals.visualsJsonContent;
+  public JSON_FILE_CONTENT: visualJson = ConstVisuals.getVisualsJsonContent();
 
   /**
    * @description create a visual with the given informations

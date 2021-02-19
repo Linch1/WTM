@@ -21,8 +21,8 @@ export abstract class AbstractGeneralView {
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = ConstViews.viewsIdentifierPageHeader;
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = ConstViews.viewsIdentifierPageFooter;
 
-  public JSON_INFORMATIONS: informationsJson = ConstViews.viewsJsonInformations;
-  public JSON_COMMON_INFORMATIONS = ConstViews.viewsCommonJsonInformations;
+  public JSON_INFORMATIONS: informationsJson = ConstViews.getViewsJsonInformations();
+  public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonInformations();
   public COMMON_DEFAULT_BUILD = ConstViews.viewsCommonContent; // modified in wp themes and singles
 
   /**

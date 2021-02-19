@@ -68,14 +68,12 @@ class TestVisual {
   }
   static visualRead(){
     visualRd.read();
-    console.log(visual.JSON_FILE_CONTENT);
   }
 
   static bulkGetAllVisuals(){
     for ( let visual of bulkVisual.getAllVisuals()){
       console.log(visual.JSON_FILE_CONTENT);
     }
-    console.log();
   }
 
 

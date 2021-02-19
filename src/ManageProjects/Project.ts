@@ -115,11 +115,6 @@ export class Project{
         for ( let visual of projectVisuals){
             let stylesDep: string[] = visual.getStylesDependencies();
             let scriptsDep: string[] = visual.getScriptsDependencies();
-            console.log(
-                visual.getName(),
-                stylesDep,
-                scriptsDep
-            )
             // parse styles dep for replace all the paths that starts with ./ or those who doesn't contains a '/' char
             for ( let i = 0; i<stylesDep.length; i++){
                 let path = stylesDep[i]

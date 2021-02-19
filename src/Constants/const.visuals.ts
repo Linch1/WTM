@@ -1,5 +1,5 @@
 import { ProjectTypes } from "../Enums/common.projectTypes";
-import { visualJson } from "../Types/manageVisual.jsons";
+import { visualJson, visualJsonIdentifiers } from "../Types/manageVisual.jsons";
 /**
  * @description in this class are stored all the  values and the files names/prefixes
  * - this is a class and not an enum to support also non strings/numeric values.
@@ -15,7 +15,7 @@ export class ConstVisuals {
   static visualsAssetsDirectory = "assets"; // the 'assets' directory of each visual
   static visaulsAssetsCssDirectory = "css"; // the 'css' directory of each visual ( this folder is inside the 'assets' directory )
   static visualsAssetsJsDirectory = "js"; // the 'js' directory of each visual ( this folder is inside the 'assets' directory )
-  static visualsJsonIdentifiersContent = {
+  static visualsJsonIdentifiersContent: visualJsonIdentifiers = {
     HTML: {
       "!STATIC!": {},
       "!ALL!": {},
@@ -36,4 +36,8 @@ export class ConstVisuals {
     },
     connected: {},
   }; // the default content of each visual json file ( 'WTM.json' )
+
+  static getVisualsJsonContent(): visualJson {
+    return JSON.parse( JSON.stringify( ConstVisuals.visualsJsonContent ) );
+  }
 }
