@@ -39,11 +39,7 @@ export abstract class AbstractGeneralVisual {
   public readonly INIT_RENDER_FILE_CONTENT: string = ConstVisuals.visualsHtmlRenderContent;
   public readonly INIT_DEFAULT_FILE_CONTENT: string = ConstVisuals.visualsHtmlDefaultContent;
 
-  public readonly JSON_FILE_PATH: string = StringComposeWriter.concatenatePaths(
-    this.getDirPath(),
-    this.JSON_FILE_NAME
-  );
-
+  public readonly JSON_FILE_PATH: string;
   public JSON_FILE_CONTENT: visualJson = ConstVisuals.visualsJsonContent;
 
   /**
@@ -52,13 +48,18 @@ export abstract class AbstractGeneralVisual {
    * @param VISUAL_NAME the name of the visual to create
    * @param projectType the typo of the project where the visual will be included
    */
-  constructor(public VISUALS_FOLDER: string, public VISUAL_NAME: string, projectType?: ProjectTypes) {
+  constructor(public VISUALS_FOLDER: string, public VISUAL_NAME: string, projectType: ProjectTypes = ProjectTypes.html) {
+    
     this.VISUAL_FOLDER = StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, this.VISUAL_NAME);
     this.JSON_FILE_CONTENT.visual.name = this.VISUAL_NAME;
+    this.JSON_FILE_CONTENT.visual.projectType = projectType as ProjectTypes;
+    this.JSON_FILE_PATH = StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      this.JSON_FILE_NAME
+    );
     if( !FileReader.existsPath(this.JSON_FILE_PATH) && !projectType ){
       throw new Error(this.WERR_NO_PROJECT_TYPE_PROVIDED);
     }
-    this.JSON_FILE_CONTENT.visual.projectType = projectType as ProjectTypes;
 
     this.init();
     this.RENDER_FILE_PATH = StringComposeWriter.concatenatePaths(

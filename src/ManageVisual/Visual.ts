@@ -18,7 +18,7 @@ export class Visual extends AbstractGeneralVisual {
    * - if this field is empty the project type will be automatically take from the visual json ( if it already exists )
    * - else an error will be thrown
    */
-  constructor(public VISUALS_FOLDER: string, public VISUAL_NAME: string, projectType?: ProjectTypes) {
+  constructor(public VISUALS_FOLDER: string, public VISUAL_NAME: string, projectType: ProjectTypes = ProjectTypes.html) {
     super(VISUALS_FOLDER, VISUAL_NAME, projectType);
     this.reader = new VisualReader(this);
     this.writer = new VisualWriter(this);
