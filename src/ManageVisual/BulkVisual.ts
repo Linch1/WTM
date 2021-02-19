@@ -16,18 +16,13 @@ export class BulkVisual {
         let visuals: Visual[] = []; 
         let visualsFolders = FileReader.getDirectories(this.VISUALS_FOLDER);
         for ( let visualFolder of visualsFolders){
-            let visualFolderPath = StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, visualFolder);
-            visuals.push(new Visual(visualFolderPath, this.projectType));
+            visuals.push(new Visual(this.VISUALS_FOLDER, visualFolder, this.projectType));
         }
         return visuals;
     }
 
     public findVisual( visualName: string): Visual {
-        let visualFolder = StringComposeWriter.concatenatePaths(
-            this.VISUALS_FOLDER,
-            visualName
-        );
-        return new Visual( visualFolder );
+        return new Visual( this.VISUALS_FOLDER, visualName );
     }
  
 }

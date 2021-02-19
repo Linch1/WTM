@@ -81,15 +81,11 @@ class VisualConverter {
    * @param projectType 
    */
   getVisualBasedOnType( visualTargetName: string, projectType: ProjectTypes): Visual | undefined{
-    let visualTargetFolderBasedOneProjectTypeRenderPath = StringComposeWriter.concatenatePaths(
-      this.visual.getVisualsPath(),
-      visualTargetName + '-' + this.visual.getProjectType()
-    );
     let visualTargetObjectBasedOneProjectTypeRenderPath: undefined | Visual = undefined;
-    try {
-      visualTargetObjectBasedOneProjectTypeRenderPath = new Visual( visualTargetFolderBasedOneProjectTypeRenderPath );
-    } catch (error) {}
-    return visualTargetObjectBasedOneProjectTypeRenderPath;
+
+    visualTargetObjectBasedOneProjectTypeRenderPath = new Visual( this.visual.getVisualsPath(), visualTargetName, projectType );
+    if( !visualTargetObjectBasedOneProjectTypeRenderPath.isCreated() ) return undefined;
+    else return visualTargetObjectBasedOneProjectTypeRenderPath;
   }
 
   /**
@@ -105,11 +101,7 @@ class VisualConverter {
       if( visualBasedOnType ) {
         includeStatement = IncludeFunctions.include(visualBasedOnType.getRenderFilePath(), this.visual.getProjectType(), false);
       } else {
-        let visualTargetFolder = StringComposeWriter.concatenatePaths(
-          this.visual.getVisualsPath(),
-          visualTarget
-        );
-        let visualTargetObject = new Visual( visualTargetFolder );
+        let visualTargetObject = new Visual( this.visual.getVisualsPath(), visualTarget );
         includeStatement = IncludeFunctions.include(visualTargetObject.getRenderFilePath(), this.visual.getProjectType(), false);
       }
     }

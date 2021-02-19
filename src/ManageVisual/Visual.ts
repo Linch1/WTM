@@ -12,13 +12,14 @@ export class Visual extends AbstractGeneralVisual {
 
   /**
    * @description creates a new visual
-   * @param VISUAL_FOLDER the visuals folder of the poroject
+   * @param VISUALS_FOLDER the visuals folder of the poroject
+   * @param VISUAL_NAME the name of the visual to create
    * @param projectType the project type
    * - if this field is empty the project type will be automatically take from the visual json ( if it already exists )
    * - else an error will be thrown
    */
-  constructor(public VISUAL_FOLDER: string, projectType?: ProjectTypes) {
-    super(VISUAL_FOLDER, projectType);
+  constructor(public VISUALS_FOLDER: string, public VISUAL_NAME: string, projectType?: ProjectTypes) {
+    super(VISUALS_FOLDER, VISUAL_NAME, projectType);
     this.reader = new VisualReader(this);
     this.writer = new VisualWriter(this);
     this.converter = new VisualConverter(this);

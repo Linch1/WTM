@@ -7,7 +7,7 @@ import { ProjectTypes } from "../..";
 import { ConstViews } from "../../Constants/const.views";
 
 export class View extends AbstractGeneralView {
-  constructor( parentAbsPath : string, pageName: string = "", projectType: ProjectTypes) {
+  constructor( parentAbsPath : string, pageName: string, projectType: ProjectTypes) {
 
     let viewsDefaultFolder: string = ConstViews.viewsDirectory;
     let viewsDefaultPrefix: string = ConstViews.viewsPrefix;

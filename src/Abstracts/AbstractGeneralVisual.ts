@@ -34,6 +34,8 @@ export abstract class AbstractGeneralVisual {
   public readonly STYLES_PATH: string;
   public readonly SCRIPTS_PATH: string;
 
+  public readonly VISUAL_FOLDER: string;
+
   public readonly INIT_RENDER_FILE_CONTENT: string = ConstVisuals.visualsHtmlRenderContent;
   public readonly INIT_DEFAULT_FILE_CONTENT: string = ConstVisuals.visualsHtmlDefaultContent;
 
@@ -46,13 +48,13 @@ export abstract class AbstractGeneralVisual {
 
   /**
    * @description create a visual with the given informations
-   * @param VISUAL_FOLDER the path to the visual folder
+   * @param VISUALS_FOLDER the path to the visuals folder
+   * @param VISUAL_NAME the name of the visual to create
    * @param projectType the typo of the project where the visual will be included
    */
-  constructor(public VISUAL_FOLDER: string, projectType?: ProjectTypes) {
-    this.JSON_FILE_CONTENT.visual.name = StringComposeReader.getPathLastElem(
-      this.VISUAL_FOLDER
-    );
+  constructor(public VISUALS_FOLDER: string, public VISUAL_NAME: string, projectType?: ProjectTypes) {
+    this.VISUAL_FOLDER = StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, this.VISUAL_NAME);
+    this.JSON_FILE_CONTENT.visual.name = this.VISUAL_NAME;
     if( !FileReader.existsPath(this.JSON_FILE_PATH) && !projectType ){
       throw new Error(this.WERR_NO_PROJECT_TYPE_PROVIDED);
     }
@@ -148,15 +150,13 @@ export abstract class AbstractGeneralVisual {
    * @description returns the path to the visual folder
    */
   public getDirPath(): string {
-    return StringComposeWriter.concatenatePaths(this.VISUAL_FOLDER);
+    return StringComposeWriter.concatenatePaths(this.VISUAL_FOLDER, this.getProjectType());
   }
   /**
-   * @description return the path of the visual based on the this.VISUALS_MAIN_FOLDER
+   * @description return the path of the visuals directory
    */
   public getVisualsPath(): string {
-    let parentDirPaths = this.VISUAL_FOLDER.split('/');
-    parentDirPaths.pop()
-    return parentDirPaths.join('/');
+    return this.VISUALS_FOLDER; // returns the path to the visuals directory
   }
   /**
    * @description return the abs path of the visual default file

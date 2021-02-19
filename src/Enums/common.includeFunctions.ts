@@ -10,7 +10,10 @@ export class IncludeFunctions{
         wordpress: ( path: string, initIncludePathWithMainFolderPath: boolean = true): string => {
             if( !initIncludePathWithMainFolderPath ) return `<?php include('${path}');?>\n`
             else return `<?php include(TEMPLATEPATH.'${path}');?>\n`;
-        }
+        },
+        html: ( path: string, initIncludePathWithMainFolderPath: boolean = true): string => {
+            return `INCLUDE FOR HTML NOT IMPLEMENTED YET`;
+        },
     }
 
     /**

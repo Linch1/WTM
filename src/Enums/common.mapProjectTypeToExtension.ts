@@ -1,6 +1,11 @@
-import { extensions } from "./common.extension"
-
+/**
+ * This enum is connected to the enums: 
+ * - './common.extensions.ts'
+ * - './common.projectTypes.ts'
+ * - './common.includeFunctions.ts'
+ */
 export enum MapProjectTypeToExtension {
     wordpress = 'php',
-    ejs = 'ejs'
+    ejs = 'ejs',
+    html = 'html'
 }
