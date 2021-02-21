@@ -44,6 +44,6 @@ export class View extends AbstractGeneralView {
     this.initialize();
   }
   getIncludeFunction(path: string): string {
-    return IncludeFunctions.include(path, ProjectTypes.ejs);
+    return IncludeFunctions.include(path, this.getProjectType());
   }
 }
