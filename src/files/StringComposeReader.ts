@@ -1,3 +1,4 @@
+import { ConstProjects, ConstVisuals } from "../Constants";
 import { extensions } from "../Enums/common.extension";
 import { FileReader } from "./FileReader";
 import { StringComposeWriter } from "./StringComposeWriter";
@@ -6,6 +7,25 @@ export class StringComposeReader {
   static readonly ERR_NO_START_CHAR_FOUND =
     "ERR: The given start char is not present in the file";
   static readonly ERR_CANNOT_GET_LAST_ELEM: "ERR: Cannot get the last element of the given Path";
+
+  /**
+   * @description check if two paths have the same end
+   * @param path1 
+   * @param path2 
+   */
+  static checkLibPathsSameEnd( path1: string, path2: string){
+    let path1Elements = path1.split('/');
+    let path2Elements = path2.split('/');
+    let minLen = Math.min( path1Elements.length, path2Elements.length );
+    let same = true;
+    for ( let i = 0; i < minLen; i++){
+      let elem1 = path1Elements[ path1Elements.length - 1 - i];
+      let elem2 = path2Elements[ path2Elements.length - 1 - i];
+      console.log( elem1, elem2 );
+      if( elem1 == ConstVisuals.visualsAssetsLibDirectory || elem2 == ConstVisuals.visualsAssetsLibDirectory ) return true;
+      if( elem1 != elem2 ) return false;
+    }
+  }
 
   /**
    * @description read the text contained beetween to chars/phrases ( and check if the text that start with a specific phrase/word optionally )

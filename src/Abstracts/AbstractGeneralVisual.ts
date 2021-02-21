@@ -18,7 +18,11 @@ export abstract class AbstractGeneralVisual {
   public readonly ASSETS_RELATIVE_PATH: string = ConstVisuals.visualsAssetsDirectory;
   public readonly STYLES_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
     ConstVisuals.visualsAssetsDirectory,
-    ConstVisuals.visaulsAssetsCssDirectory
+    ConstVisuals.visualsAssetsCssDirectory
+  );
+  public readonly LIB_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
+    ConstVisuals.visualsAssetsDirectory,
+    ConstVisuals.visualsAssetsLibDirectory
   );
   public readonly SCRIPTS_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
     ConstVisuals.visualsAssetsDirectory,
@@ -33,6 +37,7 @@ export abstract class AbstractGeneralVisual {
   public readonly ASSETS_PATH: string;
   public readonly STYLES_PATH: string;
   public readonly SCRIPTS_PATH: string;
+  public readonly LIB_PATH: string;
 
   public readonly VISUAL_FOLDER: string;
 
@@ -77,6 +82,10 @@ export abstract class AbstractGeneralVisual {
     this.SCRIPTS_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
       this.SCRIPTS_RELATIVE_PATH
+    );
+    this.LIB_PATH = StringComposeWriter.concatenatePaths(
+      this.getDirPath(),
+      this.LIB_RELATIVE_PATH
     );
     this.STYLES_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
@@ -128,6 +137,25 @@ export abstract class AbstractGeneralVisual {
    */
   public getStylesDirPath(): string {
     return this.STYLES_PATH;
+  }
+  /**
+   * @description get the visual lib folder path 
+   */
+  public getLibDirPath(): string {
+    return this.LIB_PATH;
+  }
+  /**
+   * @description get the path to the directory of an element added in the visual lib
+   * @param libElemName the name of the element inside the lib
+   */
+  public getLibElemDirPath(libElemName: string): string {
+    return StringComposeWriter.concatenatePaths(this.LIB_PATH, libElemName);
+  }
+  /**
+   * @description get the lib dependencies of the current visual
+   */
+  public getLibDependencies(){
+    return this.JSON_FILE_CONTENT.lib;
   }
   /**
    * @description return the current visual styles dependencies

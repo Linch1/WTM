@@ -5,6 +5,7 @@ import { Identifiers } from "../Identifiers/Identifiers";
 import { Visual } from "./Visual";
 import { identifierActions, renderTypes } from "../Enums";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
+import { ConstVisuals } from "../Constants";
 
 export class VisualWriter {
 
@@ -26,6 +27,7 @@ export class VisualWriter {
     FileWriter.createDirectory(this.visual.getAssetsDirPath());
     FileWriter.createDirectory(this.visual.getScriptsDirPath());
     FileWriter.createDirectory(this.visual.getStylesDirPath());
+    FileWriter.createDirectory(this.visual.getLibDirPath());
 
     FileWriter.createFile(
       this.visual.RENDER_FILE_PATH,
@@ -62,6 +64,34 @@ export class VisualWriter {
     this.visual.JSON_FILE_CONTENT.dependencies.scripts.push(path.trim());
     this.saveJson();
   }
+  /**
+   * @description add the passed path as script lib dependency
+   * @param elemName the path to add as lib dependency
+   */
+  public addLibScript(elemName: string, path: string): void{
+    this.initializeLibElem(elemName);
+    this.visual.JSON_FILE_CONTENT.lib[elemName].scripts.push(path);
+    this.saveJson();
+  }
+  /**
+   * @description add the passed path as style lib dependency
+   * @param elemName the path to add as lib dependency
+   */
+  public addLibStyle(elemName: string, path: string): void{
+    this.initializeLibElem(elemName);
+    this.visual.JSON_FILE_CONTENT.lib[elemName].styles.push(path);
+    this.saveJson();
+  }
+  /**
+   * @description initalize the lib-elem dependencies if the elem is not yet present
+   * @param elemName the name of the lib to intialize
+   */
+  public initializeLibElem(elemName: string){
+    if ( !this.visual.JSON_FILE_CONTENT.lib[elemName] ) {
+      this.visual.JSON_FILE_CONTENT.lib[elemName] = ConstVisuals.getVisualsLibElemContent();
+    }
+  }
+  
 
   /**
    * @description populate the WTM.json file of the given visual with the identifiers contained in default.##

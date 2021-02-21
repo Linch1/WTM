@@ -13,8 +13,9 @@ export class ConstVisuals {
   static visualsHtmlRenderFileName = "render"; // the 'render.--' file of each visual
   static visualsHtmlRenderContent = ""; // default content used to intialize the visual 'render.--' file
   static visualsAssetsDirectory = "assets"; // the 'assets' directory of each visual
-  static visaulsAssetsCssDirectory = "css"; // the 'css' directory of each visual ( this folder is inside the 'assets' directory )
+  static visualsAssetsCssDirectory = "css"; // the 'css' directory of each visual ( this folder is inside the 'assets' directory )
   static visualsAssetsJsDirectory = "js"; // the 'js' directory of each visual ( this folder is inside the 'assets' directory )
+  static visualsAssetsLibDirectory = "lib"; // the 'lib' directory of each visual ( this folder is inside the 'assets' directory )
   static visualsJsonIdentifiersContent: visualJsonIdentifiers = {
     HTML: {
       "!STATIC!": {},
@@ -22,6 +23,10 @@ export class ConstVisuals {
       "!EXEC!": {},
     }
   }; // the default identifiers content of the json file ( 'WTM.json' ) of each visual
+  static visualsLibElemContent = {
+    scripts: [],
+    styles: []
+  } // the content the visuals of a lib elemenets
   static visualsJsonContent: visualJson = {
     visual: { name: "", projectType: ProjectTypes.ejs },
     identifiers: ConstVisuals.visualsJsonIdentifiersContent,
@@ -29,10 +34,17 @@ export class ConstVisuals {
       scripts: [],
       styles: [],
     },
+    lib: {},
     connected: {},
   }; // the default content of each visual json file ( 'WTM.json' )
 
   static getVisualsJsonContent(): visualJson {
     return JSON.parse( JSON.stringify( ConstVisuals.visualsJsonContent ) );
+  }
+  static getVisualsLibElemContent(): {
+    scripts: [],
+    styles: []
+  } {
+    return JSON.parse( JSON.stringify( ConstVisuals.visualsLibElemContent ) );
   }
 }

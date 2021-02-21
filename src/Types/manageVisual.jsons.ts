@@ -16,6 +16,12 @@ export type visualJson = {
     scripts: string[];
     styles: string[];
   },
+  lib: {
+    [key: string] : {
+      scripts: string[],
+      styles: string[]
+    }
+  },
   connected: {
     -readonly [ projectType in  keyof typeof ProjectTypes]?: {
       [visualName: string]: {
