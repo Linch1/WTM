@@ -111,13 +111,8 @@ export class Project{
         this.saveJson();
     }
     public refreshVisualsDependencies(){
-        let projectVisuals = new BulkVisual(this.getVisualsPath(), this.getProjectType()).getAllVisuals();
+        let projectVisuals = new BulkVisual(this.getVisualsPath(), this.getProjectType()).getAllVisualsFiltered();
         for ( let visual of projectVisuals){
-            if( !visual.isCreated() ){
-                let fbVisual = visual.getFallbackVisual();
-                if( fbVisual ) visual = fbVisual;
-                else continue;
-            }
             let stylesDep: string[] = visual.getStylesDependencies();
             let scriptsDep: string[] = visual.getScriptsDependencies();
             // parse styles dep for replace all the paths that starts with ./ or those who doesn't contains a '/' char

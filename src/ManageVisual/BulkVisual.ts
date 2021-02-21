@@ -22,6 +22,28 @@ export class BulkVisual {
         }
         return visuals;
     }
+    /**
+     * @description read all the visuals of a given type
+     * - replace the non existing visuals with their fallback visuals
+     * - remove the visual from the list if it is not create and also it's fallback is not created.
+     * @param VISUALS_FOLDER the path to the visual**s** folder
+     * @param projectType the type of the visuals to be read
+     * - if this param is left empty all the visuals of all the types are readed
+     */
+    public getAllVisualsFiltered(): Visual[]{
+        let visuals: Visual[] = []; 
+        let visualsFolders = FileReader.getDirectories(this.VISUALS_FOLDER);
+        for ( let visualFolder of visualsFolders){
+            let visual = new Visual(this.VISUALS_FOLDER, visualFolder, this.projectType);
+            if( !visual.isCreated() ){
+                let fbVisual = visual.getFallbackVisual();
+                if( fbVisual ) visual = fbVisual;
+                else continue;
+            }
+            visuals.push(visual);
+        }
+        return visuals;
+    }
 
     public findVisual( visualName: string): Visual {
         return new Visual( this.VISUALS_FOLDER, visualName );

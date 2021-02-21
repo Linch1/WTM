@@ -39,10 +39,18 @@ export class Visual extends AbstractGeneralVisual {
     this.writer.populateIdentifiers();
     this.converter.render(renderType);
   }
-
   public getFallbackVisual(): Visual | undefined{
     let fbVisual = new Visual(this.getVisualsPath(), this.getName(), ProjectTypes.html);
     if( fbVisual.isCreated() ) return fbVisual;
     else return undefined;
+  }
+  /**
+   * @description returns the visual if is created
+   * - returns the fallback if the visual is not created
+   * - returns undefined if also the fallback doesn't exists
+   */
+  public getVisualFiltered(): Visual | undefined{
+    if( this.isCreated() ) return this;
+    else this.getFallbackVisual();
   }
 }
