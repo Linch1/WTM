@@ -10,6 +10,10 @@ export class Project{
     public PROJECT_JSON_FILE_PATH: string;
     public PROJECT_JSON_DIR_PATH: string;
 
+    /**
+     * @description
+     * @param PROJECT_JSON_INFORMATIONS the initial informations with which the project is created
+     */
     constructor(
         public PROJECT_JSON_INFORMATIONS: ProjectJsonInformations
     ){
@@ -111,6 +115,7 @@ export class Project{
         this.saveJson();
     }
     public refreshVisualsDependencies(){
+        this.PROJECT_JSON_INFORMATIONS.visualsDependencies = {}; // reset the object with the dependencies
         let projectVisuals = new BulkVisual(this.getVisualsPath(), this.getProjectType()).getAllVisualsFiltered();
         for ( let visual of projectVisuals){
             let stylesDep: string[] = visual.getStylesDependencies();
