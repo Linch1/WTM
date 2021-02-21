@@ -6,9 +6,11 @@ import { Visual } from "./Visual";
 export class BulkVisual {
     
     /**
+     * @description read all the visuals of a given type or all the types
+     * - it returns also non created visuals if a visual of the specified type is not present. 
      * @param VISUALS_FOLDER the path to the visual**s** folder
      * @param projectType the type of the visuals to be read
-     * - if empty all the visuals of all the types are readed
+     * - if this param is left empty all the visuals of all the types are readed
      */
     constructor(public VISUALS_FOLDER: string, public projectType?: ProjectTypes){}
 
