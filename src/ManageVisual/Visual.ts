@@ -39,4 +39,10 @@ export class Visual extends AbstractGeneralVisual {
     this.writer.populateIdentifiers();
     this.converter.render(renderType);
   }
+
+  public getFallbackVisual(): Visual | undefined{
+    let fbVisual = new Visual(this.getVisualsPath(), this.getName(), ProjectTypes.html);
+    if( fbVisual.isCreated() ) return fbVisual;
+    else return undefined;
+  }
 }
