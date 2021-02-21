@@ -20,12 +20,7 @@ export class ConstVisuals {
       "!STATIC!": {},
       "!ALL!": {},
       "!EXEC!": {},
-    },
-    ACF: {
-      "!STATIC!": {},
-      "!ALL!": {},
-      "!EXEC!": {},
-    },
+    }
   }; // the default identifiers content of the json file ( 'WTM.json' ) of each visual
   static visualsJsonContent: visualJson = {
     visual: { name: "", projectType: ProjectTypes.ejs },

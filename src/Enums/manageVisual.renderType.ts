@@ -1,1 +1,1 @@
-export enum renderTypes { HTML = 'HTML', ACF = 'ACF' };
+export enum renderTypes { HTML = 'HTML' };

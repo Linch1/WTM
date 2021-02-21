@@ -58,10 +58,7 @@ class TestVisual {
     visualCv.render(renderTypes.HTML);
     this.log("Rendering HTML identifiers values")
   }
-  static visualRenderAcf(){
-    visualCv.render(renderTypes.ACF);
-    this.log("Rendering ACF identifiers values")
-  }
+
   static visualPopulateIdentfiers(){
     visualWr.populateIdentifiers();
     this.log("Populated found identifiers")
