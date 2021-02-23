@@ -1,54 +1,79 @@
 import * as fs from "fs";
-import { nestedStringsArrays } from "../Types/files.FileReader";
+import { folderObject } from "../Types/files.FileReader";
+import { StringComposeWriter } from "./StringComposeWriter";
 
 export class FileReader {
   static readonly ERR_NO_FUNCTION_FOUND =
     "NO FUNCTION FOUND: no function was found with the given name";
 
   /**
-   * @desc: recursively get the passed folder tree
+   * @description recursively get the passed folder tree
    * @param path the path to the folder
    * @param excludedFolders the folders to exclude ( array of strings )
    */
   static readFolderTree(
     path: string,
-    excludedFolders: string[] = []
-  ): nestedStringsArrays {
-    let folderDirectories: string[] = this.getDirectories(path); // read the directories
-    let folderTree: nestedStringsArrays[] = []; // init the folder Tree
-    let folderFiles: string[] = this.getFiles(path);
-    folderTree.push(...folderFiles);
+    excludedFolders: string[] = [],
+    level: number = 0,
+  ): folderObject {
+    let currentFolder: folderObject = {
+      folderPath: path,
+      files: this.getFiles(path),
+      level: level,
+      folders: []
+    }; // init the folder Tree
+    let containedFolders = this.getDirectories(path);
 
-    for (let folder of folderDirectories) {
-      let folder_name = folder;
-      folder = path.endsWith("/") ? `${path}${folder}` : `${path}/${folder}`; // get the full folder path
-      let treeLevel: nestedStringsArrays[] = []; // init the folder level
-      let subLevels: nestedStringsArrays = [];
-      if (!excludedFolders.includes(folder_name)) {
-        // if the folder is not excluded
-        subLevels = this.readFolderTree(folder); // get the folder subLevels
+    for (let folderName of containedFolders) {
+      let folderPath = path.endsWith("/") ? `${path}${folderName}` : `${path}/${folderName}`; // get the full folder path
+      if (!excludedFolders.includes(folderName)) {
+        currentFolder.folders.push( this.readFolderTree(folderPath, excludedFolders, level + 1 ) );
+      } else {
+        currentFolder.folders.push({
+          folderPath: folderPath,
+          files: [],
+          folders: [],
+          level: level + 1
+        })
       }
-
-      treeLevel.push(folder); // push the folder name ( always the first elem of the array is the folder name )
-      treeLevel.push(subLevels); // push the sublevels
-      folderTree.push(treeLevel); // push the current level tree to the main tree
     }
-    return folderTree;
+    return currentFolder;
   }
 
   /**
-   * @desc: print the tree got from the this.readFolderTree method
+   * @description print the tree got from the this.readFolderTree method
    * @param folderTree pass to this param the output of the function this.readFolderTree(path, excludedFolders)
    */
-  static printFolderTree(folderTree: nestedStringsArrays, level: number = 0) {
+  static printFolderTree(folderTree: folderObject) {
+    let level = folderTree.level;
     let print_spaces: number = level - 1 > 0 ? level - 1 : 0;
     let indent_string: string = "|" + "    |".repeat(print_spaces) + "---";
-    for (let folderOrFile of folderTree) {
-      if (typeof folderOrFile == "object")
-        this.printFolderTree(folderOrFile, level + 1);
-      else console.log(`${indent_string} ${folderOrFile}`);
+    for (let folder of folderTree.folders) {
+      console.log(`${indent_string} ${folder.folderPath}`);
+      this.printFolderTree(folder);
+    }
+    for ( let file of folderTree.files){
+      console.log(`${indent_string} ${file}`);
     }
   }
+
+  /**
+   * @description given a folderTree returns an array of all the paths inside the folder tree
+   * @param folderTree 
+   */
+  static folderTreePaths(folderTree: folderObject): string[]{
+    let paths: string[] = [];
+    let parentFolder = folderTree.folderPath;
+    for ( let folder of folderTree.folders ){
+        paths.push( ...this.folderTreePaths(folder) );
+    }
+    for ( let file of folderTree.files ){
+      paths.push( StringComposeWriter.concatenatePaths( parentFolder, file))
+    }
+    return paths;
+  }
+
+  
 
   static readFile(path: string): string {
     return fs.readFileSync(path, "utf-8");

@@ -15,34 +15,34 @@ export abstract class AbstractGeneralVisual {
     "ERR: Before calling this method create the visual with the myVisual.writer.createVisual() method";
   public readonly WERR_NO_PROJECT_TYPE_PROVIDED = "Please provide the visual project type. If not provided it means that the visual already exists and it can be take from it's json, in this case the visual doesn't exists so this cannot be done."
 
-  public readonly ASSETS_RELATIVE_PATH: string = ConstVisuals.visualsAssetsDirectory;
+  public readonly ASSETS_RELATIVE_PATH: string = ConstVisuals.AssetsDirectory;
   public readonly STYLES_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
-    ConstVisuals.visualsAssetsDirectory,
-    ConstVisuals.visualsAssetsCssDirectory
+    ConstVisuals.AssetsDirectory,
+    ConstVisuals.AssetsCssDirectory
   );
-  public readonly LIB_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
-    ConstVisuals.visualsAssetsDirectory,
-    ConstVisuals.visualsAssetsLibDirectory
+  public readonly IMG_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
+    ConstVisuals.AssetsDirectory,
+    ConstVisuals.AssetsImgDirectory
   );
   public readonly SCRIPTS_RELATIVE_PATH: string = StringComposeWriter.concatenatePaths(
-    ConstVisuals.visualsAssetsDirectory,
-    ConstVisuals.visualsAssetsJsDirectory
+    ConstVisuals.AssetsDirectory,
+    ConstVisuals.AssetsJsDirectory
   );;
-  public readonly JSON_FILE_NAME: string = ConstVisuals.visualsJsonFile;
-  public readonly HTML_DEFAULT_FILE_NAME: string  = ConstVisuals.visualsHtmlDefaultFileName;
-  public readonly HTML_RENDERED_FILE_NAME: string  = ConstVisuals.visualsHtmlRenderFileName;
+  public readonly JSON_FILE_NAME: string = ConstVisuals.JsonFile;
+  public readonly HTML_DEFAULT_FILE_NAME: string  = ConstVisuals.HtmlDefaultFileName;
+  public readonly HTML_RENDERED_FILE_NAME: string  = ConstVisuals.HtmlRenderFileName;
 
   public readonly RENDER_FILE_PATH: string;
   public readonly DEFAULT_FILE_PATH: string;
   public readonly ASSETS_PATH: string;
   public readonly STYLES_PATH: string;
   public readonly SCRIPTS_PATH: string;
-  public readonly LIB_PATH: string;
+  public readonly IMG_PATH: string;
 
   public readonly VISUAL_FOLDER: string;
 
-  public readonly INIT_RENDER_FILE_CONTENT: string = ConstVisuals.visualsHtmlRenderContent;
-  public readonly INIT_DEFAULT_FILE_CONTENT: string = ConstVisuals.visualsHtmlDefaultContent;
+  public readonly INIT_RENDER_FILE_CONTENT: string = ConstVisuals.HtmlRenderContent;
+  public readonly INIT_DEFAULT_FILE_CONTENT: string = ConstVisuals.HtmlDefaultContent;
 
   public readonly JSON_FILE_PATH: string;
   public JSON_FILE_CONTENT: visualJson = ConstVisuals.getVisualsJsonContent();
@@ -83,9 +83,9 @@ export abstract class AbstractGeneralVisual {
       this.getDirPath(),
       this.SCRIPTS_RELATIVE_PATH
     );
-    this.LIB_PATH = StringComposeWriter.concatenatePaths(
+    this.IMG_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
-      this.LIB_RELATIVE_PATH
+      this.IMG_RELATIVE_PATH
     );
     this.STYLES_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
@@ -113,7 +113,12 @@ export abstract class AbstractGeneralVisual {
   public getName(): string {
     return this.JSON_FILE_CONTENT.visual.name;
   }
-
+  /**
+   * @description return if the visual has to auto import the assets
+   */
+  public getAssetsAutoImport(): boolean{
+    return this.JSON_FILE_CONTENT.visual.assetsAutoImport;
+  }
   /**
    * @description get the visual project type
    */
@@ -135,21 +140,26 @@ export abstract class AbstractGeneralVisual {
   /**
    * @description get the visual styles folder path
    */
-  public getStylesDirPath(): string {
+  public getAssetsCssDirPath(): string {
     return this.STYLES_PATH;
+  }
+  public getAssetsAllCssFilesPaths(): string[] {
+    return FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsCssDirPath() ) );
+  }
+  /**
+   * @description get the visual scripts folder path
+   */
+  public getAssetsJsDirPath(): string {
+    return this.SCRIPTS_PATH;
+  }
+  public getAssetsAllJsFilesPaths(): string[] {
+    return FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsJsDirPath() ) );
   }
   /**
    * @description get the visual lib folder path 
    */
-  public getLibDirPath(): string {
-    return this.LIB_PATH;
-  }
-  /**
-   * @description get the path to the directory of an element added in the visual lib
-   * @param libElemName the name of the element inside the lib
-   */
-  public getLibElemDirPath(libElemName: string): string {
-    return StringComposeWriter.concatenatePaths(this.LIB_PATH, libElemName);
+  public getAssetsImgDirPath(): string {
+    return this.IMG_PATH;
   }
   /**
    * @description get the lib dependencies of the current visual
@@ -163,12 +173,7 @@ export abstract class AbstractGeneralVisual {
   public getStylesDependencies(): string[]{
     return this.JSON_FILE_CONTENT.dependencies.styles;
   }
-  /**
-   * @description get the visual scripts folder path
-   */
-  public getScriptsDirPath(): string {
-    return this.SCRIPTS_PATH;
-  }
+  
   /**
    * @description return the current visual scripts dependencies
    */

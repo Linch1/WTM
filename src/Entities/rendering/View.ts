@@ -9,9 +9,9 @@ import { ConstViews } from "../../Constants/const.views";
 export class View extends AbstractGeneralView {
   constructor( parentAbsPath : string, pageName: string, projectType: ProjectTypes) {
 
-    let viewsDefaultFolder: string = ConstViews.viewsDirectory;
-    let viewsDefaultPrefix: string = ConstViews.viewsPrefix;
-    let viewsDefaultJsonFolder: string = ConstViews.viewsJsonDirectory;
+    let viewsDefaultFolder: string = ConstViews.Directory;
+    let viewsDefaultPrefix: string = ConstViews.Prefix;
+    let viewsDefaultJsonFolder: string = ConstViews.JsonDirectory;
 
     let extension: extensions = checkMapProjectTypeToExtension(projectType);
 
@@ -28,8 +28,8 @@ export class View extends AbstractGeneralView {
     extension = extension.trim() as extensions;
 
     let currentViewJsonPath = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/${pageName.toLowerCase().split(" ").join("-")}.json`);
-    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultJsonFolder, ConstViews.viewsCommonJsonFile);
-    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${ConstViews.viewsCommonContentFileName}.${extension}`);
+    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultJsonFolder, ConstViews.CommonJsonFile);
+    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${ConstViews.CommonContentFileName}.${extension}`);
     
     super(
       pageName,

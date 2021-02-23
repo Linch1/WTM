@@ -1,6 +1,13 @@
 import { TestTheme } from "./Test/TestTheme";
 import { TestVisual } from "./Test/TestVisual";
 import { TestCustomRender } from "./Test/TestCustomRender";
+import { FileReader } from "./files";
+
+let tree = FileReader.readFolderTree("./", [".git", "node_modules", "dist"]);
+console.log( tree )
+FileReader.printFolderTree(tree)
+let paths = FileReader.folderTreePaths(tree);
+console.log( paths );
 
 // TestCustomRender.createView();
 // TestCustomRender.addBlockInTemplate();

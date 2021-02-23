@@ -24,11 +24,11 @@ export class Template extends AbstractGeneralView {
     );
     let viewsDefaultJsonFolderPath: string = themeAux.getPathInsideJsonFolder(pagePath.PAGE);
     let viewsCommonJsonPath: string = themeAux.getPathInsideJsonFolder(
-      ConstViews.viewsJsonDirectory,
-      `${ConstWordpress.wpTemplatePrefix}-${ConstViews.viewsCommonJsonFile}` // if the prefix is removed the singles common file and templates common file overlaps ( becouse they use the same name )
+      ConstViews.JsonDirectory,
+      `${ConstWordpress.wpTemplatePrefix}-${ConstViews.CommonJsonFile}` // if the prefix is removed the singles common file and templates common file overlaps ( becouse they use the same name )
     );
     let viewsCommonDefaultBuildPath: string = themeAux.getPathInsideThemeFolder(
-      `${ConstViews.viewsCommonContentFileName}.${MapProjectTypeToExtension[projectType]}`
+      `${ConstViews.CommonContentFileName}.${MapProjectTypeToExtension[projectType]}`
     );
     
     super(

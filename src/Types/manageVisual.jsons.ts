@@ -6,10 +6,21 @@ export type visualJsonIdentifiers = {
   [key in  keyof typeof renderTypes]: { [key in identifierActions] : { [key: string]: identifiersAttributesType } }
 };
 
+export type visualJsonLib = {
+  scripts: string[],
+  styles: string[],
+  cdn: string[],
+  url: string;
+}
+
 export type visualJson = {
   visual: {
     name: string;
     projectType: ProjectTypes;
+    assetsAutoImport: boolean; // allow the automatical import of js/css files of the visual
+    author: string;
+    autorhUrl: string;
+    githubRepo: string;
   };
   identifiers: visualJsonIdentifiers;
   dependencies: {
@@ -17,10 +28,7 @@ export type visualJson = {
     styles: string[];
   },
   lib: {
-    [key: string] : {
-      scripts: string[],
-      styles: string[]
-    }
+    [key: string] : visualJsonLib
   },
   connected: {
     -readonly [ projectType in  keyof typeof ProjectTypes]?: {

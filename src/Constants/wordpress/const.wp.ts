@@ -15,7 +15,7 @@ Template Name: [WTM-PLACEHOLDER-PAGE-NAME]
 Template Post Type: page
 */
 ?>
-${ConstViews.viewsCommonContent}`; //  content of wordpress templates
+${ConstViews.CommonContent}`; //  content of wordpress templates
   static wpSinglesDirectory = ""; // wp singles are in the theme root
   static wpSinglePrefix = "single-";
   static wpSingleCommonContent = `
@@ -25,5 +25,5 @@ Template Name: [WTM-PLACEHOLDER-PAGE-NAME]
 Template Post Type: post
 */
 ?>
-${ConstViews.viewsCommonContent}`; //  content of wordpress singles
+${ConstViews.CommonContent}`; //  content of wordpress singles
 }

@@ -6,6 +6,7 @@ import { Visual } from "./Visual";
 import { identifierActions, renderTypes } from "../Enums";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
 import { ConstVisuals } from "../Constants";
+import { timeStamp } from "console";
 
 export class VisualWriter {
 
@@ -25,9 +26,9 @@ export class VisualWriter {
     
     FileWriter.createDirectory(visualPath);
     FileWriter.createDirectory(this.visual.getAssetsDirPath());
-    FileWriter.createDirectory(this.visual.getScriptsDirPath());
-    FileWriter.createDirectory(this.visual.getStylesDirPath());
-    FileWriter.createDirectory(this.visual.getLibDirPath());
+    FileWriter.createDirectory(this.visual.getAssetsJsDirPath());
+    FileWriter.createDirectory(this.visual.getAssetsCssDirPath());
+    FileWriter.createDirectory(this.visual.getAssetsImgDirPath());
 
     FileWriter.createFile(
       this.visual.RENDER_FILE_PATH,
@@ -48,6 +49,28 @@ export class VisualWriter {
       JSON.stringify(this.visual.JSON_FILE_CONTENT)
     );
   }
+
+  public setName(name: string){
+    this.visual.JSON_FILE_CONTENT.visual.name = name;
+    this.saveJson();
+  }
+  public setAuthor(author: string){
+    this.visual.JSON_FILE_CONTENT.visual.author = author;
+    this.saveJson();
+  }
+  public setAssetsAutoImport(autoImport: boolean){
+    this.visual.JSON_FILE_CONTENT.visual.assetsAutoImport = autoImport;
+    this.saveJson();
+  }
+  public setAuthorUrl(url: string){
+    this.visual.JSON_FILE_CONTENT.visual.autorhUrl = url;
+    this.saveJson();
+  }
+  public setGithubRepo(name: string){
+    this.visual.JSON_FILE_CONTENT.visual.name = name;
+    this.saveJson();
+  }
+
   /**
    * @description add the passed path as style dependency in the visual json
    * @param path 
@@ -81,6 +104,24 @@ export class VisualWriter {
     this.initializeLibElem(elemName);
     this.visual.JSON_FILE_CONTENT.lib[elemName].styles.push(path);
     this.saveJson();
+  }
+  public importAllCss(): void{
+    let cssPaths = this.visual.getAssetsAllCssFilesPaths();
+    for ( let cssPath of cssPaths ){
+      this.addStyle( cssPath );
+    }
+  }
+  public importAllJs(): void{
+    let jsPaths = this.visual.getAssetsAllJsFilesPaths();
+    for ( let jsPath of jsPaths ){
+      this.addScript( jsPath );
+    }
+  }
+  public importAllCssAndJs(): void{
+    if( this.visual.getAssetsAutoImport() ){
+      this.importAllCss();
+      this.importAllJs();
+    }
   }
   /**
    * @description initalize the lib-elem dependencies if the elem is not yet present
@@ -122,6 +163,7 @@ export class VisualWriter {
       JSON.stringify(this.visual.JSON_FILE_CONTENT)
     );
   }
+  
 
   /**
    * @description replace the current default html with the passed one

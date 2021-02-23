@@ -1,13 +1,19 @@
 import { Identifiers, StringComposeWriter } from "..";
+import { ConstProjects, ConstVisuals } from "../Constants";
 import { identifierActions, identifierToClass, identifierType, IncludeFunctions, ProjectTypes } from "../Enums";
 import { renderTypes } from "../Enums/manageVisual.renderType";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
+import { Project } from "../ManageProjects";
 import { identifiersAttributesType, visualJson } from "../Types";
 import { replaceIdentifiersParams } from "../Types/files.StringComposerWriter.replaceIdentifiers";
 import { Visual } from "./Visual";
 
 class VisualConverter {
+
+  public DEFAULT_PLACEHOLDER_IDENDIFIERS: { [key: string]: string } = { }; // populated in replaceDefaultPlaceholderIdentifiers
+  
+
   constructor(public visual: Visual) {}
 
   /**
@@ -15,14 +21,16 @@ class VisualConverter {
    * with the identifiers HTML values inside **WTM.json**.
    * then the new html obtained by this operation is wrote inside **render.##**
    */
-  render(type: renderTypes) {
+  render(type: renderTypes, project?:Project) {
     if (!this.visual.isCreated())
       throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
     let html: string = FileReader.readFile(this.visual.DEFAULT_FILE_PATH);
     let json: visualJson = JSON.parse(
       FileReader.readFile(this.visual.JSON_FILE_PATH)
     );
-    let newHtml: string = this.replaceAllStaticIdentifiers(
+    let newHtml: string;
+    if( project ) newHtml = this.replaceDefaultPlaceholderIdentifiers(html, project);
+    newHtml = this.replaceAllStaticIdentifiers(
       html,
       type,
       json.identifiers[type][identifierActions.STATIC]
@@ -164,6 +172,37 @@ class VisualConverter {
       );
       text = text.replace( regex, newContent);
     });
+    return text;
+  }
+
+  /**
+   * @description replace all the default identifiers with the default value
+   * - the default identifiers are inside the object 'this.DEFAULT_PLACEHOLDER_IDENDIFIERS'
+   * @param text the text that contains the identifiers to replace
+   */
+  replaceDefaultPlaceholderIdentifiers(
+    text: string,
+    project: Project
+  ): string {
+    
+    // [WTM-PLACEHOLDER-VS-ASSETS-IMAGES]
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToImages] = this.visual.getAssetsImgDirPath();
+    // [WTM-PLACEHOLDER-PJ-ASSETS]
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssets] = project.getPorjectAssetsPath();
+    // [WTM-PLACEHOLDER-PJ-ASSETS-IMAGES]
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsImages] = project.getPorjectAssetsImgPath();
+    // [WTM-PLACEHOLDER-PJ-ASSETS-JS]
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsJs] = project.getPorjectAssetsJsPath();
+    // [WTM-PLACEHOLDER-PJ-ASSETS-CSS]
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsCss] = project.getPorjectAssetsCssPath();
+    // [WTM-PLACEHOLDER-PJ-PATH]
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectDir] = project.getPath();
+
+    let identifiersNames = Object.keys(this.DEFAULT_PLACEHOLDER_IDENDIFIERS);
+    for ( let identifierName of identifiersNames ){
+      let regex = Identifiers.getRegexPlaceholderIdentifierWhitName( identifierName );
+      text = text.replace( regex, this.DEFAULT_PLACEHOLDER_IDENDIFIERS[identifierName]);
+    }
     return text;
   }
 }

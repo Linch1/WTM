@@ -4,13 +4,13 @@ import { functionsJsonKeys, importsJsonKeys } from "../Enums/manageTheme.jsons";
 import { FileReader } from "../files/FileReader";
 import { FileWriter } from "../files/FileWriter";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { nestedStringsArrays } from "../Types/files.FileReader";
+import { folderObject } from "../Types";
 import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
 
 class Theme {
   public ERR_PATH_ALREADY_PRESERNT = "ERR: The given path is already required/imported"
 
-  public themeStructure: nestedStringsArrays = [];
+  public themeStructure: folderObject;
   public readonly IMPORT_STYLES_FUNCTION_NAME: string = ConstWordpressTheme.FunctionAddStyle;
   public readonly IMPORT_FONTS_FUNCTION_NAME: string = ConstWordpressTheme.FunctionAddFonts;
   public readonly IMPORT_SCRIPTS_FUNCTION_NAME: string = ConstWordpressTheme.FunctionAddScripts;

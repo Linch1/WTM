@@ -10,7 +10,13 @@ export class Project{
     
     public PROJECT_JSON_FILE_PATH: string;
     public PROJECT_JSON_DIR_PATH: string;
-    
+
+    public PROJECT_ASSETS_DIR_PATH: string;
+    public PROJECT_ASSETS_JS_DIR_PATH: string;
+    public PROJECT_ASSETS_CSS_DIR_PATH: string;
+    public PROJECT_ASSETS_IMG_DIR_PATH: string;
+    public PROJECT_ASSETS_LIB_DIR_PATH: string;
+
     /**
      * @description
      * @param PROJECT_JSON_INFORMATIONS the initial informations with which the project is created
@@ -26,7 +32,27 @@ export class Project{
         this.PROJECT_JSON_FILE_PATH = StringComposeWriter.concatenatePaths(
             this.PROJECT_JSON_DIR_PATH,
             ConstProjects.jsonProjectFile
-        )
+        );
+        this.PROJECT_ASSETS_DIR_PATH = StringComposeWriter.concatenatePaths(
+            this.PROJECT_JSON_DIR_PATH,
+            ConstProjects.projectAssetsDirectory
+        );
+        this.PROJECT_ASSETS_JS_DIR_PATH = StringComposeWriter.concatenatePaths(
+            this.PROJECT_ASSETS_DIR_PATH,
+            ConstProjects.projectAssetsJsDirectory
+        );
+        this.PROJECT_ASSETS_CSS_DIR_PATH = StringComposeWriter.concatenatePaths(
+            this.PROJECT_ASSETS_DIR_PATH,
+            ConstProjects.projectAssetsCssDirectory
+        );
+        this.PROJECT_ASSETS_IMG_DIR_PATH = StringComposeWriter.concatenatePaths(
+            this.PROJECT_ASSETS_DIR_PATH,
+            ConstProjects.projectAssetsImgDirectory
+        );
+        this.PROJECT_ASSETS_LIB_DIR_PATH = StringComposeWriter.concatenatePaths(
+            this.PROJECT_ASSETS_DIR_PATH,
+            ConstProjects.projectAssetsLibDirectory
+        );
         this.initalize();
     }
 
@@ -34,6 +60,11 @@ export class Project{
         FileWriter.createDirectory(this.PROJECT_JSON_DIR_PATH);
         FileWriter.createDirectory(this.getViewsPath());
         FileWriter.createDirectory(this.getVisualsPath());
+        FileWriter.createDirectory(this.getPorjectAssetsPath());
+        FileWriter.createDirectory(this.getPorjectAssetsLibPath());
+        FileWriter.createDirectory(this.getPorjectAssetsCssPath());
+        FileWriter.createDirectory(this.getPorjectAssetsImgPath());
+        FileWriter.createDirectory(this.getPorjectAssetsJsPath());
         FileWriter.createFile(this.PROJECT_JSON_FILE_PATH, JSON.stringify(this.PROJECT_JSON_INFORMATIONS));
     }
     public saveJson(){
@@ -57,6 +88,24 @@ export class Project{
     public getVisualsPath(): string{
         return this.PROJECT_JSON_INFORMATIONS.visualsPath;
     }
+    public getPorjectAssetsPath(): string{
+        return this.PROJECT_ASSETS_DIR_PATH;
+    }
+    public getPorjectAssetsLibPath(): string{
+        return this.PROJECT_ASSETS_LIB_DIR_PATH;
+    }
+    public getPorjectAssetsImgPath(): string{
+        return this.PROJECT_ASSETS_IMG_DIR_PATH;
+    }
+    public getPorjectAssetsCssPath(): string{
+        return this.PROJECT_ASSETS_CSS_DIR_PATH;
+    }
+    public getPorjectAssetsJsPath(): string{
+        return this.PROJECT_ASSETS_JS_DIR_PATH;
+    }
+    /**
+     * @description returns the path to the project directory ( not the WTM-PROJECT directory )
+     */
     public getPath(): string{
         return this.PROJECT_JSON_INFORMATIONS.path;
     }
@@ -124,7 +173,7 @@ export class Project{
         for ( let i = 0; i<dep.length; i++){
             let path = dep[i]
             // if is relative visual path add the visual abs path at the start
-            if( path.startsWith('./') || !path.includes('/') ) {
+            if( path.startsWith('./') ) {
                 path = path.replace('./', '');
                 path = StringComposeWriter.concatenatePaths( basePath, path )
                 dep[i] = path;
@@ -142,8 +191,8 @@ export class Project{
             let stylesDep: string[] = visual.getStylesDependencies();
             let scriptsDep: string[] = visual.getScriptsDependencies();
 
-            stylesDep = this.parseVisualStringArrayOfDependencies(visual.getStylesDirPath(), stylesDep);
-            scriptsDep = this.parseVisualStringArrayOfDependencies(visual.getScriptsDirPath(), scriptsDep);
+            stylesDep = this.parseVisualStringArrayOfDependencies(visual.getAssetsCssDirPath(), stylesDep);
+            scriptsDep = this.parseVisualStringArrayOfDependencies(visual.getAssetsJsDirPath(), scriptsDep);
 
             if( stylesDep.length || scriptsDep.length ){
                 this.PROJECT_JSON_INFORMATIONS.visualsDependencies[visual.getName()] = {
@@ -157,51 +206,51 @@ export class Project{
     /**
      * @description repopulate the object that contains the visuals libraries for update it
      */
-    public refreshVisualsLib(){
-        this.PROJECT_JSON_INFORMATIONS.visualsLib = {}; // reset the object with the dependencies
-        let projectVisuals = new BulkVisual(this.getVisualsPath(), this.getProjectType()).getAllVisualsFiltered();
-        for ( let visual of projectVisuals){
-            let visualLibs = visual.getLibDependencies();
-            for ( let elemName of Object.keys(visualLibs) ){
-                let libScripts = visualLibs[elemName].scripts;
-                let libStyles = visualLibs[elemName].styles;
-                libStyles = this.parseVisualStringArrayOfDependencies(visual.getLibElemDirPath(elemName), libScripts);
-                libScripts = this.parseVisualStringArrayOfDependencies(visual.getLibElemDirPath(elemName), libStyles);
-                if( !this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName] ) 
-                    this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName] = ConstProjects.getVisualsLibElemContent();
+    // public refreshVisualsLib(){
+    //     this.PROJECT_JSON_INFORMATIONS.visualsLib = {}; // reset the object with the dependencies
+    //     let projectVisuals = new BulkVisual(this.getVisualsPath(), this.getProjectType()).getAllVisualsFiltered();
+    //     for ( let visual of projectVisuals){
+    //         let visualLibs = visual.getLibDependencies();
+    //         for ( let elemName of Object.keys(visualLibs) ){
+    //             let libScripts = visualLibs[elemName].scripts;
+    //             let libStyles = visualLibs[elemName].styles;
+    //             libStyles = this.parseVisualStringArrayOfDependencies(visual.getLibElemDirPath(elemName), libScripts);
+    //             libScripts = this.parseVisualStringArrayOfDependencies(visual.getLibElemDirPath(elemName), libStyles);
+    //             if( !this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName] ) 
+    //                 this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName] = ConstProjects.getVisualsLibElemContent();
 
-                let savedLibScripts = this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].scripts;
-                let savedLibStyles = this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].styles;
-                // reverse loop on scripts to check if a file of the same lib was already importes
-                for ( let i = 0; i < libScripts.length; i++ ){
-                    let libElem = libScripts[ libScripts.length - 1 - i ];
-                    for ( let j = 0; j < savedLibScripts.length; j++){
-                        let savedLibElem = savedLibScripts[ savedLibScripts.length - 1 - j ];
-                        let alreadyImported = StringComposeReader.checkLibPathsSameEnd(savedLibElem, libElem);
-                        if ( alreadyImported ) {
-                            libScripts.splice(libScripts.length - 1 - i, 1);
-                            break;
-                        }
-                    }
-                }
-                // reverse loop on styles to check if a file of the same lib was already importes
-                for ( let i = 0; i < libStyles.length; i++ ){
-                    let libElem = libStyles[ libStyles.length - 1 - i ];
-                    for ( let j = 0; j < savedLibStyles.length; j++){
-                        let savedLibElem = savedLibStyles[ savedLibStyles.length - 1 - j ];
-                        let alreadyImported = StringComposeReader.checkLibPathsSameEnd(savedLibElem, libElem);
-                        if ( alreadyImported ) {
-                            libStyles.splice(libStyles.length - 1 - i, 1);
-                            break;
-                        }
-                    }
-                }
+    //             let savedLibScripts = this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].scripts;
+    //             let savedLibStyles = this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].styles;
+    //             // reverse loop on scripts to check if a file of the same lib was already importes
+    //             for ( let i = 0; i < libScripts.length; i++ ){
+    //                 let libElem = libScripts[ libScripts.length - 1 - i ];
+    //                 for ( let j = 0; j < savedLibScripts.length; j++){
+    //                     let savedLibElem = savedLibScripts[ savedLibScripts.length - 1 - j ];
+    //                     let alreadyImported = StringComposeReader.checkLibPathsSameEnd(savedLibElem, libElem);
+    //                     if ( alreadyImported ) {
+    //                         libScripts.splice(libScripts.length - 1 - i, 1);
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //             // reverse loop on styles to check if a file of the same lib was already importes
+    //             for ( let i = 0; i < libStyles.length; i++ ){
+    //                 let libElem = libStyles[ libStyles.length - 1 - i ];
+    //                 for ( let j = 0; j < savedLibStyles.length; j++){
+    //                     let savedLibElem = savedLibStyles[ savedLibStyles.length - 1 - j ];
+    //                     let alreadyImported = StringComposeReader.checkLibPathsSameEnd(savedLibElem, libElem);
+    //                     if ( alreadyImported ) {
+    //                         libStyles.splice(libStyles.length - 1 - i, 1);
+    //                         break;
+    //                     }
+    //                 }
+    //             }
 
-                this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].visuals.push(visual.getName());
-                this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].scripts.push(...libScripts);
-                this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].styles.push(...libStyles);
-            }
-        }
-    }
+    //             this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].visuals.push(visual.getName());
+    //             this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].scripts.push(...libScripts);
+    //             this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].styles.push(...libStyles);
+    //         }
+    //     }
+    // }
 
 }

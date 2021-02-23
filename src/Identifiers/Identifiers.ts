@@ -30,12 +30,19 @@ export class Identifiers {
     }
     return false;
   }
+  /**
+   * @description returns the regex for a specific placeholder identifier with name
+   * @param identifierName the identifier name
+   */
+  static getRegexPlaceholderIdentifierWhitName(identifierName: string): RegExp {
+    return new RegExp(`\/\/\\[WTM-${identifierType.PLACEHOLDER}-${identifierName}\]`, "g");
+  }
 
   /**
    * @description return a list containg the regex expression for find the identifiers inside a string
    * @param identifierAction the action category of the identifiers to retrive
    */
-  static getIdentifiersRegex(identifierAction: identifierActions): RegExp[] {
+  static getIdentifiersWithActionRegex(identifierAction: identifierActions): RegExp[] {
     let identifiersRegex = [];
     for(let action in identifierActions){
       let actionVal: identifierActions = (<any>identifierActions)[action];
@@ -66,7 +73,7 @@ export class Identifiers {
    */
   static getContainedIdentifiers(filePath: string, identifierAction: identifierActions): string[] {
     let text = FileReader.readFile(filePath);
-    let identifiersRegex: RegExp[] = this.getIdentifiersRegex(identifierAction);
+    let identifiersRegex: RegExp[] = this.getIdentifiersWithActionRegex(identifierAction);
     let foundIdentifiers: string[] = [];
 
     for (let regex of identifiersRegex) {

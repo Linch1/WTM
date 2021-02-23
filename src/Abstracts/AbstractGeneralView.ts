@@ -17,13 +17,13 @@ export abstract class AbstractGeneralView {
     "ERR: Before calling this method create the view with the .create() method";
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
 
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = ConstViews.viewsIdentifierPageName;
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = ConstViews.viewsIdentifierPageHeader;
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = ConstViews.viewsIdentifierPageFooter;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = ConstViews.IdentifierPageName;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = ConstViews.IdentifierPageHeader;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = ConstViews.IdentifierPageFooter;
 
   public JSON_INFORMATIONS: informationsJson = ConstViews.getViewsJsonInformations();
   public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonInformations();
-  public COMMON_DEFAULT_BUILD = ConstViews.viewsCommonContent; // modified in wp themes and singles
+  public COMMON_DEFAULT_BUILD = ConstViews.CommonContent; // modified in wp themes and singles
 
   /**
    * 
@@ -210,7 +210,7 @@ export abstract class AbstractGeneralView {
     let blocks = this.getBlocks();
     this.reCreateBlocksRecursive(
       blocks,
-      ConstViews.viewsCommonBaseBlock
+      ConstViews.CommonBaseBlock
     );
 
   }

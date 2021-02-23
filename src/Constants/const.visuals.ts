@@ -6,30 +6,39 @@ import { visualJson, visualJsonIdentifiers } from "../Types/manageVisual.jsons";
  */
 export class ConstVisuals {
 
-  static visualsDirectory = "WTM-VISUALS"; // visuals directory
-  static visualsJsonFile = "WTM.json"; // the json file name of each visual
-  static visualsHtmlDefaultFileName = "default"; // the 'default.--' file of each visual
-  static visualsHtmlDefaultContent = ""; // default content used to intialize the visual 'default.--' file
-  static visualsHtmlRenderFileName = "render"; // the 'render.--' file of each visual
-  static visualsHtmlRenderContent = ""; // default content used to intialize the visual 'render.--' file
-  static visualsAssetsDirectory = "assets"; // the 'assets' directory of each visual
-  static visualsAssetsCssDirectory = "css"; // the 'css' directory of each visual ( this folder is inside the 'assets' directory )
-  static visualsAssetsJsDirectory = "js"; // the 'js' directory of each visual ( this folder is inside the 'assets' directory )
-  static visualsAssetsLibDirectory = "lib"; // the 'lib' directory of each visual ( this folder is inside the 'assets' directory )
-  static visualsJsonIdentifiersContent: visualJsonIdentifiers = {
+  static Directory = "WTM-VISUALS"; // visuals directory
+  static JsonFile = "WTM.json"; // the json file name of each visual
+  static HtmlDefaultFileName = "default"; // the 'default.--' file of each visual
+  static HtmlDefaultContent = ""; // default content used to intialize the visual 'default.--' file
+  static HtmlRenderFileName = "render"; // the 'render.--' file of each visual
+  static HtmlRenderContent = ""; // default content used to intialize the visual 'render.--' file
+  static AssetsDirectory = "assets"; // the 'assets' directory of each visual
+  static AssetsCssDirectory = "css"; // the 'css' directory of each visual ( this folder is inside the 'assets' directory )
+  static AssetsJsDirectory = "js"; // the 'js' directory of each visual ( this folder is inside the 'assets' directory )
+  static AssetsImgDirectory = "img"; // the 'js' directory of each visual ( this folder is inside the 'assets' directory )
+  static IdentifierPlaceholderNamePathToImages = "VS-ASSETS-IMAGES" // the path ends without '/'. This placeholder when the visual is rendered is replaced with the path to the visuals images folder. 
+  static JsonIdentifiersContent: visualJsonIdentifiers = {
     HTML: {
       "!STATIC!": {},
       "!ALL!": {},
       "!EXEC!": {},
     }
   }; // the default identifiers content of the json file ( 'WTM.json' ) of each visual
-  static visualsLibElemContent = {
+  static LibElemContent = {
     scripts: [],
-    styles: []
+    styles: [],
+    cdn: []
   } // the content the visuals of a lib elemenets
-  static visualsJsonContent: visualJson = {
-    visual: { name: "", projectType: ProjectTypes.ejs },
-    identifiers: ConstVisuals.visualsJsonIdentifiersContent,
+  static JsonContent: visualJson = {
+    visual: { 
+      name: "", 
+      projectType: ProjectTypes.ejs,
+      assetsAutoImport: false,
+      author: "",
+      autorhUrl: "",
+      githubRepo: ""
+    },
+    identifiers: ConstVisuals.JsonIdentifiersContent,
     dependencies: {
       scripts: [],
       styles: [],
@@ -39,12 +48,14 @@ export class ConstVisuals {
   }; // the default content of each visual json file ( 'WTM.json' )
 
   static getVisualsJsonContent(): visualJson {
-    return JSON.parse( JSON.stringify( ConstVisuals.visualsJsonContent ) );
+    return JSON.parse( JSON.stringify( ConstVisuals.JsonContent ) );
   }
   static getVisualsLibElemContent(): {
     scripts: [],
-    styles: []
+    styles: [],
+    cdn: [],
+    url: ""
   } {
-    return JSON.parse( JSON.stringify( ConstVisuals.visualsLibElemContent ) );
+    return JSON.parse( JSON.stringify( ConstVisuals.LibElemContent ) );
   }
 }
