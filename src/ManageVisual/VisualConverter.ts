@@ -91,7 +91,7 @@ class VisualConverter {
   getVisualBasedOnType( visualTargetName: string, projectType: ProjectTypes): Visual | undefined{
     let visualTargetObjectBasedOneProjectTypeRenderPath: undefined | Visual = undefined;
 
-    visualTargetObjectBasedOneProjectTypeRenderPath = new Visual( this.visual.getVisualsPath(), visualTargetName, projectType );
+    visualTargetObjectBasedOneProjectTypeRenderPath = new Visual( this.visual.getVisualsPath(), { name: visualTargetName, projectType: projectType } );
     if( !visualTargetObjectBasedOneProjectTypeRenderPath.isCreated() ) return undefined;
     else return visualTargetObjectBasedOneProjectTypeRenderPath;
   }
@@ -109,7 +109,7 @@ class VisualConverter {
       if( visualBasedOnType ) {
         includeStatement = IncludeFunctions.include(visualBasedOnType.getRenderFilePath(), this.visual.getProjectType(), false);
       } else {
-        let visualTargetObject = new Visual( this.visual.getVisualsPath(), visualTarget );
+        let visualTargetObject = new Visual( this.visual.getVisualsPath(), { name: visualTarget } );
         includeStatement = IncludeFunctions.include(visualTargetObject.getRenderFilePath(), this.visual.getProjectType(), false);
       }
     }

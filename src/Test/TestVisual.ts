@@ -10,8 +10,8 @@ import { ProjectTypes } from "../Enums";
 
 
 let visualsFolder = "/home/pero/projects/WTM/LIB/visual"
-let testVisual = visualsFolder + "/testVisual-php";
-let visual: Visual = new Visual(testVisual, ProjectTypes.wordpress);
+let testVisual = "testVisual-php";
+let visual: Visual = new Visual(visualsFolder, { name: testVisual, projectType: ProjectTypes.wordpress});
 let visualWr: VisualWriter = visual.writer;
 let visualRd: VisualReader = visual.reader;
 let visualCv: VisualConverter= visual.converter;

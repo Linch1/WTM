@@ -35,7 +35,7 @@ export class ConstVisuals {
       projectType: ProjectTypes.ejs,
       assetsAutoImport: false,
       author: "",
-      autorhUrl: "",
+      authorUrl: "",
       githubRepo: ""
     },
     identifiers: ConstVisuals.JsonIdentifiersContent,

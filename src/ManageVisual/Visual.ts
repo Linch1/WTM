@@ -4,6 +4,7 @@ import { VisualConverter } from "./VisualConverter";
 import { VisualReader } from "./VisualReader";
 import { VisualWriter } from "./VisualWriter";
 import { ProjectTypes } from "../Enums";
+import { visualJsonScheletonAsParam } from "../Types/manageVisual.jsons";
 
 export class Visual extends AbstractGeneralVisual {
   public reader: VisualReader;
@@ -18,8 +19,8 @@ export class Visual extends AbstractGeneralVisual {
    * - if this field is empty the project type will be automatically take from the visual json ( if it already exists )
    * - else an error will be thrown
    */
-  constructor(public VISUALS_FOLDER: string, public VISUAL_NAME: string, projectType: ProjectTypes = ProjectTypes.html) {
-    super(VISUALS_FOLDER, VISUAL_NAME, projectType);
+  constructor(public VISUALS_FOLDER: string, public VISUAL_SCHELETON: visualJsonScheletonAsParam) {
+    super(VISUALS_FOLDER, VISUAL_SCHELETON);
     this.reader = new VisualReader(this);
     this.writer = new VisualWriter(this);
     this.converter = new VisualConverter(this);
@@ -40,7 +41,7 @@ export class Visual extends AbstractGeneralVisual {
     this.converter.render(renderType);
   }
   public getFallbackVisual(): Visual | undefined{
-    let fbVisual = new Visual(this.getVisualsPath(), this.getName(), ProjectTypes.html);
+    let fbVisual = new Visual(this.getVisualsPath(), { name: this.getName(), projectType: ProjectTypes.html });
     if( fbVisual.isCreated() ) return fbVisual;
     else return undefined;
   }

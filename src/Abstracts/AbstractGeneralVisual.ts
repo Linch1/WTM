@@ -1,7 +1,7 @@
 import { FileReader } from "../files/FileReader";
 import { StringComposeReader } from "../files/StringComposeReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { visualJson } from "../Types/manageVisual.jsons";
+import { visualJson, visualJsonScheletonAsParam } from "../Types/manageVisual.jsons";
 import { extensions, ProjectTypes } from "../Enums";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
 import { ConstVisuals } from "../Constants/const.visuals";
@@ -53,16 +53,23 @@ export abstract class AbstractGeneralVisual {
    * @param VISUAL_NAME the name of the visual to create
    * @param projectType the typo of the project where the visual will be included
    */
-  constructor(public VISUALS_FOLDER: string, public VISUAL_NAME: string, projectType: ProjectTypes = ProjectTypes.html) {
+  constructor(public VISUALS_FOLDER: string, public VISUAL_SCHELETON: visualJsonScheletonAsParam) {
     
-    this.VISUAL_FOLDER = StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, this.VISUAL_NAME);
-    this.JSON_FILE_CONTENT.visual.name = this.VISUAL_NAME;
-    this.JSON_FILE_CONTENT.visual.projectType = projectType as ProjectTypes;
+    if( !this.VISUAL_SCHELETON.projectType ) this.VISUAL_SCHELETON.projectType = ProjectTypes.html;
+    if( !this.VISUAL_SCHELETON.author ) this.VISUAL_SCHELETON.author = "";
+    if( !this.VISUAL_SCHELETON.authorUrl ) this.VISUAL_SCHELETON.authorUrl = "";
+    if( !this.VISUAL_SCHELETON.githubRepo ) this.VISUAL_SCHELETON.githubRepo = "";
+    if( !this.VISUAL_SCHELETON.assetsAutoImport ) this.VISUAL_SCHELETON.assetsAutoImport = false;
+    //@ts-ignore the properties will be always defined, this error is skippable
+    this.JSON_FILE_CONTENT.visual = this.VISUAL_SCHELETON;
+
+    this.VISUAL_FOLDER = StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, this.getName());
+    
     this.JSON_FILE_PATH = StringComposeWriter.concatenatePaths(
       this.getDirPath(),
       this.JSON_FILE_NAME
     );
-    if( !FileReader.existsPath(this.JSON_FILE_PATH) && !projectType ){
+    if( !FileReader.existsPath(this.JSON_FILE_PATH) && !this.getProjectType() ){
       throw new Error(this.WERR_NO_PROJECT_TYPE_PROVIDED);
     }
 

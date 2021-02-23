@@ -63,7 +63,7 @@ export class VisualWriter {
     this.saveJson();
   }
   public setAuthorUrl(url: string){
-    this.visual.JSON_FILE_CONTENT.visual.autorhUrl = url;
+    this.visual.JSON_FILE_CONTENT.visual.authorUrl = url;
     this.saveJson();
   }
   public setGithubRepo(name: string){

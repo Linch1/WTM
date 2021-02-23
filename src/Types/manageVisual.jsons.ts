@@ -13,15 +13,25 @@ export type visualJsonLib = {
   url: string;
 }
 
+export type visualJsonScheleton = {
+  name: string;
+  projectType: ProjectTypes;
+  assetsAutoImport: boolean; // allow the automatical import of js/css files of the visual
+  author: string;
+  authorUrl: string;
+  githubRepo: string;
+}
+export type visualJsonScheletonAsParam = {
+  name: string;
+  projectType?: ProjectTypes;
+  assetsAutoImport?: boolean; // allow the automatical import of js/css files of the visual
+  author?: string;
+  authorUrl?: string;
+  githubRepo?: string;
+}
+
 export type visualJson = {
-  visual: {
-    name: string;
-    projectType: ProjectTypes;
-    assetsAutoImport: boolean; // allow the automatical import of js/css files of the visual
-    author: string;
-    autorhUrl: string;
-    githubRepo: string;
-  };
+  visual: visualJsonScheleton;
   identifiers: visualJsonIdentifiers;
   dependencies: {
     scripts: string[];

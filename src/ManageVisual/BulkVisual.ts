@@ -18,7 +18,7 @@ export class BulkVisual {
         let visuals: Visual[] = []; 
         let visualsFolders = FileReader.getDirectories(this.VISUALS_FOLDER);
         for ( let visualFolder of visualsFolders){
-            visuals.push(new Visual(this.VISUALS_FOLDER, visualFolder, this.projectType));
+            visuals.push(new Visual(this.VISUALS_FOLDER, {name: visualFolder, projectType: this.projectType}));
         }
         return visuals;
     }
@@ -34,7 +34,7 @@ export class BulkVisual {
         let visuals: Visual[] = []; 
         let visualsFolders = FileReader.getDirectories(this.VISUALS_FOLDER);
         for ( let visualFolder of visualsFolders){
-            let visual = new Visual(this.VISUALS_FOLDER, visualFolder, this.projectType);
+            let visual = new Visual(this.VISUALS_FOLDER, {name: visualFolder, projectType: this.projectType});
             if( !visual.isCreated() ){
                 let fbVisual = visual.getFallbackVisual();
                 if( fbVisual ) visual = fbVisual;
@@ -46,7 +46,7 @@ export class BulkVisual {
     }
 
     public findVisual( visualName: string): Visual {
-        return new Visual( this.VISUALS_FOLDER, visualName );
+        return new Visual( this.VISUALS_FOLDER, {name: visualName} );
     }
  
 }
