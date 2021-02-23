@@ -34,8 +34,9 @@ export class Identifiers {
    * @description returns the regex for a specific placeholder identifier with name
    * @param identifierName the identifier name
    */
-  static getRegexPlaceholderIdentifierWhitName(identifierName: string): RegExp {
-    return new RegExp(`\/\/\\[WTM-${identifierType.PLACEHOLDER}-${identifierName}\]`, "g");
+  static getRegexPlaceholderIdentifierWhitName(identifierName: string, addInitialSlash: boolean = false): RegExp {
+    if(addInitialSlash) return new RegExp(`\/\/\\[WTM-${identifierType.PLACEHOLDER}-${identifierName}\]`, "g");
+    else return new RegExp(`\\[WTM-${identifierType.PLACEHOLDER}-${identifierName}\\]`, "g");
   }
 
   /**

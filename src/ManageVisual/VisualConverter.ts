@@ -28,10 +28,10 @@ class VisualConverter {
     let json: visualJson = JSON.parse(
       FileReader.readFile(this.visual.JSON_FILE_PATH)
     );
-    let newHtml: string;
+    let newHtml: string = html;
     if( project ) newHtml = this.replaceDefaultPlaceholderIdentifiers(html, project);
     newHtml = this.replaceAllStaticIdentifiers(
-      html,
+      newHtml,
       type,
       json.identifiers[type][identifierActions.STATIC]
     );
