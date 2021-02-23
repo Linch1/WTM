@@ -151,7 +151,13 @@ export abstract class AbstractGeneralVisual {
     return this.STYLES_PATH;
   }
   public getAssetsAllCssFilesPaths(): string[] {
-    return FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsCssDirPath() ) );
+    let cssFiles = FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsCssDirPath() ) );
+    let parsedFiles: string[] = [];
+    for ( let file of cssFiles ){
+      file = file.replace( this.getAssetsCssDirPath(), "");
+      parsedFiles.push(file) 
+    }
+    return parsedFiles;
   }
   /**
    * @description get the visual scripts folder path
@@ -160,7 +166,13 @@ export abstract class AbstractGeneralVisual {
     return this.SCRIPTS_PATH;
   }
   public getAssetsAllJsFilesPaths(): string[] {
-    return FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsJsDirPath() ) );
+    let jsFiles = FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsJsDirPath() ) );
+    let parsedFiles: string[] = [];
+    for ( let file of jsFiles ){
+      file = file.replace( this.getAssetsJsDirPath(), "");
+      parsedFiles.push(file) 
+    }
+    return parsedFiles;
   }
   /**
    * @description get the visual lib folder path 

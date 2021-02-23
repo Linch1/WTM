@@ -16,7 +16,14 @@ export class ConstVisuals {
   static AssetsCssDirectory = "css"; // the 'css' directory of each visual ( this folder is inside the 'assets' directory )
   static AssetsJsDirectory = "js"; // the 'js' directory of each visual ( this folder is inside the 'assets' directory )
   static AssetsImgDirectory = "img"; // the 'js' directory of each visual ( this folder is inside the 'assets' directory )
-  static IdentifierPlaceholderNamePathToImages = "VS-ASSETS-IMAGES" // the path ends without '/'. This placeholder when the visual is rendered is replaced with the path to the visuals images folder. 
+  
+  static IdentifierPlaceholderNamePathToAssetsImages = "VS-ASSETS-IMAGES";
+  static IdentifierPlaceholderPathToAssetsImages = `[WTM-PLACEHOLDER-${ConstVisuals.IdentifierPlaceholderNamePathToAssetsImages}]`;
+  static IdentifierPlaceholderNamePathToAssetsjs = "VS-ASSETS-JS"; 
+  static IdentifierPlaceholderPathToAssetsJs = `[WTM-PLACEHOLDER-${ConstVisuals.IdentifierPlaceholderNamePathToAssetsjs}]`;
+  static IdentifierPlaceholderNamePathToAssetsCss = "VS-ASSETS-CSS"; 
+  static IdentifierPlaceholderPathToAssetsCss = `[WTM-PLACEHOLDER-${ConstVisuals.IdentifierPlaceholderNamePathToAssetsCss}]`;
+
   static JsonIdentifiersContent: visualJsonIdentifiers = {
     HTML: {
       "!STATIC!": {},

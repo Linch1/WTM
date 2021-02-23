@@ -7,6 +7,7 @@ import { identifierActions, renderTypes } from "../Enums";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
 import { ConstVisuals } from "../Constants";
 import { timeStamp } from "console";
+import { StringComposeWriter } from "../files";
 
 export class VisualWriter {
 
@@ -76,7 +77,9 @@ export class VisualWriter {
    * @param path 
    */
   public addStyle(path: string): void{
-    this.visual.JSON_FILE_CONTENT.dependencies.styles.push(path.trim());
+    path = path.trim();
+    if( this.visual.JSON_FILE_CONTENT.dependencies.styles.includes(path)) return;
+    this.visual.JSON_FILE_CONTENT.dependencies.styles.push(path);
     this.saveJson();
   }
   /**
@@ -84,7 +87,9 @@ export class VisualWriter {
    * @param path 
    */
   public addScript(path: string): void{
-    this.visual.JSON_FILE_CONTENT.dependencies.scripts.push(path.trim());
+    path = path.trim();
+    if( this.visual.JSON_FILE_CONTENT.dependencies.scripts.includes(path)) return;
+    this.visual.JSON_FILE_CONTENT.dependencies.scripts.push(path);
     this.saveJson();
   }
   /**
@@ -93,6 +98,8 @@ export class VisualWriter {
    */
   public addLibScript(elemName: string, path: string): void{
     this.initializeLibElem(elemName);
+    path = path.trim();
+    if( this.visual.JSON_FILE_CONTENT.lib[elemName].scripts.includes(path)) return;
     this.visual.JSON_FILE_CONTENT.lib[elemName].scripts.push(path);
     this.saveJson();
   }
@@ -102,25 +109,30 @@ export class VisualWriter {
    */
   public addLibStyle(elemName: string, path: string): void{
     this.initializeLibElem(elemName);
+    path = path.trim();
+    if( this.visual.JSON_FILE_CONTENT.lib[elemName].styles.includes(path)) return;
     this.visual.JSON_FILE_CONTENT.lib[elemName].styles.push(path);
     this.saveJson();
   }
-  public importAllCss(): void{
+  public importAllStyles(): void{
     let cssPaths = this.visual.getAssetsAllCssFilesPaths();
     for ( let cssPath of cssPaths ){
       this.addStyle( cssPath );
     }
   }
-  public importAllJs(): void{
+  public importAllScripts(): void{
     let jsPaths = this.visual.getAssetsAllJsFilesPaths();
     for ( let jsPath of jsPaths ){
       this.addScript( jsPath );
     }
   }
+  /**
+   * @description import all the scripts and styles of the visual automatically
+   */
   public importAllCssAndJs(): void{
     if( this.visual.getAssetsAutoImport() ){
-      this.importAllCss();
-      this.importAllJs();
+      this.importAllStyles();
+      this.importAllScripts();
     }
   }
   /**

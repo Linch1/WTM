@@ -186,7 +186,11 @@ class VisualConverter {
   ): string {
     
     // [WTM-PLACEHOLDER-VS-ASSETS-IMAGES]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToImages] = this.visual.getAssetsImgDirPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsImages] = this.visual.getAssetsImgDirPath();
+    // [WTM-PLACEHOLDER-VS-ASSETS-CSS]
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsCss] = this.visual.getAssetsCssDirPath();
+    // [WTM-PLACEHOLDER-VS-ASSETS-JS]
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsjs] = this.visual.getAssetsJsDirPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS]
     this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssets] = project.getAssetsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-IMAGES]
