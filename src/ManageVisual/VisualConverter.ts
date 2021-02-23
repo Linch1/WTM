@@ -188,13 +188,13 @@ class VisualConverter {
     // [WTM-PLACEHOLDER-VS-ASSETS-IMAGES]
     this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToImages] = this.visual.getAssetsImgDirPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssets] = project.getPorjectAssetsPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssets] = project.getAssetsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-IMAGES]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsImages] = project.getPorjectAssetsImgPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsImages] = project.getAssetsImgPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-JS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsJs] = project.getPorjectAssetsJsPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsJs] = project.getAssetsJsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-CSS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsCss] = project.getPorjectAssetsCssPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsCss] = project.getAssetsCssPath();
     // [WTM-PLACEHOLDER-PJ-PATH]
     this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectDir] = project.getPath();
 
