@@ -10,6 +10,10 @@ export type ProjectJsonInformations = {
     visualsPath: string;
     viewsPath: string;
     path: string;
+    author: string;
+    autorhUrl: string;
+    githubRepo: string;
+    assetsAutoImport: boolean; // allow the automatical import of js/css files of the project
     /**
      * @description custom scripts imported in the project
      */

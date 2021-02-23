@@ -1,7 +1,7 @@
 import { StringComposeWriter, FileWriter, extensions, BulkVisual, ProjectTypes, Visual, ConstVisuals } from "..";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
 import { ConstProjects } from "../Constants/const.projects";
-import { StringComposeReader } from "../files";
+import { FileReader, StringComposeReader } from "../files";
 
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
 
@@ -60,11 +60,11 @@ export class Project{
         FileWriter.createDirectory(this.PROJECT_JSON_DIR_PATH);
         FileWriter.createDirectory(this.getViewsPath());
         FileWriter.createDirectory(this.getVisualsPath());
-        FileWriter.createDirectory(this.getPorjectAssetsPath());
-        FileWriter.createDirectory(this.getPorjectAssetsLibPath());
-        FileWriter.createDirectory(this.getPorjectAssetsCssPath());
-        FileWriter.createDirectory(this.getPorjectAssetsImgPath());
-        FileWriter.createDirectory(this.getPorjectAssetsJsPath());
+        FileWriter.createDirectory(this.getAssetsPath());
+        FileWriter.createDirectory(this.getAssetsLibPath());
+        FileWriter.createDirectory(this.getAssetsCssPath());
+        FileWriter.createDirectory(this.getAssetsImgPath());
+        FileWriter.createDirectory(this.getAssetsJsPath());
         FileWriter.createFile(this.PROJECT_JSON_FILE_PATH, JSON.stringify(this.PROJECT_JSON_INFORMATIONS));
     }
     public saveJson(){
@@ -73,35 +73,89 @@ export class Project{
             JSON.stringify(this.PROJECT_JSON_INFORMATIONS)
         )
     }
+    /**
+     * @description return the name of the porject
+     */
     public getName(): string{
         return this.PROJECT_JSON_INFORMATIONS.name;
     }
+    /**
+     * @description return author of the project
+     */
+    public getAuthor(): string{
+        return this.PROJECT_JSON_INFORMATIONS.author;
+    }
+    /**
+     * @description return author site
+     */
+    public getAuthorUrl(): string{
+        return this.PROJECT_JSON_INFORMATIONS.autorhUrl;
+    }
+    /**
+     * @description return the repo of the project
+     */
+    public getGithubRepo(): string{
+        return this.PROJECT_JSON_INFORMATIONS.githubRepo;
+    }
+    /**
+     * @description return the extension used for the porject based on the projectType
+     */
     public getExtension(): extensions{
         return checkMapProjectTypeToExtension(this.PROJECT_JSON_INFORMATIONS.projectType);
     }
+    /**
+     * @description return the type of the project
+     */
     public getProjectType(): ProjectTypes{
         return this.PROJECT_JSON_INFORMATIONS.projectType;
     }
+    /**
+     * @description return the abs path to the project views directory
+     */
     public getViewsPath(): string{
         return this.PROJECT_JSON_INFORMATIONS.viewsPath;
     }
+    /**
+     * @description return the abs path to the project visuals directory
+     */
     public getVisualsPath(): string{
         return this.PROJECT_JSON_INFORMATIONS.visualsPath;
     }
-    public getPorjectAssetsPath(): string{
+    /**
+     * @description return the abs path to the project assets directory
+     */
+    public getAssetsPath(): string{
         return this.PROJECT_ASSETS_DIR_PATH;
     }
-    public getPorjectAssetsLibPath(): string{
+    /**
+     * @description return the abs path to the project assets lib directory
+     */
+    public getAssetsLibPath(): string{
         return this.PROJECT_ASSETS_LIB_DIR_PATH;
     }
-    public getPorjectAssetsImgPath(): string{
+    /**
+     * @description return the abs path to the project assets img directory
+     */
+    public getAssetsImgPath(): string{
         return this.PROJECT_ASSETS_IMG_DIR_PATH;
     }
-    public getPorjectAssetsCssPath(): string{
+    /**
+     * @description return the abs path to the project assets css directory
+     */
+    public getAssetsCssPath(): string{
         return this.PROJECT_ASSETS_CSS_DIR_PATH;
     }
-    public getPorjectAssetsJsPath(): string{
+    /**
+     * @description return the abs path to the project assets js directory
+     */
+    public getAssetsJsPath(): string{
         return this.PROJECT_ASSETS_JS_DIR_PATH;
+    }
+    /**
+     * @description return if the project has to auto import the assets
+     */
+    public getAssetsAutoImport(): boolean{
+        return this.PROJECT_JSON_INFORMATIONS.assetsAutoImport;
     }
     /**
      * @description returns the path to the project directory ( not the WTM-PROJECT directory )
@@ -109,18 +163,30 @@ export class Project{
     public getPath(): string{
         return this.PROJECT_JSON_INFORMATIONS.path;
     }
+    /**
+     * @description get all the used js files for the project, the common ones and the visuals ones
+     */
     public getScripts(): string[]{
-        let scripts = [...this.PROJECT_JSON_INFORMATIONS.scripts, ...this.getVisualsDependenciesScripts()]
+        let scripts = [...this.PROJECT_JSON_INFORMATIONS.scripts, ...this.getVisualsDependenciesJs()]
         return scripts;
     }
+    /**
+     * @description get all the used css files for the project, the common ones and the visuals ones
+     */
     public getStyles(): string[]{
-        let styles = [ ...this.PROJECT_JSON_INFORMATIONS.styles, ...this.getVisualsDependenciesStyles()];
+        let styles = [ ...this.PROJECT_JSON_INFORMATIONS.styles, ...this.getVisualsDependenciesCss()];
         return styles;
     }
+    /**
+     * @description return an object that contains the visual dependencies
+     */
     public getVisualsDependencies(){
         return this.PROJECT_JSON_INFORMATIONS.visualsDependencies;
     }
-    public getVisualsDependenciesStyles(): string[]{
+    /**
+     * @description return ann array with all the used visuals css files
+     */
+    public getVisualsDependenciesCss(): string[]{
         let dependencies = this.PROJECT_JSON_INFORMATIONS.visualsDependencies;
         let styles: string[] = [];
         for ( let key of Object.keys(dependencies)){
@@ -129,7 +195,10 @@ export class Project{
         }
         return styles;
     }
-    public getVisualsDependenciesScripts(): string[]{
+    /**
+     * @description return ann array with all the used visuals js files
+     */
+    public getVisualsDependenciesJs(): string[]{
         let dependencies = this.PROJECT_JSON_INFORMATIONS.visualsDependencies;
         let scripts: string[] = [];
         for ( let key of Object.keys(dependencies)){
@@ -138,12 +207,46 @@ export class Project{
         }
         return scripts;
     }
+    /**
+     * @description set the path to the project views folder
+     */
     public setViewsPath(newOne: string){
         this.PROJECT_JSON_INFORMATIONS.viewsPath = newOne;
         this.saveJson();
     }
+    /**
+     * @description set the name of the project
+     */
     public setName(newOne: string){
         this.PROJECT_JSON_INFORMATIONS.name = newOne;
+        this.saveJson();
+    }
+    /**
+     * @description set the author of the project
+     */
+    public setAuthor(newOne: string){
+        this.PROJECT_JSON_INFORMATIONS.author = newOne;
+        this.saveJson();
+    }
+    /**
+     * @description set the author url of the project
+     */
+    public setAuthorUrl(newOne: string){
+        this.PROJECT_JSON_INFORMATIONS.autorhUrl = newOne;
+        this.saveJson();
+    }
+    /**
+     * @description set the github repo of the project
+     */
+    public setGithubRepo(newOne: string){
+        this.PROJECT_JSON_INFORMATIONS.githubRepo = newOne;
+        this.saveJson();
+    }
+    /**
+     * @description set if the project should auto import all it's js/css files
+     */
+    public setAssetsAutoImport(newOne: boolean){
+        this.PROJECT_JSON_INFORMATIONS.assetsAutoImport = newOne;
         this.saveJson();
     }
     public setVisualsPath(newOne: string){
@@ -154,16 +257,40 @@ export class Project{
         this.PROJECT_JSON_INFORMATIONS.path = newOne;
         this.saveJson();
     }
-    public addScript( path: string){
+    public addCss( path: string){
         if( path.includes(this.getPath())) path = path.replace(this.getPath(), "");
         this.PROJECT_JSON_INFORMATIONS.scripts.push(path);
         this.saveJson();
     }
-    public addStyle( path: string){
+    public addJs( path: string){
         if( path.includes(this.getPath())) path = path.replace(this.getPath(), "");
         this.PROJECT_JSON_INFORMATIONS.styles.push(path);
         this.saveJson();
     }
+    public getAssetsAllCssFilesPaths(){
+        return FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsCssPath() ) );
+    }
+    public getAssetsAllJsFilesPaths(){
+        return FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsJsPath() ) );
+    }
+    public importAllCss(): void{
+        let cssPaths = this.getAssetsAllCssFilesPaths();
+        for ( let cssPath of cssPaths ){
+          this.addCss( cssPath );
+        }
+      }
+      public importAllJs(): void{
+        let jsPaths = this.getAssetsAllJsFilesPaths();
+        for ( let jsPath of jsPaths ){
+          this.addJs( jsPath );
+        }
+      }
+      public importAllCssAndJs(): void{
+        if( this.getAssetsAutoImport() ){
+          this.importAllCss();
+          this.importAllJs();
+        }
+      }
     /**
      * @description parse styles/scripts dependencies of a visual for append to all the paths that starts with ./ or those who doesn't contains a '/' char the basePath
      * @param basePath the path to the visual scripts/styles folder based on the passed dep array
