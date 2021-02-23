@@ -271,14 +271,12 @@ export class Project {
   }
   public addStyle(path: string) {
     path = path.trim();
-    if (path.includes(this.getPath())) path = path.replace(this.getPath(), "");
     if( this.PROJECT_JSON_INFORMATIONS.styles.includes(path)) return;
     this.PROJECT_JSON_INFORMATIONS.styles.push(path);
     this.saveJson();
   }
   public addScript(path: string) {
     path = path.trim();
-    if (path.includes(this.getPath())) path = path.replace(this.getPath(), "");
     if( this.PROJECT_JSON_INFORMATIONS.scripts.includes(path)) return;
     this.PROJECT_JSON_INFORMATIONS.scripts.push(path);
     this.saveJson();
