@@ -72,11 +72,17 @@ export class VisualWriter {
     this.saveJson();
   }
   public setScripts(scripts: string[]){
-    this.visual.JSON_FILE_CONTENT.dependencies.scripts = scripts;
+    this.visual.JSON_FILE_CONTENT.dependencies.scripts = [];
+    for ( let filePath of scripts ){
+      this.addScript(filePath);
+    }
     this.saveJson();
   }
   public setStyles(styles: string[]){
-    this.visual.JSON_FILE_CONTENT.dependencies.styles = styles;
+    this.visual.JSON_FILE_CONTENT.dependencies.styles = [];
+    for ( let filePath of styles ){
+      this.addStyle(filePath);
+    }
     this.saveJson();
   }
 
