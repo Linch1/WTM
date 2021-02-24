@@ -39,6 +39,7 @@ export class ConstVisuals {
   static JsonContent: visualJson = {
     visual: { 
       name: "", 
+      projectPath: "",
       projectType: ProjectTypes.ejs,
       assetsAutoImport: false,
       author: "",

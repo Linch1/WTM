@@ -9,6 +9,7 @@ import { ConstVisuals } from "../Constants/const.visuals";
 
 export abstract class AbstractGeneralVisual {
   public readonly ERR_VISUAL_ALREADY_EXISTS = "ERR: The visual already exists";
+  public readonly ERR_EMPTY_PROJECT_PATH = "The path to the project of the current visual is empty on undefined";
   public readonly ERR_CANNOT_GET_VISUAL_NAME =
     "ERR: Cannot retrive the visual name from the given path";
   public readonly ERR_VISUAL_NOT_CREATED =
@@ -133,6 +134,14 @@ export abstract class AbstractGeneralVisual {
     return this.JSON_FILE_CONTENT.visual.projectType;
   }
   /**
+   * @description get the path to the project in which the visual is
+   */
+  public getProjectDirPath(): string {
+    let path = this.JSON_FILE_CONTENT.visual.projectPath;
+    if( !path ) throw new Error( this.ERR_EMPTY_PROJECT_PATH )
+    return path;
+  }
+  /**
    * @description get the visual extension
    */
   public getExtension(): extensions {
@@ -150,14 +159,11 @@ export abstract class AbstractGeneralVisual {
   public getAssetsCssDirPath(): string {
     return this.STYLES_PATH;
   }
+  /**
+   * @description returns an array of string containg all the abs paths to the visual styles
+   */
   public getAssetsAllCssFilesPaths(): string[] {
-    let cssFiles = FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsCssDirPath() ) );
-    let parsedFiles: string[] = [];
-    for ( let file of cssFiles ){
-      file = file.replace( this.getAssetsCssDirPath(), "");
-      parsedFiles.push(file) 
-    }
-    return parsedFiles;
+    return FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsCssDirPath() ) );
   }
   /**
    * @description get the visual scripts folder path
@@ -165,14 +171,11 @@ export abstract class AbstractGeneralVisual {
   public getAssetsJsDirPath(): string {
     return this.SCRIPTS_PATH;
   }
+  /**
+   * @description returns an array of string containg all the abs paths to the visual scripts
+   */
   public getAssetsAllJsFilesPaths(): string[] {
-    let jsFiles = FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsJsDirPath() ) );
-    let parsedFiles: string[] = [];
-    for ( let file of jsFiles ){
-      file = file.replace( this.getAssetsJsDirPath(), "");
-      parsedFiles.push(file) 
-    }
-    return parsedFiles;
+    return FileReader.folderTreePaths( FileReader.readFolderTree( this.getAssetsJsDirPath() ) );
   }
   /**
    * @description get the visual lib folder path 

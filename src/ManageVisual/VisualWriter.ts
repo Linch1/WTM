@@ -78,6 +78,11 @@ export class VisualWriter {
    */
   public addStyle(path: string): void{
     path = path.trim();
+    let stylesPath = this.visual.getAssetsCssDirPath();
+    let projectPath = this.visual.getProjectDirPath();
+    if( !path.includes(stylesPath) ) path = StringComposeWriter.concatenatePaths(stylesPath, path);
+    if( path.includes(projectPath) ) path = path.replace(projectPath, "");
+
     if( this.visual.JSON_FILE_CONTENT.dependencies.styles.includes(path)) return;
     this.visual.JSON_FILE_CONTENT.dependencies.styles.push(path);
     this.saveJson();
@@ -88,6 +93,11 @@ export class VisualWriter {
    */
   public addScript(path: string): void{
     path = path.trim();
+    let scriptsPath = this.visual.getAssetsJsDirPath();
+    let projectPath = this.visual.getProjectDirPath();
+    if( !path.includes(scriptsPath) ) path = StringComposeWriter.concatenatePaths(scriptsPath, path);
+    if( path.includes(projectPath) ) path = path.replace(projectPath, "");
+
     if( this.visual.JSON_FILE_CONTENT.dependencies.scripts.includes(path)) return;
     this.visual.JSON_FILE_CONTENT.dependencies.scripts.push(path);
     this.saveJson();
@@ -129,7 +139,7 @@ export class VisualWriter {
   /**
    * @description import all the scripts and styles of the visual automatically
    */
-  public importAllCssAndJs(): void{
+  public autoImportAllCssAndJs(): void{
     if( this.visual.getAssetsAutoImport() ){
       this.importAllStyles();
       this.importAllScripts();

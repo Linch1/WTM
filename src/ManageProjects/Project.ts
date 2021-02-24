@@ -271,12 +271,18 @@ export class Project {
   }
   public addStyle(path: string) {
     path = path.trim();
+    path = StringComposeWriter.concatenatePaths( this.getAssetsCssPath(), path);
+    path = path.replace(this.getPath(), "");
+    
     if( this.PROJECT_JSON_INFORMATIONS.styles.includes(path)) return;
     this.PROJECT_JSON_INFORMATIONS.styles.push(path);
     this.saveJson();
   }
   public addScript(path: string) {
     path = path.trim();
+    path = StringComposeWriter.concatenatePaths( this.getAssetsJsPath(), path);
+    path = path.replace(this.getPath(), "");
+
     if( this.PROJECT_JSON_INFORMATIONS.scripts.includes(path)) return;
     this.PROJECT_JSON_INFORMATIONS.scripts.push(path);
     this.saveJson();
@@ -342,6 +348,7 @@ export class Project {
       this.getProjectType()
     ).getAllVisualsFiltered();
     for (let visual of projectVisuals) {
+      
       let stylesDep: string[] = visual.getStylesDependencies();
       let scriptsDep: string[] = visual.getScriptsDependencies();
 

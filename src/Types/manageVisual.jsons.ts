@@ -15,6 +15,7 @@ export type visualJsonLib = {
 
 export type visualJsonScheleton = {
   name: string;
+  projectPath: string;
   projectType: ProjectTypes;
   assetsAutoImport: boolean; // allow the automatical import of js/css files of the visual
   author: string;
@@ -24,6 +25,7 @@ export type visualJsonScheleton = {
 export type visualJsonScheletonAsParam = {
   name: string;
   projectType?: ProjectTypes;
+  projectPath?: string;
   assetsAutoImport?: boolean; // allow the automatical import of js/css files of the visual
   author?: string;
   authorUrl?: string;
