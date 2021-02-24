@@ -318,26 +318,7 @@ export class Project {
       this.importAllScripts();
     }
   }
-  /**
-   * @description parse styles/scripts dependencies of a visual for append to all the paths that starts with ./ or those who doesn't contains a '/' char the basePath
-   * @param basePath the path to the visual scripts/styles folder based on the passed dep array
-   * @param dep the array of dependencies, it contains a list of path to scripts/styles
-   */
-  public parseVisualStringArrayOfDependencies(
-    basePath: string,
-    dep: string[]
-  ): string[] {
-    for (let i = 0; i < dep.length; i++) {
-      let path = dep[i];
-      // if is relative visual path add the visual abs path at the start
-      if (path.startsWith("./")) {
-        path = path.replace("./", "");
-        path = StringComposeWriter.concatenatePaths(basePath, path);
-        dep[i] = path;
-      }
-    }
-    return dep;
-  }
+
   /**
    * @description repopulate the object that contains the visuals dependencies for update it
    */
@@ -351,15 +332,6 @@ export class Project {
       visual.writer.autoImportAllCssAndJs();
       let stylesDep: string[] = visual.getStylesDependencies();
       let scriptsDep: string[] = visual.getScriptsDependencies();
-
-      stylesDep = this.parseVisualStringArrayOfDependencies(
-        visual.getAssetsCssDirPath(),
-        stylesDep
-      );
-      scriptsDep = this.parseVisualStringArrayOfDependencies(
-        visual.getAssetsJsDirPath(),
-        scriptsDep
-      );
 
       if (stylesDep.length || scriptsDep.length) {
         this.PROJECT_JSON_INFORMATIONS.visualsDependencies[visual.getName()] = {

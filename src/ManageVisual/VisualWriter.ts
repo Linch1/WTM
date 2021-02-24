@@ -71,6 +71,14 @@ export class VisualWriter {
     this.visual.JSON_FILE_CONTENT.visual.name = name;
     this.saveJson();
   }
+  public setScripts(scripts: string[]){
+    this.visual.JSON_FILE_CONTENT.dependencies.scripts = scripts;
+    this.saveJson();
+  }
+  public setStyles(styles: string[]){
+    this.visual.JSON_FILE_CONTENT.dependencies.styles = styles;
+    this.saveJson();
+  }
 
   /**
    * @description add the passed path as style dependency in the visual json
@@ -140,6 +148,8 @@ export class VisualWriter {
    * @description import all the scripts and styles of the visual automatically
    */
   public autoImportAllCssAndJs(): void{
+    this.setScripts([]);
+    this.setStyles([]);
     if( this.visual.getAssetsAutoImport() ){
       this.importAllStyles();
       this.importAllScripts();
