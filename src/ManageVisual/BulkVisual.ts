@@ -1,6 +1,5 @@
 import { ProjectTypes } from "../Enums";
 import { FileReader } from "../files/FileReader";
-import { StringComposeWriter } from "../files/StringComposeWriter";
 import { Visual } from "./Visual";
 
 export class BulkVisual {

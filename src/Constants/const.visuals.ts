@@ -37,20 +37,16 @@ export class ConstVisuals {
     cdn: []
   } // the content the visuals of a lib elemenets
   static JsonContent: visualJson = {
-    visual: { 
-      name: "", 
-      projectPath: "",
-      projectType: ProjectTypes.ejs,
-      assetsAutoImport: false,
-      author: "",
-      authorUrl: "",
-      githubRepo: ""
-    },
+    name: "", 
+    projectPath: "",
+    projectType: ProjectTypes.ejs,
+    assetsAutoImport: false,
+    author: "",
+    authorUrl: "",
+    githubRepo: "",
     identifiers: ConstVisuals.JsonIdentifiersContent,
-    dependencies: {
-      scripts: [],
-      styles: [],
-    },
+    scripts: [],
+    styles: [],
     lib: {},
     connected: {},
   }; // the default content of each visual json file ( 'WTM.json' )
@@ -61,7 +57,10 @@ export class ConstVisuals {
   static getVisualsLibElemContent(): {
     scripts: [],
     styles: [],
-    cdn: [],
+    cdn: {
+      scripts: [],
+      styles: [],
+    },
     url: ""
   } {
     return JSON.parse( JSON.stringify( ConstVisuals.LibElemContent ) );

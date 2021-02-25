@@ -29,7 +29,10 @@ export class ConstProjects {
         visuals: [], // the names of the visuals that depends on this lib
         scripts: [], // the lib scripts
         styles: [], // the lib styles
-        cdn: [],
+        cdn: {
+          scripts: [],
+          styles: []
+        },
         url: ""
     }
   }

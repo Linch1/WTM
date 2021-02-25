@@ -4,9 +4,9 @@ import { VisualWriter } from "../ManageVisual/VisualWriter";
 import { VisualReader } from "../ManageVisual/VisualReader";
 import { VisualConverter } from "../ManageVisual/VisualConverter";
 import { renderTypes } from "../Enums/manageVisual.renderType";
-import { Visual } from "../ManageVisual/Visual";
 import { BulkVisual } from "../ManageVisual/BulkVisual";
 import { ProjectTypes } from "../Enums";
+import { Visual } from "../ManageVisual/Visual";
 
 
 let visualsFolder = "/home/pero/projects/WTM/LIB/visual"

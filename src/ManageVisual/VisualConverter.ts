@@ -186,19 +186,19 @@ class VisualConverter {
   ): string {
     
     // [WTM-PLACEHOLDER-VS-ASSETS-IMAGES]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsImages] = this.visual.getAssetsImgDirPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsImages] = this.visual.depManager.getAssetsImgPath();
     // [WTM-PLACEHOLDER-VS-ASSETS-CSS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsCss] = this.visual.getAssetsCssDirPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsCss] = this.visual.depManager.getAssetsStylesPath();
     // [WTM-PLACEHOLDER-VS-ASSETS-JS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsjs] = this.visual.getAssetsJsDirPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsjs] = this.visual.depManager.getAssetsScriptsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssets] = project.getAssetsPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssets] = project.depManager.getAssetsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-IMAGES]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsImages] = project.getAssetsImgPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsImages] = project.depManager.getAssetsImgPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-JS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsJs] = project.getAssetsJsPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsJs] = project.depManager.getAssetsScriptsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-CSS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsCss] = project.getAssetsCssPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsCss] = project.depManager.getAssetsStylesPath();
     // [WTM-PLACEHOLDER-PJ-PATH]
     this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectDir] = project.getPath();
 

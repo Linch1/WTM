@@ -23,6 +23,13 @@ export type ProjectJsonInformations = {
      */
     styles: string[];
     /**
+     * @description this object contains the lib elements of all the visuals
+     * - the elem name is the key of the sub-object
+     */
+    lib: {
+        [key: string]: ProjectJsonInformationsLibElem
+    }
+     /**
      * @description this object contains the custom dependencies ( js/css ) of the individual visual
      * - the visual name is the key of the sub-object
      */
@@ -32,12 +39,5 @@ export type ProjectJsonInformations = {
             styles: string[];
         }
     },
-    /**
-     * @description this object contains the lib elements of all the visuals
-     * - the elem name is the key of the sub-object
-     */
-    lib: {
-        [key: string]: ProjectJsonInformationsLibElem
-    }
 };
   

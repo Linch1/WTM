@@ -9,19 +9,13 @@ export type visualJsonIdentifiers = {
 export type visualJsonLib = {
   scripts: string[],
   styles: string[],
-  cdn: string[],
+  cdn: {
+    scripts: string[],
+    styles: string[],
+  },
   url: string;
 }
 
-export type visualJsonScheleton = {
-  name: string;
-  projectPath: string;
-  projectType: ProjectTypes;
-  assetsAutoImport: boolean; // allow the automatical import of js/css files of the visual
-  author: string;
-  authorUrl: string;
-  githubRepo: string;
-}
 export type visualJsonScheletonAsParam = {
   name: string;
   projectType?: ProjectTypes;
@@ -33,12 +27,16 @@ export type visualJsonScheletonAsParam = {
 }
 
 export type visualJson = {
-  visual: visualJsonScheleton;
+  name: string;
+  projectPath: string;
+  projectType: ProjectTypes;
+  assetsAutoImport: boolean; // allow the automatical import of js/css files of the visual
+  author: string;
+  authorUrl: string;
+  githubRepo: string;
   identifiers: visualJsonIdentifiers;
-  dependencies: {
-    scripts: string[];
-    styles: string[];
-  },
+  scripts: string[];
+  styles: string[];
   lib: {
     [key: string] : visualJsonLib
   },
