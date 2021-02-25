@@ -14,6 +14,9 @@ import { FileReader, StringComposeReader } from "../files";
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
 
 export class Project {
+
+  public readonly NO_PATH_FOUND = "The given path doesn't exists"
+
   public PROJECT_JSON_FILE_PATH: string;
   public PROJECT_JSON_DIR_PATH: string;
 
@@ -316,8 +319,10 @@ export class Project {
    * @param path the path that contains the content to clone
    */
   public addLibFromPath( libName: string, path: string){
-    FileWriter.copyFolderRecursive( path, this.getAssetsLibPath() );
-    FileWriter.rename(path, StringComposeWriter.concatenatePaths( this.getAssetsLibPath(), libName ));
+    if(  !FileReader.existsPath(path) ) throw new Error(this.NO_PATH_FOUND);
+    let destinationFolder = StringComposeWriter.concatenatePaths( this.getAssetsLibPath(), libName );
+    FileWriter.createDirectory(destinationFolder);
+    FileWriter.copyFolderRecursive( path, destinationFolder );
   }
   /**
    * @description import all the common scripts and styles in the project assets directory automatically

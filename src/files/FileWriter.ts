@@ -39,6 +39,7 @@ export class FileWriter {
         case stat.isFile():
           fs.copyFileSync(srcPath, destPath); break
         case stat.isDirectory():
+          FileWriter.createDirectory(srcPath);
           FileWriter.copyFolderRecursive(srcPath, destPath); break
         case stat.isSymbolicLink():
           fs.symlinkSync(fs.readlinkSync(srcPath), destPath); break
