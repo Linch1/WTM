@@ -97,6 +97,13 @@ export class FileReader {
       .map((dirent) => dirent.name);
   }
 
+  static isDirectory(path: string): boolean {
+    return fs.lstatSync(path).isDirectory() 
+  }
+  static isFile(path: string): boolean {
+    return fs.lstatSync(path).isFile() 
+  }
+
   static getFirstLevelFilesAndFolders(path: string): string[] {
     return fs
       .readdirSync(path, { withFileTypes: true })
