@@ -309,20 +309,15 @@ export class Project {
       this.addScript(jsPath);
     }
   }
-  /**
-   * @description create a folder with the passed name in the assets lib directory
-   * @param libName 
-   */
-  public createLibFolder( libName: string): void{
-    FileWriter.createDirectory( StringComposeWriter.concatenatePaths( this.getAssetsLibPath(), libName) );
-  }
+  
   /**
    * @description create a new folder assets lib directory and populates it with the content inside the passed path 
    * @param libName the name of the directory to create inside the lib folder
    * @param path the path that contains the content to clone
    */
   public copyFolderContentIntoLib( libName: string, path: string){
-    this.createLibFolder(libName);
+    FileWriter.copyFolderRecursive( path, this.getAssetsLibPath() );
+    FileWriter.rename(path, StringComposeWriter.concatenatePaths( this.getAssetsLibPath(), libName ));
   }
   /**
    * @description import all the common scripts and styles in the project assets directory automatically
