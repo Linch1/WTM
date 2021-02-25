@@ -11,11 +11,12 @@ import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectType
 import { ConstProjects } from "../Constants/const.projects";
 import { FileReader, StringComposeReader } from "../files";
 
-import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
+import { ProjectJsonInformations, ProjectJsonInformationsVisualsLibElem } from "../Types/manageProject.jsonInformations";
 
 export class Project {
 
   public readonly NO_PATH_FOUND = "The given path doesn't exists"
+  public readonly NO_LIB_FOUND = "The given lib doesn't exists"
 
   public PROJECT_JSON_FILE_PATH: string;
   public PROJECT_JSON_DIR_PATH: string;
@@ -141,7 +142,8 @@ export class Project {
   /**
    * @description return the abs path to the project assets lib directory
    */
-  public getAssetsLibPath(): string {
+  public getAssetsLibPath( libName?: string ): string {
+    if( libName ) return StringComposeWriter.concatenatePaths(this.PROJECT_ASSETS_LIB_DIR_PATH, libName);
     return this.PROJECT_ASSETS_LIB_DIR_PATH;
   }
   /**
@@ -312,26 +314,120 @@ export class Project {
       this.addScript(jsPath);
     }
   }
-  
   /**
    * @description create a new folder assets lib directory and populates it with the content inside the passed path 
    * @param libName the name of the directory to create inside the lib folder
    * @param path the path that contains the content to clone
    */
-  public addLibFromPath( libName: string, path: string){
+  public createLibFromPath( libName: string, path: string){
     if(  !FileReader.existsPath(path) ) throw new Error(this.NO_PATH_FOUND);
     let destinationFolder = StringComposeWriter.concatenatePaths( this.getAssetsLibPath(), libName );
     FileWriter.createDirectory(destinationFolder);
     FileWriter.copyFolderRecursive( path, destinationFolder );
   }
   /**
+   * @description add a lib object to the project json
+   * @param libName 
+   * @param options 
+   */
+  public addLib( libName: string, options: ProjectJsonInformationsVisualsLibElem ){
+    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName] = options;
+    this.saveJson();
+  }
+  /**
+   * @description add a script path inside the passed lib
+   * - throws an error if the lib doesn't exists
+   * @param libName 
+   * @param scriptPath 
+   */
+  public addLibScript( libName: string, scriptPath: string){
+    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if( !scriptPath.includes(this.getAssetsLibPath(libName)) ) 
+      scriptPath = StringComposeWriter.concatenatePaths(this.getAssetsLibPath(libName), scriptPath);
+    scriptPath = scriptPath.replace(this.getPath(), "");
+    if( this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].scripts.includes(scriptPath) ) return;
+
+    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].scripts.push(scriptPath);
+    this.saveJson();
+  }
+   /**
+   * @description add a style paht inside the passed lib
+   * - throws an error if the lib doesn't exists
+   * @param libName 
+   * @param scriptPath 
+   */
+  public addLibStyle( libName: string, stylePath: string){
+    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if( !stylePath.includes(this.getAssetsLibPath(libName)) ) 
+      stylePath = StringComposeWriter.concatenatePaths(this.getAssetsLibPath(libName), stylePath);
+    stylePath = stylePath.replace(this.getPath(), "");
+    if( this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].styles.includes(stylePath) ) return;
+    
+    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].styles.push(stylePath);
+    this.saveJson();
+  }
+  /**
+   * @description add a cdn to the passed lib
+   * - throws an error if the lib doesn't exists
+   * @param libName 
+   * @param cdnUrl 
+   */
+  public addLibCdn( libName: string, cdnUrl: string){
+    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if( this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].cdn.includes(cdnUrl) ) return;
+
+    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].cdn.push( cdnUrl );
+    this.saveJson();
+  }
+  /**
+   * @description modify the url of the passed lib
+   * - throws an error if the lib doesn't exists
+   * @param libName 
+   * @param libUrl 
+   */
+  public setLibUrl( libName: string, libUrl: string){
+    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+
+    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].url = libUrl;
+    this.saveJson();
+  }
+  /**
+   * @description replace the lib styles with the new passed ones
+   * - throws an error if the lib doesn't exists
+   * @param libName 
+   * @param stylesPaths 
+   */
+  public setLibStyles( libName: string, stylesPaths: string[]){
+    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+
+    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].styles = [];
+    for( let stylePath of stylesPaths ){
+      this.addLibStyle(libName, stylePath);
+    }
+    this.saveJson();
+  }
+  /**
+   * @description replace the lib scripts with the new passed ones
+   * - throws an error if the lib doesn't exists
+   * @param libName 
+   * @param scriptsPaths 
+   */
+  public setLibScripts( libName: string, scriptsPaths: string[]){
+    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+
+    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].scripts = [];
+    for( let scriptPath of scriptsPaths ){
+      this.addLibScript(libName, scriptPath);
+    }
+    this.saveJson();
+  }
+
+  /**
    * @description import all the common scripts and styles in the project assets directory automatically
    */
   public importAllStylesAndScripts(): void {
-    if (this.getAssetsAutoImport()) {
       this.importAllStyles();
       this.importAllScripts();
-    }
   }
 
   /**
@@ -357,53 +453,14 @@ export class Project {
       }
     }
   }
+
   /**
-   * @description repopulate the object that contains the visuals libraries for update it
+   * @description repopulate the common scripts and styles of the project automatically detecting the new ones parsing the assets css/js folders
+   * - works only if assetsAutoImport is set to true.
    */
-  // public refreshVisualsLib(){
-  //     this.PROJECT_JSON_INFORMATIONS.visualsLib = {}; // reset the object with the dependencies
-  //     let projectVisuals = new BulkVisual(this.getVisualsPath(), this.getProjectType()).getAllVisualsFiltered();
-  //     for ( let visual of projectVisuals){
-  //         let visualLibs = visual.getLibDependencies();
-  //         for ( let elemName of Object.keys(visualLibs) ){
-  //             let libScripts = visualLibs[elemName].scripts;
-  //             let libStyles = visualLibs[elemName].styles;
-  //             libStyles = this.parseVisualStringArrayOfDependencies(visual.getLibElemDirPath(elemName), libScripts);
-  //             libScripts = this.parseVisualStringArrayOfDependencies(visual.getLibElemDirPath(elemName), libStyles);
-  //             if( !this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName] )
-  //                 this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName] = ConstProjects.getVisualsLibElemContent();
-
-  //             let savedLibScripts = this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].scripts;
-  //             let savedLibStyles = this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].styles;
-  //             // reverse loop on scripts to check if a file of the same lib was already importes
-  //             for ( let i = 0; i < libScripts.length; i++ ){
-  //                 let libElem = libScripts[ libScripts.length - 1 - i ];
-  //                 for ( let j = 0; j < savedLibScripts.length; j++){
-  //                     let savedLibElem = savedLibScripts[ savedLibScripts.length - 1 - j ];
-  //                     let alreadyImported = StringComposeReader.checkLibPathsSameEnd(savedLibElem, libElem);
-  //                     if ( alreadyImported ) {
-  //                         libScripts.splice(libScripts.length - 1 - i, 1);
-  //                         break;
-  //                     }
-  //                 }
-  //             }
-  //             // reverse loop on styles to check if a file of the same lib was already importes
-  //             for ( let i = 0; i < libStyles.length; i++ ){
-  //                 let libElem = libStyles[ libStyles.length - 1 - i ];
-  //                 for ( let j = 0; j < savedLibStyles.length; j++){
-  //                     let savedLibElem = savedLibStyles[ savedLibStyles.length - 1 - j ];
-  //                     let alreadyImported = StringComposeReader.checkLibPathsSameEnd(savedLibElem, libElem);
-  //                     if ( alreadyImported ) {
-  //                         libStyles.splice(libStyles.length - 1 - i, 1);
-  //                         break;
-  //                     }
-  //                 }
-  //             }
-
-  //             this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].visuals.push(visual.getName());
-  //             this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].scripts.push(...libScripts);
-  //             this.PROJECT_JSON_INFORMATIONS.visualsLib[elemName].styles.push(...libStyles);
-  //         }
-  //     }
-  // }
+  public refreshProjectDependencies(){
+    if (this.getAssetsAutoImport()) {
+      this.importAllStylesAndScripts();
+    }
+  }
 }
