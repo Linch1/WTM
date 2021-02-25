@@ -19,7 +19,8 @@ export class DependenciesManager {
     return this.JSON.assetsAutoImport;
   }
   /**
-   * @description return the abs path to the project assets lib directory
+   * @description returns the abs path to the project lib path
+   * - if the libName is passed it returns the abs path to that specific lib
    */
   public getProjectAssetsLibPath(libName?: string): string {
     if (libName)

@@ -14,8 +14,13 @@ export class ProjectDependenciesManager extends DependenciesManager{
     }
 
     // alias of DependenciesManager.getProjectAssetsLibPath()
-    public getAssetsLibPath(){
-        return this.getProjectAssetsLibPath();
+    /**
+     * @description returns the abs path to the project lib path
+     * - if the libName is passed it returns the abs path to that specific lib
+     * @param libName 
+     */
+    public getAssetsLibPath( libName?: string ){
+        return this.getProjectAssetsLibPath( libName );
     }
     /**
      * @description return an object that contains the visual dependencies
