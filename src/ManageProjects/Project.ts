@@ -11,7 +11,7 @@ import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectType
 import { ConstProjects } from "../Constants/const.projects";
 import { FileReader, StringComposeReader } from "../files";
 
-import { ProjectJsonInformations, ProjectJsonInformationsVisualsLibElem } from "../Types/manageProject.jsonInformations";
+import { ProjectJsonInformations, ProjectJsonInformationsLibElem } from "../Types/manageProject.jsonInformations";
 
 export class Project {
 
@@ -330,8 +330,8 @@ export class Project {
    * @param libName 
    * @param options 
    */
-  public addLib( libName: string, options: ProjectJsonInformationsVisualsLibElem ){
-    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName] = options;
+  public addLib( libName: string, options: ProjectJsonInformationsLibElem ){
+    this.PROJECT_JSON_INFORMATIONS.lib[libName] = options;
     this.saveJson();
   }
   /**
@@ -341,13 +341,13 @@ export class Project {
    * @param scriptPath 
    */
   public addLibScript( libName: string, scriptPath: string){
-    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if(!this.PROJECT_JSON_INFORMATIONS.lib[libName]) throw new Error(this.NO_LIB_FOUND);
     if( !scriptPath.includes(this.getAssetsLibPath(libName)) ) 
       scriptPath = StringComposeWriter.concatenatePaths(this.getAssetsLibPath(libName), scriptPath);
     scriptPath = scriptPath.replace(this.getPath(), "");
-    if( this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].scripts.includes(scriptPath) ) return;
+    if( this.PROJECT_JSON_INFORMATIONS.lib[libName].scripts.includes(scriptPath) ) return;
 
-    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].scripts.push(scriptPath);
+    this.PROJECT_JSON_INFORMATIONS.lib[libName].scripts.push(scriptPath);
     this.saveJson();
   }
    /**
@@ -357,13 +357,13 @@ export class Project {
    * @param scriptPath 
    */
   public addLibStyle( libName: string, stylePath: string){
-    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if(!this.PROJECT_JSON_INFORMATIONS.lib[libName]) throw new Error(this.NO_LIB_FOUND);
     if( !stylePath.includes(this.getAssetsLibPath(libName)) ) 
       stylePath = StringComposeWriter.concatenatePaths(this.getAssetsLibPath(libName), stylePath);
     stylePath = stylePath.replace(this.getPath(), "");
-    if( this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].styles.includes(stylePath) ) return;
+    if( this.PROJECT_JSON_INFORMATIONS.lib[libName].styles.includes(stylePath) ) return;
     
-    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].styles.push(stylePath);
+    this.PROJECT_JSON_INFORMATIONS.lib[libName].styles.push(stylePath);
     this.saveJson();
   }
   /**
@@ -373,10 +373,10 @@ export class Project {
    * @param cdnUrl 
    */
   public addLibCdn( libName: string, cdnUrl: string){
-    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
-    if( this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].cdn.includes(cdnUrl) ) return;
+    if(!this.PROJECT_JSON_INFORMATIONS.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if( this.PROJECT_JSON_INFORMATIONS.lib[libName].cdn.includes(cdnUrl) ) return;
 
-    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].cdn.push( cdnUrl );
+    this.PROJECT_JSON_INFORMATIONS.lib[libName].cdn.push( cdnUrl );
     this.saveJson();
   }
   /**
@@ -386,9 +386,9 @@ export class Project {
    * @param libUrl 
    */
   public setLibUrl( libName: string, libUrl: string){
-    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if(!this.PROJECT_JSON_INFORMATIONS.lib[libName]) throw new Error(this.NO_LIB_FOUND);
 
-    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].url = libUrl;
+    this.PROJECT_JSON_INFORMATIONS.lib[libName].url = libUrl;
     this.saveJson();
   }
   /**
@@ -398,9 +398,9 @@ export class Project {
    * @param stylesPaths 
    */
   public setLibStyles( libName: string, stylesPaths: string[]){
-    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if(!this.PROJECT_JSON_INFORMATIONS.lib[libName]) throw new Error(this.NO_LIB_FOUND);
 
-    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].styles = [];
+    this.PROJECT_JSON_INFORMATIONS.lib[libName].styles = [];
     for( let stylePath of stylesPaths ){
       this.addLibStyle(libName, stylePath);
     }
@@ -413,9 +413,9 @@ export class Project {
    * @param scriptsPaths 
    */
   public setLibScripts( libName: string, scriptsPaths: string[]){
-    if(!this.PROJECT_JSON_INFORMATIONS.visualsLib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if(!this.PROJECT_JSON_INFORMATIONS.lib[libName]) throw new Error(this.NO_LIB_FOUND);
 
-    this.PROJECT_JSON_INFORMATIONS.visualsLib[libName].scripts = [];
+    this.PROJECT_JSON_INFORMATIONS.lib[libName].scripts = [];
     for( let scriptPath of scriptsPaths ){
       this.addLibScript(libName, scriptPath);
     }
