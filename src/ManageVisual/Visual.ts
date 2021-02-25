@@ -112,7 +112,8 @@ export class Visual {
       this.getDirPath(),
       this.STYLES_RELATIVE_PATH
     );
-    this.ASSETS_LIB_PATH = StringComposeWriter.concatenatePaths(
+    if ( !this.isCreated() ) this.ASSETS_LIB_PATH = "";
+    else this.ASSETS_LIB_PATH = StringComposeWriter.concatenatePaths(
       this.getProjectPath(),
       ConstProjects.projectAssetsDirectory,
       ConstProjects.projectAssetsLibDirectory

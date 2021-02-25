@@ -8,10 +8,16 @@ import { visualJson } from "../Types/manageVisual.jsons";
 export class DependenciesManager {
   public JSON: ProjectJsonInformations | visualJson;
   public readonly NO_LIB_FOUND = "The given lib doesn't exists";
+  public readonly NO_ASSETS_LIB_PATH = "The given ASSETS_LIB_PATH is undefined or empty "
+  public readonly ERR_EMPTY_PROJECT_PATH = "The path to the project of the current visual is empty on undefined";
+
   constructor(public CLIENT: Visual | Project) {
     this.JSON = CLIENT.getJson();
   }
 
+  public getProjectPath(): string{
+    return this.CLIENT.getProjectPath();
+  }
   /**
    * @description return if the visual has to auto import the assets
    */
@@ -23,6 +29,9 @@ export class DependenciesManager {
    * - if the libName is passed it returns the abs path to that specific lib
    */
   public getProjectAssetsLibPath(libName?: string): string {
+    
+    if( !this.CLIENT.ASSETS_LIB_PATH ) throw new Error( this.NO_ASSETS_LIB_PATH )
+    
     if (libName)
       return StringComposeWriter.concatenatePaths(
         this.CLIENT.ASSETS_LIB_PATH,
@@ -85,7 +94,7 @@ export class DependenciesManager {
   public addStyle(path: string): void {
     path = path.trim();
     let stylesPath = this.getAssetsStylesPath();
-    let projectPath = this.CLIENT.getProjectPath();
+    let projectPath = this.getProjectPath();
     if (!path.includes(stylesPath))
       path = StringComposeWriter.concatenatePaths(stylesPath, path);
     if (path.includes(projectPath)) path = path.replace(projectPath, "");
@@ -101,7 +110,7 @@ export class DependenciesManager {
   public addScript(path: string): void {
     path = path.trim();
     let scriptsPath = this.getAssetsScriptsPath();
-    let projectPath = this.CLIENT.getProjectPath();
+    let projectPath = this.getProjectPath();
     if (!path.includes(scriptsPath))
       path = StringComposeWriter.concatenatePaths(scriptsPath, path);
     if (path.includes(projectPath)) path = path.replace(projectPath, "");
@@ -201,7 +210,7 @@ export class DependenciesManager {
         this.getProjectAssetsLibPath(libName),
         scriptPath
       );
-    scriptPath = scriptPath.replace(this.CLIENT.getProjectPath(), "");
+    scriptPath = scriptPath.replace(this.getProjectPath(), "");
     if (this.JSON.lib[libName].scripts.includes(scriptPath)) return;
 
     this.JSON.lib[libName].scripts.push(scriptPath);
@@ -221,7 +230,7 @@ export class DependenciesManager {
         this.getProjectAssetsLibPath(libName),
         stylePath
       );
-    stylePath = stylePath.replace(this.CLIENT.getProjectPath(), "");
+    stylePath = stylePath.replace(this.getProjectPath(), "");
     if (this.JSON.lib[libName].styles.includes(stylePath)) return;
 
     this.JSON.lib[libName].styles.push(stylePath);
