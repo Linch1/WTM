@@ -1,5 +1,5 @@
 import * as fs from "fs";
-
+import path from "path";
 import { StringComposeWriter } from "./StringComposeWriter";
 import { FileReader } from "./FileReader";
 
@@ -25,6 +25,33 @@ export class FileWriter {
     let fileContent = FileReader.readFile(filePath);
     if (!oldContent.trim()) throw new Error(this.ERR_EMPTY_TEXT);
     this.writeFile(filePath, fileContent.replace(oldContent, newContent));
+  }
+  /**
+   * @description copy the 'src' inside the 'dest' with all the subfolders
+   * @param src  folder to copy 
+   * @param dest  folder where to copy
+   */
+  static copyFolderRecursive( src: string, dest: string){
+    fs.readdirSync(src).forEach(dirent => {
+      const [srcPath, destPath] = [src, dest].map(dirPath => path.join(dirPath, dirent))
+      const stat = fs.lstatSync(srcPath)
+      switch (true) {
+        case stat.isFile():
+          fs.copyFileSync(srcPath, destPath); break
+        case stat.isDirectory():
+          FileWriter.copyFolderRecursive(srcPath, destPath); break
+        case stat.isSymbolicLink():
+          fs.symlinkSync(fs.readlinkSync(srcPath), destPath); break
+      }
+    });
+  }
+  /**
+   * @description rename the 'oldPath' to 'newPath'
+   * @param oldPath  the old name path
+   * @param newPath  the new name path
+   */
+  static rename( oldPath: string, newPath: string ){
+    fs.renameSync(oldPath, newPath);
   }
 
   static removeFolderRecursive(path: string): void {
