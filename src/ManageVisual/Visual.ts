@@ -74,8 +74,13 @@ export class Visual {
     if( !this.VISUAL_SCHELETON.authorUrl ) this.VISUAL_SCHELETON.authorUrl = "";
     if( !this.VISUAL_SCHELETON.githubRepo ) this.VISUAL_SCHELETON.githubRepo = "";
     if( !this.VISUAL_SCHELETON.assetsAutoImport ) this.VISUAL_SCHELETON.assetsAutoImport = false;
-    //@ts-ignore the properties will be always defined, this error is skippable
-    this.JSON_FILE_CONTENT.visual = this.VISUAL_SCHELETON;
+    
+    this.JSON_FILE_CONTENT.projectType = this.VISUAL_SCHELETON.projectType;
+    this.JSON_FILE_CONTENT.author = this.VISUAL_SCHELETON.author;
+    this.JSON_FILE_CONTENT.authorUrl = this.VISUAL_SCHELETON.authorUrl;
+    this.JSON_FILE_CONTENT.githubRepo = this.VISUAL_SCHELETON.githubRepo;
+    this.JSON_FILE_CONTENT.assetsAutoImport = this.VISUAL_SCHELETON.assetsAutoImport;
+    this.JSON_FILE_CONTENT.name = this.VISUAL_SCHELETON.name;
 
     this.VISUAL_FOLDER = StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, this.getName());
     
