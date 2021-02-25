@@ -33,13 +33,16 @@ export class FileWriter {
    */
   static copyFolderRecursive( src: string, dest: string){
     fs.readdirSync(src).forEach(dirent => {
-      const [srcPath, destPath] = [src, dest].map(dirPath => path.join(dirPath, dirent))
+      const [srcPath, destPath] = [src, dest].map(dirPath => {
+        FileWriter.createDirectory(dirPath);
+        return path.join(dirPath, dirent);
+      })
       const stat = fs.lstatSync(srcPath)
       switch (true) {
         case stat.isFile():
           fs.copyFileSync(srcPath, destPath); break
         case stat.isDirectory():
-          FileWriter.createDirectory(srcPath);
+          
           FileWriter.copyFolderRecursive(srcPath, destPath); break
         case stat.isSymbolicLink():
           fs.symlinkSync(fs.readlinkSync(srcPath), destPath); break
