@@ -1,4 +1,5 @@
-import { ProjectJsonInformationsVisualsLibElem } from "../Types/manageProject.jsonInformations";
+
+import { ProjectJsonInformationsLibElem } from "../Types/manageProject.jsonInformations";
 import { ConstVisuals } from "./const.visuals";
 
 /**
@@ -23,7 +24,7 @@ export class ConstProjects {
   static IdentifierPlaceholderNamePathToProjectAssetsCss = "PJ-ASSETS-CSS" // the path ends without '/'. 
 
 
-  static getVisualsLibElemContent(): ProjectJsonInformationsVisualsLibElem {
+  static getVisualsLibElemContent(): ProjectJsonInformationsLibElem {
     return {
         visuals: [], // the names of the visuals that depends on this lib
         scripts: [], // the lib scripts
