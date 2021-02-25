@@ -170,7 +170,7 @@ export class Visual {
    * @description returns the path to the visual folder
    */
   public getDirPath(): string {
-    return StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, this.getProjectType());
+    return StringComposeWriter.concatenatePaths(this.VISUAL_FOLDER, this.getProjectType());
   }
   /**
    * @description return the path of the visuals directory
