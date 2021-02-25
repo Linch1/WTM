@@ -302,6 +302,9 @@ export class Project {
       FileReader.readFolderTree(this.getAssetsJsPath())
     );
   }
+  public getAllLib(): string[]{
+    return Object.keys( this.PROJECT_JSON_INFORMATIONS.lib );
+  }
   public importAllStyles(): void {
     let cssPaths = this.getAssetsAllCssFilesPaths();
     for (let cssPath of cssPaths) {
