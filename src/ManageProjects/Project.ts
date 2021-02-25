@@ -315,7 +315,7 @@ export class Project {
    * @param libName the name of the directory to create inside the lib folder
    * @param path the path that contains the content to clone
    */
-  public copyFolderContentIntoLib( libName: string, path: string){
+  public addLibFromPath( libName: string, path: string){
     FileWriter.copyFolderRecursive( path, this.getAssetsLibPath() );
     FileWriter.rename(path, StringComposeWriter.concatenatePaths( this.getAssetsLibPath(), libName ));
   }
