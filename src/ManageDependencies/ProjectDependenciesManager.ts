@@ -129,11 +129,4 @@ export class ProjectDependenciesManager extends DependenciesManager{
     FileWriter.copyFolderRecursive( path, destinationFolder );
   }
 
-  /**
-   * @description returns true if the lib already exists
-   */
-  public libExists( libName: string ): boolean {
-    return this.JSON.lib[libName] ? true : false;
-  }
-
 }

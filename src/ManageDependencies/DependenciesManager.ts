@@ -281,6 +281,36 @@ export class DependenciesManager {
     if (cdnUrl.endsWith(".js")) this.addLibCdnScript(libName, cdnUrl);
     else if (cdnUrl.endsWith(".css")) this.addLibCdnStyle(libName, cdnUrl);
   }
+  /**
+   * @description remove a cdn script from the lib
+   * - throws an error if the lib doesn't exists
+   * @param libName
+   * @param cdnUrl
+   */
+  public removeLibCdnScript(libName: string, cdnUrl: string) {
+    if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if (!this.JSON.lib[libName].cdn.scripts.includes(cdnUrl)) return;
+
+    this.JSON.lib[libName].cdn.scripts.splice( this.JSON.lib[libName].cdn.scripts.indexOf(cdnUrl), 1 );
+    this.CLIENT.saveJson();
+  }
+  /**
+   * @description emove a cdn style from the lib
+   * - throws an error if the lib doesn't exists
+   * @param libName
+   * @param cdnUrl
+   */
+  public removeLibCdnStyle(libName: string, cdnUrl: string) {
+    if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+    if (!this.JSON.lib[libName].cdn.styles.includes(cdnUrl)) return;
+
+    this.JSON.lib[libName].cdn.styles.splice( this.JSON.lib[libName].cdn.styles.indexOf(cdnUrl), 1 );
+    this.CLIENT.saveJson();
+  }
+  public removeLibCdnScriptOrStyle(libName: string, cdnUrl: string) {
+    if (cdnUrl.endsWith(".js")) this.removeLibCdnScript(libName, cdnUrl);
+    else if (cdnUrl.endsWith(".css")) this.removeLibCdnStyle(libName, cdnUrl);
+  }
 
   public getAllLibCdnScripts( libName?: string ): string[] {
     if( libName ){
@@ -363,6 +393,12 @@ export class DependenciesManager {
       }
       return scripts
     }
+  }
+  /**
+   * @description returns true if the lib already exists
+   */
+  public libExists( libName: string ): boolean {
+    return this.JSON.lib[libName] ? true : false;
   }
   /**
    * @description import all the common scripts and styles in the project assets directory automatically
