@@ -69,7 +69,10 @@ export class VisualWriter {
   public populateIdentifiers() {
     if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
     
-    let identifiersJson: visualJsonIdentifiers = this.visual.JSON_FILE_CONTENT.identifiers;
+    // reset the identifiers
+    this.visual.JSON_FILE_CONTENT.identifiers = ConstVisuals.JsonIdentifiersContent
+    let identifiersJson: visualJsonIdentifiers = ConstVisuals.JsonIdentifiersContent;
+
     let identfiers: string[] = Identifiers.getContainedIdentifiers(
       this.visual.DEFAULT_FILE_PATH,
       identifierActions.ALL
