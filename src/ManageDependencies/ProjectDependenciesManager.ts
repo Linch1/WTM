@@ -6,6 +6,7 @@ import { DependenciesManager } from "./DependenciesManager";
 
 export class ProjectDependenciesManager extends DependenciesManager{
     public readonly NO_PATH_FOUND = "The given path doesn't exists";
+    public readonly LIB_ALREADY_EXISTS = "The passed lib already exists";
     
     public PROJECT_JSON: ProjectJsonInformations;
     constructor( public CLIENT: Project ){
@@ -103,7 +104,9 @@ export class ProjectDependenciesManager extends DependenciesManager{
    * @param options 
    */
   public addLib( libName: string, options: ProjectJsonInformationsLibElem ){
+    if( this.libExists( libName ) ) throw new Error(this.LIB_ALREADY_EXISTS);
     this.PROJECT_JSON.lib[libName] = options;
+    FileWriter.createDirectory(this.getAssetsLibPath(libName));
     this.CLIENT.saveJson();
   }
   /**
@@ -113,14 +116,24 @@ export class ProjectDependenciesManager extends DependenciesManager{
     return Object.keys( this.PROJECT_JSON.lib );
   }
   /**
-   * @description create a new folder assets lib directory and populates it with the content inside the passed path 
+   * @description create a new folder in the lib directory and populates it with the content inside the passed pat
+   * - if the folder already exists it is deleted and re-created with the new contents
    * @param libName the name of the directory to create inside the lib folder
    * @param path the path that contains the content to clone
    */
   public createLibFromPath( libName: string, path: string){
     if(  !FileReader.existsPath(path) ) throw new Error(this.NO_PATH_FOUND);
     let destinationFolder = StringComposeWriter.concatenatePaths( this.getProjectAssetsLibPath(), libName );
+    FileWriter.removeFolderRecursive( destinationFolder );
     FileWriter.createDirectory(destinationFolder);
     FileWriter.copyFolderRecursive( path, destinationFolder );
   }
+
+  /**
+   * @description returns true if the lib already exists
+   */
+  public libExists( libName: string ): boolean {
+    return this.JSON.lib[libName] ? true : false;
+  }
+
 }
