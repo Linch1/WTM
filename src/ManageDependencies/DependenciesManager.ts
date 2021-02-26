@@ -328,6 +328,14 @@ export class DependenciesManager {
     }
     this.CLIENT.saveJson();
   }
+  public getAllLibStyles(libName: string): string[]{
+    if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+    return [ ...this.JSON.lib[libName].styles ]
+  }
+  public getAllLibScripts(libName: string): string[]{
+    if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+    return [ ...this.JSON.lib[libName].scripts ]
+  }
   /**
    * @description import all the common scripts and styles in the project assets directory automatically
    */
