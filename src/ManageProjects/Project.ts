@@ -72,7 +72,7 @@ export class Project {
     FileWriter.createDirectory(this.depManager.getAssetsLibPath());
     FileWriter.createDirectory(this.depManager.getAssetsScriptsPath());
     FileWriter.createDirectory(this.depManager.getAssetsImgPath());
-    FileWriter.createDirectory(this.depManager.getAssetsScriptsPath());
+    FileWriter.createDirectory(this.depManager.getAssetsStylesPath());
     FileWriter.createFile(
       this.PROJECT_JSON_FILE_PATH,
       JSON.stringify(this.JSON_FILE_CONTENT)
