@@ -311,6 +311,18 @@ export class DependenciesManager {
     if (cdnUrl.endsWith(".js")) this.removeLibCdnScript(libName, cdnUrl);
     else if (cdnUrl.endsWith(".css")) this.removeLibCdnStyle(libName, cdnUrl);
   }
+  public removeMultipleLibCdnScripts( libName: string, cdnUrls: string ){
+    for( let url of cdnUrls ) this.removeLibCdnScript( libName, url )
+  }
+  public removeMultipleLibCdnStyles( libName: string, cdnUrls: string ){
+    for( let url of cdnUrls ) this.removeLibCdnStyle( libName, url )
+  }
+  public removeMultipleLibCdnScriptsOrStyles(libName: string, cdnUrls: string) {
+    for( let url of cdnUrls ){
+      if (url.endsWith(".js")) this.removeLibCdnScript(libName, url);
+      else if (url.endsWith(".css")) this.removeLibCdnStyle(libName, url);
+    }
+  }
 
   public getAllLibCdnScripts( libName?: string ): string[] {
     if( libName ){
