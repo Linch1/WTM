@@ -281,6 +281,23 @@ export class DependenciesManager {
     if (cdnUrl.endsWith(".js")) this.addLibCdnScript(libName, cdnUrl);
     else if (cdnUrl.endsWith(".css")) this.addLibCdnStyle(libName, cdnUrl);
   }
+
+  public getAllCdnScripts(): string[] {
+    let cdnScripts: string[] = [];
+    for ( let lib of Object.keys(this.JSON.lib)){
+      cdnScripts.push( ...this.JSON.lib[lib].cdn.scripts )
+    }
+    return cdnScripts
+  }
+  
+  public getAllCdnStyles(): string[] {
+    let cdnStyles: string[] = [];
+    for ( let lib of Object.keys(this.JSON.lib)){
+      cdnStyles.push( ...this.JSON.lib[lib].cdn.styles )
+    }
+    return cdnStyles
+  }
+
   /**
    * @description replace the lib styles with the new passed ones
    * - throws an error if the lib doesn't exists
