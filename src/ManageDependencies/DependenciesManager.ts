@@ -328,13 +328,29 @@ export class DependenciesManager {
     }
     this.CLIENT.saveJson();
   }
-  public getAllLibStyles(libName: string): string[]{
-    if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
-    return [ ...this.JSON.lib[libName].styles ]
+  public getAllLibStyles(libName?: string): string[]{
+    if( libName ){
+      if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+      return [ ...this.JSON.lib[libName].styles ]
+    } else {
+      let styles: string[] = [];
+      for ( let lib of Object.keys(this.JSON.lib)){
+        styles.push( ...this.JSON.lib[lib].styles )
+      }
+      return styles
+    }
   }
-  public getAllLibScripts(libName: string): string[]{
-    if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
-    return [ ...this.JSON.lib[libName].scripts ]
+  public getAllLibScripts(libName?: string): string[]{
+    if( libName ){
+      if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+      return [ ...this.JSON.lib[libName].scripts ]
+    } else {
+      let scripts: string[] = [];
+      for ( let lib of Object.keys(this.JSON.lib)){
+        scripts.push( ...this.JSON.lib[lib].scripts )
+      }
+      return scripts
+    }
   }
   /**
    * @description import all the common scripts and styles in the project assets directory automatically
