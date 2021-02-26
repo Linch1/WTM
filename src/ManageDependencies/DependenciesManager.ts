@@ -282,20 +282,32 @@ export class DependenciesManager {
     else if (cdnUrl.endsWith(".css")) this.addLibCdnStyle(libName, cdnUrl);
   }
 
-  public getAllCdnScripts(): string[] {
-    let cdnScripts: string[] = [];
-    for ( let lib of Object.keys(this.JSON.lib)){
-      cdnScripts.push( ...this.JSON.lib[lib].cdn.scripts )
+  public getAllLibCdnScripts( libName?: string ): string[] {
+    if( libName ){
+      if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+      return [ ...this.JSON.lib[libName].cdn.scripts ]
+    } else {
+      let cdnScripts: string[] = [];
+      for ( let lib of Object.keys(this.JSON.lib)){
+        cdnScripts.push( ...this.JSON.lib[lib].cdn.scripts )
+      }
+      return cdnScripts
     }
-    return cdnScripts
+    
   }
   
-  public getAllCdnStyles(): string[] {
-    let cdnStyles: string[] = [];
-    for ( let lib of Object.keys(this.JSON.lib)){
-      cdnStyles.push( ...this.JSON.lib[lib].cdn.styles )
+  public getAllLibCdnStyles( libName?: string ): string[] {
+    if( libName ){
+      if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+      return [ ...this.JSON.lib[libName].cdn.styles ]
+    } else {
+      let cdnStyles: string[] = [];
+      for ( let lib of Object.keys(this.JSON.lib)){
+        cdnStyles.push( ...this.JSON.lib[lib].cdn.styles )
+      }
+      return cdnStyles
     }
-    return cdnStyles
+    
   }
 
   /**
