@@ -2,7 +2,7 @@ import { FileReader } from "../files";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { Project } from "../ManageProjects";
 import { Visual } from "../ManageVisual/Visual";
-import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
+import { ProjectJsonInformations, ProjectJsonInformationsLibElem } from "../Types/manageProject.jsonInformations";
 import { visualJson } from "../Types/manageVisual.jsons";
 
 export class DependenciesManager {
@@ -338,8 +338,8 @@ export class DependenciesManager {
       return [ ...this.JSON.lib[libName].cdn.scripts ]
     } else {
       let cdnScripts: string[] = [];
-      for ( let lib of Object.keys(this.JSON.lib)){
-        cdnScripts.push( ...this.JSON.lib[lib].cdn.scripts )
+      for ( let libValue of this.getAllLibValuesWithOrder() ){
+        cdnScripts.push( ...libValue.cdn.scripts )
       }
       return cdnScripts
     }
@@ -352,12 +352,45 @@ export class DependenciesManager {
       return [ ...this.JSON.lib[libName].cdn.styles ]
     } else {
       let cdnStyles: string[] = [];
-      for ( let lib of Object.keys(this.JSON.lib)){
-        cdnStyles.push( ...this.JSON.lib[lib].cdn.styles )
+      for ( let libValue of this.getAllLibValuesWithOrder() ){
+        cdnStyles.push( ...libValue.cdn.styles )
       }
       return cdnStyles
     }
-    
+  }
+
+  /**
+   * @description returns an array with all the lib dependencies ordered by the order number
+   */
+  public getAllLibValuesWithOrder(): ProjectJsonInformationsLibElem[] {
+    return Object.values( this.JSON.lib ).sort( ( obj1, obj2 ) => { 
+      if( obj1.order && obj2.order ) return obj1.order - obj2.order;
+      if( !obj1.order && obj2.order ) return -1;
+      if( obj1.order && !obj2.order ) return 1;
+      else return 0;
+    });
+  }
+  
+  /**
+   * @description returns an array that contains the names of the libs in order
+   * - the order is given by the '[libNameDependencies].oreder' value in each lib
+   */
+  public getAllLibKeysWithOrder(): string[] {    
+    let orderedLibs = Object.keys(this.JSON.lib).sort(( a, b ) => { 
+      let obj1 = this.JSON.lib[a];
+      let obj2 = this.JSON.lib[b];
+      if( obj1.order && obj2.order ) return obj1.order - obj2.order;
+      if( !obj1.order && obj2.order ) return -1;
+      if( obj1.order && !obj2.order ) return 1;
+      else return 0;
+    }).reduce(
+      (obj: any, key: string) => { 
+        obj[key] = this.JSON.lib[key]; 
+        return obj;
+      }, 
+      {}
+    );
+    return Object.keys( orderedLibs );
   }
 
   /**
@@ -396,8 +429,8 @@ export class DependenciesManager {
       return [ ...this.JSON.lib[libName].styles ]
     } else {
       let styles: string[] = [];
-      for ( let lib of Object.keys(this.JSON.lib)){
-        styles.push( ...this.JSON.lib[lib].styles )
+      for ( let libValue of this.getAllLibValuesWithOrder() ){
+        styles.push( ...libValue.styles )
       }
       return styles
     }
@@ -408,8 +441,8 @@ export class DependenciesManager {
       return [ ...this.JSON.lib[libName].scripts ]
     } else {
       let scripts: string[] = [];
-      for ( let lib of Object.keys(this.JSON.lib)){
-        scripts.push( ...this.JSON.lib[lib].scripts )
+      for ( let libValue of this.getAllLibValuesWithOrder() ){
+        scripts.push( ...libValue.scripts )
       }
       return scripts
     }

@@ -14,6 +14,8 @@ export type visualJsonLib = {
     styles: string[],
   },
   url: string;
+  order?: number;
+  beforeCdn?: boolean;
 }
 
 export type visualJsonScheletonAsParam = {
