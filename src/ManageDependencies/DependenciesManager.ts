@@ -190,10 +190,18 @@ export class DependenciesManager {
   }
 
   /**
-   * @description get the lib dependencies of the current visual
+   * @description get the lib dependencies
    */
-  public getLibDependencies() {
+  public getLibDependencies(  ) {
     return this.JSON.lib;
+  }
+  /**
+   * @description it returns the dependencies of that specific lib
+   * @param libName 
+   */
+  public getLibDependenciesSpecific( libName: string ){
+    if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+    else return this.JSON.lib[libName];
   }
 
   /**

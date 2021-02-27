@@ -1,9 +1,7 @@
 
 import { ProjectTypes } from "../Enums/common.projectTypes";
 import { visualJsonLib } from "./manageVisual.jsons";
-export type ProjectJsonInformationsLibElem = visualJsonLib & {
-    visuals: string[]; // the names of the visuals that depends on this lib,
-}
+export type ProjectJsonInformationsLibElem = visualJsonLib;
 export type ProjectJsonInformations = {
     name: string;
     projectType: ProjectTypes;
