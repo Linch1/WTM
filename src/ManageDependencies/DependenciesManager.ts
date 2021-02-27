@@ -370,7 +370,7 @@ export class DependenciesManager {
       else return 0;
     });
   }
-  
+
   /**
    * @description returns an array that contains the names of the libs in order
    * - the order is given by the '[libNameDependencies].oreder' value in each lib
@@ -421,6 +421,11 @@ export class DependenciesManager {
     for (let scriptPath of scriptsPaths) {
       this.addLibScript(libName, scriptPath);
     }
+    this.CLIENT.saveJson();
+  }
+  public setLibOrder(libName: string, order: number) {
+    if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
+    this.JSON.lib[libName].order = order;
     this.CLIENT.saveJson();
   }
   public getAllLibStyles(libName?: string): string[]{
