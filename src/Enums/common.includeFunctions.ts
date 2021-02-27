@@ -12,7 +12,7 @@ export class IncludeFunctions{
             else return `<?php include(TEMPLATEPATH.'${path}');?>\n`;
         },
         html: ( path: string, initIncludePathWithMainFolderPath: boolean = true): string => {
-            return `INCLUDE FOR HTML NOT IMPLEMENTED YET`;
+            return `<div include-html='${path}'></div>`;
         },
     }
 
