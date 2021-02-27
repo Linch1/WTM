@@ -63,6 +63,10 @@ export class VisualWriter {
     this.visual.JSON_FILE_CONTENT.name = name;
     this.visual.saveJson();
   }
+  public setProjectPath(path: string){
+    this.visual.JSON_FILE_CONTENT.projectPath = path;
+    this.visual.saveJson();
+  }
   /**
    * @description populate the WTM.json file of the given visual with the identifiers contained in default.##
    */
