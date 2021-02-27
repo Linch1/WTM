@@ -7,8 +7,13 @@ export class VisualsDependenciesManager extends DependenciesManager {
     constructor( public CLIENT: Visual ){
         super(CLIENT);
     }
+    /**
+     * @description copty in the passed lib the given informations
+     * - this method override the old lib informations
+     * @param libName the name of the lib where to add the dependencies
+     * @param libDep the dependencies to add
+     */
     public copyLibDependencies( libName: string, libDep: ProjectJsonInformationsLibElem ){
-        if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
         this.JSON.lib[libName] = libDep;
         this.CLIENT.saveJson();
     }
