@@ -11,7 +11,6 @@ import { ConstProjects } from "../Constants/const.projects";
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
 import { Visual } from "../ManageVisual";
 import { identifierActions, IncludeFunctions, renderTypes } from "../Enums";
-import { View } from "../Entities";
 import { IdentifierHtml, IdentifierPlaceholder } from "../Identifiers";
 import { ConstProjectsInit } from "../Constants/const.projects.init";
 import { FileReader } from "../files";
@@ -262,21 +261,21 @@ export class Project {
     }
     
     // - views
-    let index = new View( 'index', this );
-    if( !index.isCreated() ){
-      index.create();
-      if( this.getProjectType() != ProjectTypes.html ){
-        let headerInclude = this.parseInclude( IncludeFunctions.include( htmlStartView.getRenderFilePath(), this.getProjectType() ) );
-        let footerInclude = this.parseInclude( IncludeFunctions.include( htmlEndView.getRenderFilePath(), this.getProjectType() ) );
-        if( !index.getViewStart() ) index.setViewStart( headerInclude );
-        if( !index.getViewEnd() ) index.setViewEnd( footerInclude );
-      } else {
-        if( !index.getViewStart() ) index.setViewStart( ConstProjectsInit.htmlStart );
-        if( !index.getViewEnd() ) index.setViewEnd( ConstProjectsInit.htmlEnd );
-        index.addDefaultScript( ConstProjectsInit.IncludeScriptForHtmlProject ); 
-      }
-      index.reCreate();
-    }
+    // let index = new View( 'index', new Project( this.getPath() ) );
+    // if( !index.isCreated() ){
+    //   index.create();
+    //   if( this.getProjectType() != ProjectTypes.html ){
+    //     let headerInclude = this.parseInclude( IncludeFunctions.include( htmlStartView.getRenderFilePath(), this.getProjectType() ) );
+    //     let footerInclude = this.parseInclude( IncludeFunctions.include( htmlEndView.getRenderFilePath(), this.getProjectType() ) );
+    //     if( !index.getViewStart() ) index.setViewStart( headerInclude );
+    //     if( !index.getViewEnd() ) index.setViewEnd( footerInclude );
+    //   } else {
+    //     if( !index.getViewStart() ) index.setViewStart( ConstProjectsInit.htmlStart );
+    //     if( !index.getViewEnd() ) index.setViewEnd( ConstProjectsInit.htmlEnd );
+    //     index.addDefaultScript( ConstProjectsInit.IncludeScriptForHtmlProject ); 
+    //   }
+    //   index.reCreate();
+    // }
   }
 
 }

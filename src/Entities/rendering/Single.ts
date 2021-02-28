@@ -5,8 +5,9 @@ import { ProjectTypes } from "../../Enums";
 import { checkMapProjectTypeToExtension } from "../../Checkers/check.mapProjectTypeToExtension";
 import { ConstWordpress } from "../../Constants/wordpress/const.wp";
 import { ConstViews } from "../../Constants/const.views";
+
 import { AbstractGeneralView } from "../../Abstracts/AbstractGeneralView";
-import { Project } from "../../ManageProjects";
+import { Project } from "../../ManageProjects/Project";
 
 export class Single extends AbstractGeneralView {
   constructor( nullOne: ThemeAux, nullTwo: string ){

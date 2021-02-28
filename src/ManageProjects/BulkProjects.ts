@@ -48,14 +48,14 @@ export class BulkProjects{
      */
     public refreshProjectsCache(): void{
         for ( let projectPath of this.PROJECTS_JSON_INFORMATIONS.projectPaths ){
+            let projectJsonPath = StringComposeWriter.concatenatePaths(
+                projectPath,
+                ConstProjects.jsonPathInProjectDirectory,
+                ConstProjects.jsonProjectFile
+            );
+            if( !FileReader.existsPath( projectJsonPath )) { this.removeProject( projectPath )}
             let projectInfos: ProjectJsonInformations = JSON.parse(
-                FileReader.readFile(
-                    StringComposeWriter.concatenatePaths(
-                        projectPath,
-                        ConstProjects.jsonPathInProjectDirectory,
-                        ConstProjects.jsonProjectFile
-                    )
-                )
+                FileReader.readFile( projectJsonPath )
             );
             let project = new Project(projectInfos);
             this.PROJECTS_CACHE[projectInfos.name] = project;
@@ -77,6 +77,13 @@ export class BulkProjects{
     public addProject(infos: ProjectJsonInformations){
         this.PROJECTS_CACHE[infos.name] = new Project( infos );
         this.PROJECTS_JSON_INFORMATIONS.projectPaths.push(infos.path);
+        this.saveJson();
+    }
+    public removeProject(path: string){
+        this.PROJECTS_JSON_INFORMATIONS.projectPaths.splice(
+            this.PROJECTS_JSON_INFORMATIONS.projectPaths.indexOf(path),
+            1
+        );
         this.saveJson();
     }
 }
