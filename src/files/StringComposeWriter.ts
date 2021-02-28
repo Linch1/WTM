@@ -44,11 +44,11 @@ export class StringComposeWriter {
     textToAdd: string,
     startChar: string,
     endChar: string
-  ) {
+  ): void {
     let fileText = FileReader.readFile( filePath );
     let foundAndRegex = StringComposeReader.readBeetweenStrings( filePath, startChar, endChar );
-    if( !foundAndRegex.text ) return fileText;
-    else return fileText.replace( foundAndRegex.bewtweenCharsRegex, startChar + foundAndRegex.text + textToAdd + endChar );
+    if( !foundAndRegex.text ) return;
+    else FileWriter.writeFile( filePath, fileText.replace(foundAndRegex.bewtweenCharsRegex, startChar + foundAndRegex.text + textToAdd + endChar) );
   }
   
   /**
