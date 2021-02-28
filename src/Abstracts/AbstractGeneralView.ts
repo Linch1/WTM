@@ -315,7 +315,7 @@ export abstract class AbstractGeneralView {
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_HEADER] = this.getDefaultHeader();
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER] = this.getDefaultFooter();
     params[this.IDENTIFIER_PLACEHOLDER_DEFAULT_SCRIPTS] = this.getDefaultScripts();
-    params[this.IDENTIFIER_PLACEHOLDER_DEFAULT_STYLES] = this.getDefaultScripts();
+    params[this.IDENTIFIER_PLACEHOLDER_DEFAULT_STYLES] = this.getDefaultStyles();
 
     let newContent: string = defaultContent;
     newContent = Identifiers.replaceAllIdentifiersPlaceholders(
