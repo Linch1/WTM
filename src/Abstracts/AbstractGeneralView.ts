@@ -101,7 +101,7 @@ export abstract class AbstractGeneralView {
   }
   setDefaultHeader( newOne: string ) {
     this.JSON_COMMON_INFORMATIONS.header = newOne;
-    this.saveJson();
+    this.saveCommonInformationsJson();
   }
   /**
    * @description get the common footer ( it is inside the this.JSON_COMMON_INFORMATIONS_FILE_PATH)
@@ -111,7 +111,7 @@ export abstract class AbstractGeneralView {
   }
   setDefaultFooter( newOne: string ) {
     this.JSON_COMMON_INFORMATIONS.footer = newOne;
-    this.saveJson();
+    this.saveCommonInformationsJson();
   }
   getDefaultScripts(): string {
     return this.JSON_COMMON_INFORMATIONS.scripts.join('\n');
@@ -123,11 +123,11 @@ export abstract class AbstractGeneralView {
   addDefaultScript( script: string ){
     if( this.JSON_COMMON_INFORMATIONS.scripts.includes( script ) ) return;
     this.JSON_COMMON_INFORMATIONS.scripts.push( script );
-    this.saveJson();
+    this.saveCommonInformationsJson();
   }
   setDefaultScripts( scripts: string[] ) {
     this.JSON_COMMON_INFORMATIONS.scripts = scripts;
-    this.saveJson();
+    this.saveCommonInformationsJson();
   }
   getDefaultStyles(): string {
     return this.JSON_COMMON_INFORMATIONS.styles.join('\n');
@@ -139,11 +139,11 @@ export abstract class AbstractGeneralView {
   addDefaultStyle( style: string ){
     if( this.JSON_COMMON_INFORMATIONS.styles.includes( style ) ) return;
     this.JSON_COMMON_INFORMATIONS.styles.push( style );
-    this.saveJson();
+    this.saveCommonInformationsJson();
   }
   setDefaultStyles( styles: string[] ) {
     this.JSON_COMMON_INFORMATIONS.styles = styles;
-    this.saveJson();
+    this.saveCommonInformationsJson();
   }
   /**
    * @description delete the all the relative files
@@ -168,9 +168,10 @@ export abstract class AbstractGeneralView {
       JSON.stringify(this.JSON_INFORMATIONS)
     );
   }
-  public reloadJson(): void {
-    this.JSON_COMMON_INFORMATIONS = JSON.parse(
-      FileReader.readFile(this.JSON_COMMON_INFORMATIONS_FILE_PATH)
+  public saveCommonInformationsJson(): void {
+    FileWriter.writeFile(
+      this.JSON_COMMON_INFORMATIONS_FILE_PATH,
+      JSON.stringify(this.JSON_COMMON_INFORMATIONS)
     );
   }
   /**
