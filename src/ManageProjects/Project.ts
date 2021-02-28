@@ -124,6 +124,7 @@ export class Project {
       if( !index.getDefaultHeader() ) index.setDefaultHeader( headerInclude + stylesImplementerInclude );
       if( !index.getDefaultFooter() ) index.setDefaultFooter( footerInclude + scriptImplementerInclude );
       if ( this.getProjectType() == ProjectTypes.html ) index.addDefaultScript( ConstProjects.htmlProjectIncludeJs ); 
+      index.reloadJson();
       index.reCreate();
     }
   }

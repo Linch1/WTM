@@ -168,6 +168,11 @@ export abstract class AbstractGeneralView {
       JSON.stringify(this.JSON_INFORMATIONS)
     );
   }
+  public reloadJson(): void {
+    this.JSON_COMMON_INFORMATIONS = JSON.parse(
+      FileReader.readFile(this.JSON_COMMON_INFORMATIONS_FILE_PATH)
+    );
+  }
   /**
    * @description get the absolute path to the main file of the view
    */
