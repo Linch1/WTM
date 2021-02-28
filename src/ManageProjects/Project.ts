@@ -108,8 +108,12 @@ export class Project {
     let index = new View( this.getViewsPath(), 'index', this.getProjectType() );
     if( !index.isCreated() ){
       index.create();
-      if( !index.getDefaultHeader() ) index.setDefaultHeader( IncludeFunctions.include( header.getRenderFilePath(), this.getProjectType() ) );
-      if( !index.getDefaultFooter() ) index.setDefaultFooter( IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() ) );
+      let headerInclude = IncludeFunctions.include( header.getRenderFilePath(), this.getProjectType() );
+      headerInclude = headerInclude.includes( this.getPath() ) ? headerInclude.replace( this.getPath(), "") : headerInclude;
+      let footerInclude = IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() );
+      footerInclude = footerInclude.includes( this.getPath() ) ? footerInclude.replace( this.getPath(), "") : footerInclude;
+      if( !index.getDefaultHeader() ) index.setDefaultHeader( headerInclude );
+      if( !index.getDefaultFooter() ) index.setDefaultFooter( footerInclude );
       index.reCreate();
     }
     
