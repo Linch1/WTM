@@ -184,7 +184,6 @@ class VisualConverter {
     text: string,
     project: Project
   ): string {
-    
     // [WTM-PLACEHOLDER-VS-ASSETS-IMAGES]
     this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsImages] = this.visual.depManager.getAssetsImgPath();
     // [WTM-PLACEHOLDER-VS-ASSETS-CSS]

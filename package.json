@@ -23,7 +23,8 @@
         "@types/node": "^14.14.10"
     },
     "dependencies": {
-        "prettier": "^2.2.1",
-        "@types/prettier": "^2.1.5"
+        "@types/prettier": "^2.1.5",
+        "path": "^0.12.7",
+        "prettier": "^2.2.1"
     }
 }

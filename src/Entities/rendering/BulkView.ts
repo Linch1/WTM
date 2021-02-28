@@ -1,29 +1,41 @@
 import { checkValidExtension } from "../../Checkers/check.validExtension";
+import { ConstViews } from "../../Constants";
 import { ProjectTypes } from "../../Enums";
 import { extensions } from "../../Enums/common.extension";
 import { FileReader } from "../../files";
+import { Project } from "../../ManageProjects";
 import { View } from "./View";
 
 export class BulkView {
-    /**
-     * @param VIEWS_FOLDER the folder where the views are contained
-     * @param prefix the prefix of the views to read _with or without the dash '-' _
-     * @param extension the extension of the visual files ( php, ejs, html etc...) _without the dot_
-     */
-    constructor(public VIEWS_FOLDER: string, public prefix: string, public projectType: ProjectTypes){}
+    public viewsPath;
+    public prefix;
+    public projectType;
+    public projectPath;
+    constructor(public project: Project ){
+        this.viewsPath = this.project.getViewsPath();
+        this.prefix = ConstViews.Prefix;
+        this.projectType = this.project.getProjectType();
+        this.projectPath = this.project.getPath();
+    }
 
     public getAllViews(): View[]{
         let views: View[] = []; 
-        let viewsFolderFiles = FileReader.getFiles(this.VIEWS_FOLDER);
+        let viewsFolderFiles = FileReader.getFiles( this.viewsPath );
         for ( let viewFile of viewsFolderFiles){
-            if(!viewFile.startsWith(this.prefix)) continue;
+            if(!viewFile.startsWith( this.prefix )) continue;
             let viewNameArr: string[] = viewFile.split(".");
             let extension = viewNameArr.pop() as extensions; // remove the extension from the file name
             if(!checkValidExtension(extension)) continue; // if not valid extension skip it
             viewFile = viewNameArr.join(".");
-            views.push(new View(this.VIEWS_FOLDER, viewFile, this.projectType));
+            views.push( new View( viewFile, this.project ) );
         }
         return views;
+    }
+
+    public reCreateAll() {
+        for ( let view of this.getAllViews()){
+            view.reCreate();
+        }
     }
  
 }

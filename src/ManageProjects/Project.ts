@@ -13,11 +13,13 @@ import { Visual } from "../ManageVisual";
 import { identifierActions, IncludeFunctions, renderTypes } from "../Enums";
 import { View } from "../Entities";
 import { IdentifierHtml, IdentifierPlaceholder } from "../Identifiers";
+import { ConstProjectsInit } from "../Constants/const.projects.init";
+import { FileReader } from "../files";
 
 export class Project {
 
   
-  
+  public ERR_NO_PATH_EXISTS = "The passed pathd doesn't exists";
 
   public PROJECT_JSON_FILE_PATH: string;
   public PROJECT_JSON_DIR_PATH: string;
@@ -28,13 +30,30 @@ export class Project {
   public ASSETS_STYLES_PATH: string;
   public ASSETS_IMG_PATH: string;
   public ASSETS_LIB_PATH: string;
+
+  public JSON_FILE_CONTENT: ProjectJsonInformations;
   
 
   /**
    * @description
-   * @param JSON_FILE_CONTENT the initial informations with which the project is created
+   * @param projectContentOrPath the initial informations with which the project is created or ( if it already was created ) the project main folder 
    */
-  constructor(public JSON_FILE_CONTENT: ProjectJsonInformations) {
+  constructor(public projectContentOrPath: ProjectJsonInformations | string) {
+    
+    if( typeof projectContentOrPath != "string" ) this.JSON_FILE_CONTENT = projectContentOrPath;
+    else {
+      let jsonFile = StringComposeWriter.concatenatePaths(
+        projectContentOrPath,
+        ConstProjects.jsonPathInProjectDirectory,
+        ConstProjects.jsonProjectFile
+      )
+      if( FileReader.existsPath( jsonFile )) {
+        this.JSON_FILE_CONTENT = JSON.parse( FileReader.readFile( jsonFile ) );
+      } else {
+        throw new Error( this.ERR_NO_PATH_EXISTS );
+      }
+    }
+
     this.PROJECT_JSON_DIR_PATH = StringComposeWriter.concatenatePaths(
       this.getPath(),
       ConstProjects.jsonPathInProjectDirectory
@@ -69,7 +88,7 @@ export class Project {
   }
 
   public initalize() {
-
+    if( this.isCreated() ) return;
     FileWriter.createDirectory(this.PROJECT_JSON_DIR_PATH);
     FileWriter.createDirectory(this.getViewsPath());
     FileWriter.createDirectory(this.getVisualsPath());
@@ -82,50 +101,9 @@ export class Project {
       this.PROJECT_JSON_FILE_PATH,
       JSON.stringify(this.JSON_FILE_CONTENT)
     );
-    
-    // create this default visuals and views if not present
-    // - visuals
-    let header = this.buildVisual('header');
-    let footer = this.buildVisual('footer');
-    let scriptImplementer = this.buildVisual('add-scripts');
-    let stylesImplementer = this.buildVisual('add-styles');
-    let addScriptsIdentifier = IdentifierPlaceholder.getIdentifier( ConstProjects.IdentifierScripts, false);
-    let addStylesIdentifier = IdentifierPlaceholder.getIdentifier( ConstProjects.IdentifierStyles, false);
 
-    if( !header.isCreated() ){
-      header.writer.createVisual();
-      header.writer.editDefaultHtml(ConstProjects.htmlStart);
-      header.converter.render( renderTypes.HTML );
-    }
-    if( !footer.isCreated() ){
-      footer.writer.createVisual();
-      footer.writer.editDefaultHtml(ConstProjects.htmlFooter);
-      footer.converter.render( renderTypes.HTML );
-    }
-    if( !scriptImplementer.isCreated() ){
-      scriptImplementer.writer.createVisual();
-      scriptImplementer.writer.editDefaultHtml(addScriptsIdentifier + ConstProjects.htmlEnd);
-      scriptImplementer.converter.render( renderTypes.HTML );
-    }
-    if( !stylesImplementer.isCreated() ){
-      stylesImplementer.writer.createVisual();
-      stylesImplementer.writer.editDefaultHtml(addStylesIdentifier);
-      stylesImplementer.converter.render(renderTypes.HTML);
-    }
-    
-    // - views
-    let index = new View( this.getViewsPath(), 'index', this.getProjectType() );
-    if( !index.isCreated() ){
-      index.create();
-      let headerInclude = this.parseInclude( IncludeFunctions.include( header.getRenderFilePath(), this.getProjectType() ) );
-      let footerInclude = this.parseInclude( IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() ) );
-      let stylesImplementerInclude = this.parseInclude( IncludeFunctions.include( stylesImplementer.getRenderFilePath(), this.getProjectType() ) );
-      let scriptImplementerInclude = this.parseInclude( IncludeFunctions.include( scriptImplementer.getRenderFilePath(), this.getProjectType() ) );
-      if( !index.getDefaultHeader() ) index.setDefaultHeader( headerInclude + stylesImplementerInclude );
-      if( !index.getDefaultFooter() ) index.setDefaultFooter( footerInclude + scriptImplementerInclude );
-      if ( this.getProjectType() == ProjectTypes.html ) index.addDefaultScript( ConstProjects.htmlProjectIncludeJs ); 
-      index.reCreate();
-    }
+    this.createDefaultContent();
+
   }
   
   public buildVisual( name: string ): Visual{
@@ -210,9 +188,15 @@ export class Project {
   public getPath(): string {
     return this.JSON_FILE_CONTENT.path;
   }
-  // alias of getPath() to work with the dependenciesManager
+  /**
+   *  @description  alias of getPath() to work with the dependenciesManager
+   * */
   public getProjectPath(): string {
     return this.getPath();
+  }
+
+  public isCreated(): boolean {
+    return FileReader.existsPath( this.PROJECT_JSON_DIR_PATH );
   }
   
   /**
@@ -257,6 +241,42 @@ export class Project {
   public setPath(newOne: string) {
     this.JSON_FILE_CONTENT.path = newOne;
     this.saveJson();
+  }
+
+  public createDefaultContent(){
+    // create this default visuals and views if not present
+    // - visuals
+    let htmlStartView: Visual = this.buildVisual('htmlStart');
+    let htmlEndView: Visual = this.buildVisual('htmlEnd');
+    if( this.getProjectType() != ProjectTypes.html ){
+      if( !htmlStartView.isCreated() ){
+        htmlStartView.writer.createVisual();
+        htmlStartView.writer.editDefaultHtml(ConstProjectsInit.htmlStart);
+        htmlStartView.converter.render( renderTypes.HTML );
+      }
+      if( !htmlEndView.isCreated() ){
+        htmlEndView.writer.createVisual();
+        htmlEndView.writer.editDefaultHtml(ConstProjectsInit.htmlEnd);
+        htmlEndView.converter.render( renderTypes.HTML );
+      }
+    }
+    
+    // - views
+    let index = new View( 'index', this );
+    if( !index.isCreated() ){
+      index.create();
+      if( this.getProjectType() != ProjectTypes.html ){
+        let headerInclude = this.parseInclude( IncludeFunctions.include( htmlStartView.getRenderFilePath(), this.getProjectType() ) );
+        let footerInclude = this.parseInclude( IncludeFunctions.include( htmlEndView.getRenderFilePath(), this.getProjectType() ) );
+        if( !index.getViewStart() ) index.setViewStart( headerInclude );
+        if( !index.getViewEnd() ) index.setViewEnd( footerInclude );
+      } else {
+        if( !index.getViewStart() ) index.setViewStart( ConstProjectsInit.htmlStart );
+        if( !index.getViewEnd() ) index.setViewEnd( ConstProjectsInit.htmlEnd );
+        index.addDefaultScript( ConstProjectsInit.IncludeScriptForHtmlProject ); 
+      }
+      index.reCreate();
+    }
   }
 
 }

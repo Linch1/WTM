@@ -2,6 +2,7 @@ import { FileReader } from "./FileReader";
 import { FileWriter } from "./FileWriter";
 import * as prettier from "prettier";
 import { StringComposeReader } from "./StringComposeReader";
+import * as path from 'path';
 
 export class StringComposeWriter {
   /**
@@ -21,6 +22,14 @@ export class StringComposeWriter {
       : completePath;
     return completePath;
   }
+  /**
+   * @description returns the realtive path to path2 from path1
+   * @param path1 
+   * @param path2 
+   */
+  static relativePath( path1: string, path2: string): string{
+    return path.relative(path.dirname(path1),path.dirname(path2));
+  } 
 
   /**
    * @description

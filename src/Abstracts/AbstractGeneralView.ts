@@ -1,14 +1,15 @@
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { extensions,  ProjectTypes } from "../Enums";
+import { extensions,  identifierActions,  identifierType,  ProjectTypes } from "../Enums";
 import { FileWriter } from "../files/FileWriter";
 import { informationsJson } from "../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { addBlockParams } from "../Types/entity.rendering.params.addBlock";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
-import { Identifiers } from "../Identifiers";
+import { IdentifierPlaceholder, Identifiers } from "../Identifiers";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
 import { ConstViews } from "../Constants/const.views";
+import { Project } from "../ManageProjects/Project";
 
 export abstract class AbstractGeneralView {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -18,11 +19,19 @@ export abstract class AbstractGeneralView {
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
 
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = ConstViews.IdentifierPageName;
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = ConstViews.IdentifierPageHeader;
-  public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = ConstViews.IdentifierPageFooter;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_START: string = ConstViews.IdentifierPageStart;
+  public readonly IDENTIFIER_PLACEHOLDER_PAGE_END: string = ConstViews.IdentifierPageEnd;
 
   public readonly IDENTIFIER_PLACEHOLDER_DEFAULT_SCRIPTS: string = ConstViews.IdentifierDefaultScripts;
   public readonly IDENTIFIER_PLACEHOLDER_DEFAULT_STYLES: string = ConstViews.IdentifierDefaultStyles;
+
+  public PAGE_PROJECT_TYPE: ProjectTypes;
+  public VIEWS_FOLDER: string;
+  public PAGE_PREFIX: string;
+  public JSON_FOLDER_PATH: string;
+  public JSON_FILE_PATH: string;
+  public JSON_COMMON_INFORMATIONS_FILE_PATH: string;
+  public COMMON_DEFAULT_BUILD_FILE_PATH: string;
 
   public JSON_INFORMATIONS: informationsJson = ConstViews.getViewsJsonInformations();
   public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonInformations( );
@@ -32,7 +41,7 @@ export abstract class AbstractGeneralView {
    * 
    * @param PAGE_NAME 
    * @param PAGE_EXTENSION 
-   * @param PARENT_DIR_PATH Absolute path
+   * @param VIEWS_FOLDER Absolute path
    * @param PAGE_PREFIX 
    * @param JSON_FOLDER_PATH Absolute path
    * @param JSON_FILE_PATH Absolute path
@@ -40,17 +49,20 @@ export abstract class AbstractGeneralView {
    * @param COMMON_DEFAULT_BUILD_FILE_PATH Absolute path
    */
   constructor(
+    
     public PAGE_NAME: string,
-    public PAGE_PROJECT_TYPE: ProjectTypes,
-    public PARENT_DIR_PATH: string,
-    public PAGE_PREFIX: string,
-    public JSON_FOLDER_PATH: string,
-    public JSON_FILE_PATH: string,
-    public JSON_COMMON_INFORMATIONS_FILE_PATH: string,
-    public COMMON_DEFAULT_BUILD_FILE_PATH: string
+    public PROJECT: Project,
+
   ) {
+    this.PAGE_PREFIX = ConstViews.Prefix;
+    this.VIEWS_FOLDER = this.PROJECT.getViewsPath();
+    this.PAGE_PROJECT_TYPE = this.PROJECT.getProjectType();
+    this.JSON_FOLDER_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, ConstViews.JsonDirectory);
+    this.JSON_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, `${ConstViews.JsonDirectory}/${this.PAGE_NAME.toLowerCase().split(" ").join("-")}.json`);
+    this.COMMON_DEFAULT_BUILD_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, `${ConstViews.CommonContentFileName}.${checkMapProjectTypeToExtension(this.PAGE_PROJECT_TYPE)}`);
+    this.JSON_COMMON_INFORMATIONS_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, ConstViews.JsonDirectory, ConstViews.CommonJsonFile);
     this.JSON_INFORMATIONS.view.name = PAGE_NAME;
-    this.JSON_INFORMATIONS.view.projectType = PAGE_PROJECT_TYPE;
+    this.JSON_INFORMATIONS.view.projectType = this.PAGE_PROJECT_TYPE;
   }
 
   /**
@@ -64,7 +76,7 @@ export abstract class AbstractGeneralView {
    * @description create the needed files and directories
    */
   public initialize(): void {
-    FileWriter.createDirectory(this.PARENT_DIR_PATH);
+    FileWriter.createDirectory(this.VIEWS_FOLDER);
     FileWriter.createDirectory(this.JSON_FOLDER_PATH);
     FileWriter.createFile(
       this.JSON_COMMON_INFORMATIONS_FILE_PATH,
@@ -94,23 +106,23 @@ export abstract class AbstractGeneralView {
     return this.COMMON_DEFAULT_BUILD;
   }
   /**
-   * @description get the common header ( it is inside the this.JSON_COMMON_INFORMATIONS_FILE_PATH)
+   * @description get the common viewStart ( it is inside the this.JSON_COMMON_INFORMATIONS_FILE_PATH)
    */
-  getDefaultHeader(): string {
-    return this.JSON_COMMON_INFORMATIONS.header;
+  getViewStart(): string {
+    return this.JSON_COMMON_INFORMATIONS.viewStart;
   }
-  setDefaultHeader( newOne: string ) {
-    this.JSON_COMMON_INFORMATIONS.header = newOne;
+  setViewStart( newOne: string ) {
+    this.JSON_COMMON_INFORMATIONS.viewStart = newOne;
     this.saveCommonInformationsJson();
   }
   /**
-   * @description get the common footer ( it is inside the this.JSON_COMMON_INFORMATIONS_FILE_PATH)
+   * @description get the common viewEnd ( it is inside the this.JSON_COMMON_INFORMATIONS_FILE_PATH)
    */
-  getDefaultFooter(): string {
-    return this.JSON_COMMON_INFORMATIONS.footer;
+  getViewEnd(): string {
+    return this.JSON_COMMON_INFORMATIONS.viewEnd;
   }
-  setDefaultFooter( newOne: string ) {
-    this.JSON_COMMON_INFORMATIONS.footer = newOne;
+  setViewEnd( newOne: string ) {
+    this.JSON_COMMON_INFORMATIONS.viewEnd = newOne;
     this.saveCommonInformationsJson();
   }
   getDefaultScripts(): string {
@@ -179,7 +191,7 @@ export abstract class AbstractGeneralView {
    */
   public getPath(): string {
     return StringComposeWriter.concatenatePaths(
-      this.PARENT_DIR_PATH,
+      this.VIEWS_FOLDER,
       this.getFileName()
     );
   }
@@ -195,6 +207,9 @@ export abstract class AbstractGeneralView {
    */
   public setName(name: string) {
     this.JSON_INFORMATIONS.view.name = name;
+  }
+  public getProjectPath(): string{
+    return this.VIEWS_FOLDER;
   }
   /**
    * @description get the extension of the view
@@ -312,8 +327,8 @@ export abstract class AbstractGeneralView {
     let defaultContent: string = this.getDefaultBuild();
     let params: replaceAllParams = {};
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_NAME] = this.PAGE_NAME;
-    params[this.IDENTIFIER_PLACEHOLDER_PAGE_HEADER] = this.getDefaultHeader();
-    params[this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER] = this.getDefaultFooter();
+    params[this.IDENTIFIER_PLACEHOLDER_PAGE_START] = this.getViewStart();
+    params[this.IDENTIFIER_PLACEHOLDER_PAGE_END] = this.getViewEnd();
     params[this.IDENTIFIER_PLACEHOLDER_DEFAULT_SCRIPTS] = this.getDefaultScripts();
     params[this.IDENTIFIER_PLACEHOLDER_DEFAULT_STYLES] = this.getDefaultStyles();
 
@@ -322,6 +337,9 @@ export abstract class AbstractGeneralView {
       newContent,
       params
     );
+    let project = new Project( this.getProjectPath() );
+    newContent = this.populateScripts( newContent );
+    newContent = this.populateStyles( newContent );
     this.setName(this.PAGE_NAME);
     FileWriter.writeFile(
       this.JSON_FILE_PATH,
@@ -419,5 +437,60 @@ ${blockInfo.close}
       IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.parentBlockName)[1]
     );
     StringComposeWriter.makePretty(this.getPath());
+  }
+
+  public populateScripts( text: string ): string{
+    let scripts = [ 
+      ...this.PROJECT.depManager.getAllLibCdnScripts(), 
+      ...this.PROJECT.depManager.getAllLibScripts(),
+      ...this.PROJECT.depManager.getScripts(),
+      ...this.PROJECT.depManager.getVisualsScripts()
+    ]
+    for ( let i = 0; i < scripts.length; i++){
+      scripts[i] = `<script type="module" src="${scripts[i]}" ></script>`
+    }
+    let tagStart = `
+      <div 
+      id="${ConstViews.IdentifierScripts}" 
+      data-action="${identifierActions.EXECUTABLE}" 
+      data-type="${identifierType.PLACEHOLDER}" 
+      data-name="${ConstViews.IdentifierScripts}" 
+      >`;
+    tagStart = tagStart.replace(/\n/g,' '); // removes the \n chars
+    tagStart = tagStart.replace(/[ \t]+/g,' '); // conver sequences of white spaces to a single white space
+
+    let tagEnd = `</div>`;
+    let finalBlock = tagStart + scripts.join('\n') + tagEnd;
+    return text.replace(
+      IdentifierPlaceholder.getIdentifierWithAction(ConstViews.IdentifierScripts, identifierActions.EXECUTABLE),
+      finalBlock
+    )
+  } 
+  public populateStyles( text: string ): string{
+    let styles = [ 
+      ...this.PROJECT.depManager.getAllLibCdnStyles(), 
+      ...this.PROJECT.depManager.getAllLibStyles(),
+      ...this.PROJECT.depManager.getStyles(),
+      ...this.PROJECT.depManager.getVisualsStyles()
+    ]
+    for ( let i = 0; i < styles.length; i++){
+      styles[i] = `<link rel="stylesheet" href="${styles[i]}">`
+    }
+    let tagStart = `
+      <div 
+      id="${ConstViews.IdentifierScripts}" 
+      data-action="${identifierActions.EXECUTABLE}" 
+      data-type="${identifierType.PLACEHOLDER}" 
+      data-name="${ConstViews.IdentifierScripts}" 
+      >`;
+    tagStart = tagStart.replace(/\n/g,' '); // removes the \n chars
+    tagStart = tagStart.replace(/[ \t]+/g,' '); // conver sequences of white spaces to a single white space
+
+    let tagEnd = `</div>`;
+    let finalBlock = tagStart + styles.join('\n') + tagEnd;
+    return text.replace(
+      IdentifierPlaceholder.getIdentifierWithAction(ConstViews.IdentifierStyles, identifierActions.EXECUTABLE),
+      finalBlock
+    )
   }
 }
