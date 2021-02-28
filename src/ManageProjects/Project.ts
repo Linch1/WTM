@@ -90,7 +90,7 @@ export class Project {
     let scriptImplementer = this.buildVisual('add-scripts');
     let stylesImplementer = this.buildVisual('add-styles');
     let addScriptsIdentifier = IdentifierHtml.getIdentifier( ConstProjects.IdentifierScripts, false);
-    let addStylesIdentifier = IdentifierHtml.getIdentifierWithAction( ConstProjects.IdentifierStyles, false);
+    let addStylesIdentifier = IdentifierHtml.getIdentifier( ConstProjects.IdentifierStyles, false);
 
     if( !header.isCreated() ){
       header.writer.createVisual();
