@@ -337,7 +337,6 @@ export abstract class AbstractGeneralView {
       newContent,
       params
     );
-    let project = new Project( this.getProjectPath() );
     newContent = this.populateScripts( newContent );
     newContent = this.populateStyles( newContent );
     this.setName(this.PAGE_NAME);

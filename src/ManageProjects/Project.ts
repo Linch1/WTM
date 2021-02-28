@@ -11,6 +11,7 @@ import { ConstProjects } from "../Constants/const.projects";
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
 import { Visual } from "../ManageVisual";
 import { identifierActions, IncludeFunctions, renderTypes } from "../Enums";
+import { View } from "../Entities";
 import { IdentifierHtml, IdentifierPlaceholder } from "../Identifiers";
 import { ConstProjectsInit } from "../Constants/const.projects.init";
 import { FileReader } from "../files";
