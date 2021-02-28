@@ -7,7 +7,7 @@ import { ProjectTypes } from "../..";
 import { ConstViews } from "../../Constants/const.views";
 
 export class View extends AbstractGeneralView {
-  constructor( parentAbsPath : string, pageName: string, projectType: ProjectTypes) {
+  constructor( viewsPath : string, pageName: string, projectType: ProjectTypes) {
 
     let viewsDefaultFolder: string = ConstViews.Directory;
     let viewsDefaultPrefix: string = ConstViews.Prefix;
@@ -15,26 +15,26 @@ export class View extends AbstractGeneralView {
 
     let extension: extensions = checkMapProjectTypeToExtension(projectType);
 
-    // the parentAbsPath point to the views directory, if not the default viewsFolderName is at the end of the path and the directory will be created
-    parentAbsPath = parentAbsPath.trim();
-    if( !(StringComposeReader.getPathLastElem(parentAbsPath) == viewsDefaultFolder) )
-      parentAbsPath = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultFolder);
+    // the viewsPath point to the views directory, if not the default viewsFolderName is at the end of the path and the directory will be created
+    viewsPath = viewsPath.trim();
+    if( !(StringComposeReader.getPathLastElem(viewsPath) == viewsDefaultFolder) )
+      viewsPath = StringComposeWriter.concatenatePaths(viewsPath, viewsDefaultFolder);
 
     pageName = pageName.trim();
 
-    let viewsDefaultJsonFolderPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}`);
+    let viewsDefaultJsonFolderPath: string = StringComposeWriter.concatenatePaths(viewsPath, `${viewsDefaultJsonFolder}`);
     
     if( pageName.includes(viewsDefaultPrefix) ) pageName = pageName.replace(viewsDefaultPrefix, "");
     extension = extension.trim() as extensions;
 
-    let currentViewJsonPath = StringComposeWriter.concatenatePaths(parentAbsPath, `${viewsDefaultJsonFolder}/${pageName.toLowerCase().split(" ").join("-")}.json`);
-    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, viewsDefaultJsonFolder, ConstViews.CommonJsonFile);
-    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(parentAbsPath, `${ConstViews.CommonContentFileName}.${extension}`);
+    let currentViewJsonPath = StringComposeWriter.concatenatePaths(viewsPath, `${viewsDefaultJsonFolder}/${pageName.toLowerCase().split(" ").join("-")}.json`);
+    let viewsCommonJsonPath: string = StringComposeWriter.concatenatePaths(viewsPath, viewsDefaultJsonFolder, ConstViews.CommonJsonFile);
+    let viewsCommonDefaultBuildPath: string = StringComposeWriter.concatenatePaths(viewsPath, `${ConstViews.CommonContentFileName}.${extension}`);
     
     super(
       pageName,
       projectType,
-      parentAbsPath,
+      viewsPath,
       viewsDefaultPrefix,
       viewsDefaultJsonFolderPath,
       currentViewJsonPath,

@@ -9,6 +9,9 @@ import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectType
 import { ConstProjects } from "../Constants/const.projects";
 
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
+import { Visual } from "../ManageVisual";
+import { IncludeFunctions, renderTypes } from "../Enums";
+import { View } from "../Entities";
 
 export class Project {
 
@@ -65,6 +68,7 @@ export class Project {
   }
 
   public initalize() {
+
     FileWriter.createDirectory(this.PROJECT_JSON_DIR_PATH);
     FileWriter.createDirectory(this.getViewsPath());
     FileWriter.createDirectory(this.getVisualsPath());
@@ -77,7 +81,43 @@ export class Project {
       this.PROJECT_JSON_FILE_PATH,
       JSON.stringify(this.JSON_FILE_CONTENT)
     );
+    
+    // create this default visuals and views if not present
+    // - visuals
+    let header = this.createVisual('header');
+    let footer = this.createVisual('footer');
+    let defaultHeader = ConstProjects.getDefaultHeader();
+    let defaultFooter = ConstProjects.getDefaultFooter();
+    if ( this.getProjectType() == ProjectTypes.html ){
+      defaultHeader = ConstProjects.getDefaultHeader();
+      defaultFooter = ConstProjects.getDefaultFooter([ ConstProjects.htmlProjectIncludeJs ]);
+    }
+    header.writer.editDefaultHtml(defaultHeader);
+    footer.writer.editDefaultHtml(defaultFooter);
+    header.converter.render( renderTypes.HTML );
+    footer.converter.render( renderTypes.HTML );
+    // - views
+    let index = new View( this.getViewsPath(), 'index', this.getProjectType() );
+    index.setDefaultHeader( IncludeFunctions.include( header.getRenderFilePath(), this.getProjectType() ) );
+    index.setDefaultFooter( IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() ) );
+    index.reCreate();
   }
+  
+  public createVisual( name: string ): Visual{
+    let visualScheleton = {
+      name: name,
+      projectPath: this.getPath(),
+      projectType: this.getProjectType() as ProjectTypes,
+      assetsAutoImport: false,
+      author: "",
+      authorUrl: "",
+      githubRepo: ""
+    }
+    let visual = new Visual( this.getVisualsPath(), visualScheleton );
+    visual.writer.createVisual();
+    return visual;
+  }
+
   public saveJson() {
     FileWriter.writeFile(
       this.PROJECT_JSON_FILE_PATH,

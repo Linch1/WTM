@@ -22,7 +22,7 @@ export abstract class AbstractGeneralView {
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = ConstViews.IdentifierPageFooter;
 
   public JSON_INFORMATIONS: informationsJson = ConstViews.getViewsJsonInformations();
-  public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonInformations();
+  public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonInformations( );
   public COMMON_DEFAULT_BUILD = ConstViews.CommonContent; // modified in wp themes and singles
 
   /**
@@ -67,7 +67,7 @@ export abstract class AbstractGeneralView {
       this.JSON_COMMON_INFORMATIONS_FILE_PATH,
       JSON.stringify(this.JSON_COMMON_INFORMATIONS)
     );
-    FileWriter.createFile( this.COMMON_DEFAULT_BUILD_FILE_PATH, "" );
+    FileWriter.createFile( this.COMMON_DEFAULT_BUILD_FILE_PATH, this.COMMON_DEFAULT_BUILD );
 
     this.JSON_COMMON_INFORMATIONS = JSON.parse(
       FileReader.readFile(this.JSON_COMMON_INFORMATIONS_FILE_PATH)
@@ -96,13 +96,20 @@ export abstract class AbstractGeneralView {
   getDefaultHeader(): string {
     return this.JSON_COMMON_INFORMATIONS.header;
   }
+  setDefaultHeader( newOne: string ) {
+    this.JSON_COMMON_INFORMATIONS.header = newOne;
+    this.saveJson();
+  }
   /**
    * @description get the common footer ( it is inside the this.JSON_COMMON_INFORMATIONS_FILE_PATH)
    */
   getDefaultFooter(): string {
     return this.JSON_COMMON_INFORMATIONS.footer;
   }
-
+  setDefaultFooter( newOne: string ) {
+    this.JSON_COMMON_INFORMATIONS.footer = newOne;
+    this.saveJson();
+  }
   /**
    * @description delete the all the relative files
    */

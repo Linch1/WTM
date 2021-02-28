@@ -1,3 +1,4 @@
+import { IncludeFunctions } from "../Enums";
 import { ProjectTypes } from "../Enums/common.projectTypes";
 import { informationsJson } from "../Types/entity.rendering.jsons";
 
@@ -31,7 +32,7 @@ export class ConstViews {
   static getViewsJsonInformations(): informationsJson {
     return JSON.parse(JSON.stringify(ConstViews.JsonInformations));
   }
-  static getViewsCommonJsonInformations(): {
+  static getViewsCommonJsonInformations( ): {
     header: string;
     footer: string;
   } {

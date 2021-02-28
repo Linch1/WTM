@@ -1,4 +1,5 @@
 
+import { ProjectTypes } from "../Enums";
 import { ProjectJsonInformationsLibElem } from "../Types/manageProject.jsonInformations";
 import { ConstVisuals } from "./const.visuals";
 
@@ -35,4 +36,80 @@ export class ConstProjects {
         url: ""
     }
   }
+
+
+  /**
+   * DEFAULT VALUES FOR POPULATING A NEWLY CREATED PROJECT
+   */
+
+  static getDefaultHeader( custom?: string[] ){
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        ${ custom ? custom.join(' ') : "" }
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        [WTM-HTML-!EXEC!-ADD-STYLES]`
+  }
+
+  static getDefaultFooter( custom?: string[] ){
+    return `
+    <footer></footer>
+    ${ custom ? custom.join(' ') : "" }
+    [WTM-HTML-!EXEC!-ADD-SCRIPTS]
+    </body>
+    </html>`
+  }
+
+  /**
+   * @description script for allow the include in html 
+   */
+  static htmlProjectIncludeJs = `
+<script>
+function includeHTML() {
+  var z, i, elmnt, file, xhttp;
+  /*loop through a collection of all HTML elements:*/
+  z = document.getElementsByTagName("*");
+  for (i = 0; i < z.length; i++) {
+    elmnt = z[i];
+    /*search for elements with a certain atrribute:*/
+    file = elmnt.getAttribute("include-html").startsWith('/') ? \${process.env.PWD}\${elmnt.getAttribute("include-html")} : \${process.env.PWD}/\${elmnt.getAttribute("include-html")}
+    if (file) {
+      /*make an HTTP request using the attribute value as the file name:*/
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+            elmnt.innerHTML = this.responseText;
+          }
+          if (this.status == 404) {
+            elmnt.innerHTML = "Page not found.";
+          }
+          /*remove the attribute, and call this function once more:*/
+          elmnt.removeAttribute("include-html");
+          includeHTML();
+        }
+      };
+      xhttp.open("GET", file, true);
+      xhttp.send();
+      /*exit the function:*/
+      return;
+    }
+  }
+}
+
+// execute the includes
+window.addEventListener('load', start, false )
+function start() {
+    includeHTML();
+}
+</script>
+`
+
+
 }
