@@ -90,7 +90,7 @@ export class Project {
     let defaultFooter = ConstProjects.getDefaultFooter();
     if ( this.getProjectType() == ProjectTypes.html ){
       defaultHeader = ConstProjects.getDefaultHeader();
-      defaultFooter = ConstProjects.getDefaultFooter([ ConstProjects.htmlProjectIncludeJs ]);
+      defaultFooter = ConstProjects.getDefaultFooter();
     }
 
     if( !header.isCreated() ){
@@ -113,7 +113,7 @@ export class Project {
       let footerInclude = IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() );
       footerInclude = footerInclude.includes( this.getPath() ) ? footerInclude.replace( this.getPath(), "") : footerInclude;
       if( !index.getDefaultHeader() ) index.setDefaultHeader( headerInclude );
-      if( !index.getDefaultFooter() ) index.setDefaultFooter( footerInclude );
+      if( !index.getDefaultFooter() ) index.setDefaultFooter( ConstProjects.htmlProjectIncludeJs + footerInclude );
       index.reCreate();
     }
     
