@@ -84,26 +84,38 @@ export class Project {
     
     // create this default visuals and views if not present
     // - visuals
-    let header = this.createVisual('header');
-    let footer = this.createVisual('footer');
+    let header = this.buildVisual('header');
+    let footer = this.buildVisual('footer');
     let defaultHeader = ConstProjects.getDefaultHeader();
     let defaultFooter = ConstProjects.getDefaultFooter();
     if ( this.getProjectType() == ProjectTypes.html ){
       defaultHeader = ConstProjects.getDefaultHeader();
       defaultFooter = ConstProjects.getDefaultFooter([ ConstProjects.htmlProjectIncludeJs ]);
     }
-    header.writer.editDefaultHtml(defaultHeader);
-    footer.writer.editDefaultHtml(defaultFooter);
-    header.converter.render( renderTypes.HTML );
-    footer.converter.render( renderTypes.HTML );
+
+    if( !header.isCreated() ){
+      header.writer.createVisual();
+      header.writer.editDefaultHtml(defaultHeader);
+      header.converter.render( renderTypes.HTML );
+    }
+    if( !footer.isCreated() ){
+      footer.writer.createVisual();
+      footer.writer.editDefaultHtml(defaultFooter);
+      footer.converter.render( renderTypes.HTML );
+    }
+    
     // - views
     let index = new View( this.getViewsPath(), 'index', this.getProjectType() );
-    index.setDefaultHeader( IncludeFunctions.include( header.getRenderFilePath(), this.getProjectType() ) );
-    index.setDefaultFooter( IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() ) );
-    index.reCreate();
+    if( !index.isCreated() ){
+      index.create();
+      if( !index.getDefaultHeader() ) index.setDefaultHeader( IncludeFunctions.include( header.getRenderFilePath(), this.getProjectType() ) );
+      if( !index.getDefaultFooter() ) index.setDefaultFooter( IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() ) );
+      index.reCreate();
+    }
+    
   }
   
-  public createVisual( name: string ): Visual{
+  public buildVisual( name: string ): Visual{
     let visualScheleton = {
       name: name,
       projectPath: this.getPath(),
@@ -114,7 +126,6 @@ export class Project {
       githubRepo: ""
     }
     let visual = new Visual( this.getVisualsPath(), visualScheleton );
-    visual.writer.createVisual();
     return visual;
   }
 
