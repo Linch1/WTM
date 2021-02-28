@@ -53,7 +53,10 @@ export class BulkProjects{
                 ConstProjects.jsonPathInProjectDirectory,
                 ConstProjects.jsonProjectFile
             );
-            if( !FileReader.existsPath( projectJsonPath )) { this.removeProject( projectPath )}
+            if( !FileReader.existsPath( projectJsonPath )) { 
+                this.removeProject( projectPath );
+                continue;
+            }
             let projectInfos: ProjectJsonInformations = JSON.parse(
                 FileReader.readFile( projectJsonPath )
             );
