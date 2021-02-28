@@ -12,7 +12,7 @@ import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations
 import { Visual } from "../ManageVisual";
 import { identifierActions, IncludeFunctions, renderTypes } from "../Enums";
 import { View } from "../Entities";
-import { IdentifierHtml } from "../Identifiers";
+import { IdentifierHtml, IdentifierPlaceholder } from "../Identifiers";
 
 export class Project {
 
@@ -89,8 +89,8 @@ export class Project {
     let footer = this.buildVisual('footer');
     let scriptImplementer = this.buildVisual('add-scripts');
     let stylesImplementer = this.buildVisual('add-styles');
-    let addScriptsIdentifier = IdentifierHtml.getIdentifier( ConstProjects.IdentifierScripts, false);
-    let addStylesIdentifier = IdentifierHtml.getIdentifier( ConstProjects.IdentifierStyles, false);
+    let addScriptsIdentifier = IdentifierPlaceholder.getIdentifier( ConstProjects.IdentifierScripts, false);
+    let addStylesIdentifier = IdentifierPlaceholder.getIdentifier( ConstProjects.IdentifierStyles, false);
 
     if( !header.isCreated() ){
       header.writer.createVisual();

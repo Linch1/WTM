@@ -26,11 +26,11 @@ export class ConstViews {
   static CommonBaseBlock = "BODY";
   static CommonContent = `
 [WTM-PLACEHOLDER-PAGE-HEADER]
-[WTM-ADD-DEFAULT-STYLES]
+[WTM-PLACEHOLDER-ADD-DEFAULT-STYLES]
 <!--<[WTM-HTML-BODY]-->
 
 <!--[WTM-HTML-BODY]>-->
-[WTM-ADD-DEFAULT-SCRIPTS]
+[WTM-PLACEHOLDER-ADD-DEFAULT-SCRIPTS]
 [WTM-PLACEHOLDER-PAGE-FOOTER]`; //  content used to generate a view file, this is the content of 'common.--'
   static JsonInformations: informationsJson = {
     blocks: { BODY: { open: "", close: "", include: [] } },
