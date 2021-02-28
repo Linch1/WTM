@@ -355,6 +355,7 @@ export abstract class AbstractGeneralView {
    */
   public includeRelative(parentBlockName: string, path: string): void {
     if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
+    if( this.JSON_INFORMATIONS.blocks[parentBlockName].include.includes(path) ) return
     this.buildIncludeRelative(parentBlockName, path);
     this.JSON_INFORMATIONS.blocks[parentBlockName].include.push(path);
     this.saveJson();
