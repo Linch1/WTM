@@ -103,7 +103,6 @@ export class Project {
     );
 
     this.createDefaultContent();
-
   }
   
   public buildVisual( name: string ): Visual{
@@ -260,23 +259,22 @@ export class Project {
         htmlEndView.converter.render( renderTypes.HTML );
       }
     }
-    
     // - views
-    // let index = new View( 'index', new Project( this.getPath() ) );
-    // if( !index.isCreated() ){
-    //   index.create();
-    //   if( this.getProjectType() != ProjectTypes.html ){
-    //     let headerInclude = this.parseInclude( IncludeFunctions.include( htmlStartView.getRenderFilePath(), this.getProjectType() ) );
-    //     let footerInclude = this.parseInclude( IncludeFunctions.include( htmlEndView.getRenderFilePath(), this.getProjectType() ) );
-    //     if( !index.getViewStart() ) index.setViewStart( headerInclude );
-    //     if( !index.getViewEnd() ) index.setViewEnd( footerInclude );
-    //   } else {
-    //     if( !index.getViewStart() ) index.setViewStart( ConstProjectsInit.htmlStart );
-    //     if( !index.getViewEnd() ) index.setViewEnd( ConstProjectsInit.htmlEnd );
-    //     index.addDefaultScript( ConstProjectsInit.IncludeScriptForHtmlProject ); 
-    //   }
-    //   index.reCreate();
-    // }
+    let index = new View( 'index', new Project( this.getPath() ) );
+    if( !index.isCreated() ){
+      index.create();
+      if( this.getProjectType() != ProjectTypes.html ){
+        let headerInclude = this.parseInclude( IncludeFunctions.include( htmlStartView.getRenderFilePath(), this.getProjectType() ) );
+        let footerInclude = this.parseInclude( IncludeFunctions.include( htmlEndView.getRenderFilePath(), this.getProjectType() ) );
+        if( !index.getViewStart() ) index.setViewStart( headerInclude );
+        if( !index.getViewEnd() ) index.setViewEnd( footerInclude );
+      } else {
+        if( !index.getViewStart() ) index.setViewStart( ConstProjectsInit.htmlStart );
+        if( !index.getViewEnd() ) index.setViewEnd( ConstProjectsInit.htmlEnd );
+        index.addDefaultScript( ConstProjectsInit.IncludeScriptForHtmlProject ); 
+      }
+      index.reCreate();
+    }
   }
 
 }
