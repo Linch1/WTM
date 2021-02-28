@@ -10,8 +10,9 @@ import { ConstProjects } from "../Constants/const.projects";
 
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
 import { Visual } from "../ManageVisual";
-import { IncludeFunctions, renderTypes } from "../Enums";
+import { identifierActions, IncludeFunctions, renderTypes } from "../Enums";
 import { View } from "../Entities";
+import { IdentifierHtml } from "../Identifiers";
 
 export class Project {
 
@@ -86,37 +87,45 @@ export class Project {
     // - visuals
     let header = this.buildVisual('header');
     let footer = this.buildVisual('footer');
-    let defaultHeader = ConstProjects.getDefaultHeader();
-    let defaultFooter = ConstProjects.getDefaultFooter();
-    if ( this.getProjectType() == ProjectTypes.html ){
-      defaultHeader = ConstProjects.getDefaultHeader();
-      defaultFooter = ConstProjects.getDefaultFooter();
-    }
+    let scriptImplementer = this.buildVisual('add-scripts');
+    let stylesImplementer = this.buildVisual('add-styles');
+    let addScriptsIdentifier = IdentifierHtml.getIdentifierWithAction( ConstProjects.IdentifierScripts, identifierActions.EXECUTABLE, false);
+    let addStylesIdentifier = IdentifierHtml.getIdentifierWithAction( ConstProjects.IdentifierStyles, identifierActions.EXECUTABLE, false);
 
     if( !header.isCreated() ){
       header.writer.createVisual();
-      header.writer.editDefaultHtml(defaultHeader);
+      header.writer.editDefaultHtml(ConstProjects.htmlStart);
       header.converter.render( renderTypes.HTML );
     }
     if( !footer.isCreated() ){
       footer.writer.createVisual();
-      footer.writer.editDefaultHtml(defaultFooter);
+      footer.writer.editDefaultHtml(ConstProjects.htmlFooter);
       footer.converter.render( renderTypes.HTML );
+    }
+    if( !scriptImplementer.isCreated() ){
+      scriptImplementer.writer.createVisual();
+      scriptImplementer.writer.editDefaultHtml(addScriptsIdentifier + ConstProjects.htmlEnd);
+      scriptImplementer.converter.render( renderTypes.HTML );
+    }
+    if( !stylesImplementer.isCreated() ){
+      stylesImplementer.writer.createVisual();
+      stylesImplementer.writer.editDefaultHtml(addStylesIdentifier);
+      stylesImplementer.converter.render(renderTypes.HTML);
     }
     
     // - views
     let index = new View( this.getViewsPath(), 'index', this.getProjectType() );
     if( !index.isCreated() ){
       index.create();
-      let headerInclude = IncludeFunctions.include( header.getRenderFilePath(), this.getProjectType() );
-      headerInclude = headerInclude.includes( this.getPath() ) ? headerInclude.replace( this.getPath(), "") : headerInclude;
-      let footerInclude = IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() );
-      footerInclude = footerInclude.includes( this.getPath() ) ? footerInclude.replace( this.getPath(), "") : footerInclude;
-      if( !index.getDefaultHeader() ) index.setDefaultHeader( headerInclude );
-      if( !index.getDefaultFooter() ) index.setDefaultFooter( ConstProjects.htmlProjectIncludeJs + footerInclude );
+      let headerInclude = this.parseInclude( IncludeFunctions.include( header.getRenderFilePath(), this.getProjectType() ) );
+      let footerInclude = this.parseInclude( IncludeFunctions.include( footer.getRenderFilePath(), this.getProjectType() ) );
+      let stylesImplementerInclude = this.parseInclude( IncludeFunctions.include( stylesImplementer.getRenderFilePath(), this.getProjectType() ) );
+      let scriptImplementerInclude = this.parseInclude( IncludeFunctions.include( scriptImplementer.getRenderFilePath(), this.getProjectType() ) );
+      if( !index.getDefaultHeader() ) index.setDefaultHeader( headerInclude + stylesImplementerInclude );
+      if( !index.getDefaultFooter() ) index.setDefaultFooter( footerInclude + scriptImplementerInclude );
+      if ( this.getProjectType() == ProjectTypes.html ) index.addDefaultScript( ConstProjects.htmlProjectIncludeJs ); 
       index.reCreate();
     }
-    
   }
   
   public buildVisual( name: string ): Visual{
@@ -131,6 +140,9 @@ export class Project {
     }
     let visual = new Visual( this.getVisualsPath(), visualScheleton );
     return visual;
+  }
+  public parseInclude( path: string): string{
+    return path.includes( this.getPath() ) ? path.replace( this.getPath(), "") : path;
   }
 
   public saveJson() {

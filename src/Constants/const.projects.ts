@@ -42,29 +42,26 @@ export class ConstProjects {
    * DEFAULT VALUES FOR POPULATING A NEWLY CREATED PROJECT
    */
 
-  static getDefaultHeader( custom?: string[] ){
-    return `
+  static IdentifierScripts = "ADD-SCRIPTS";
+  static IdentifierStyles = "ADD-STYLES";
+
+  static htmlStart = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        ${ custom ? custom.join(' ') : "" }
+        
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
     </head>
-    <body>
-        [WTM-HTML-!EXEC!-ADD-STYLES]`
-  }
+    <body>`
 
-  static getDefaultFooter( custom?: string[] ){
-    return `
-    <footer></footer>
-    ${ custom ? custom.join(' ') : "" }
-    [WTM-HTML-!EXEC!-ADD-SCRIPTS]
+  static htmlEnd = `
     </body>
     </html>`
-  }
+
+  static htmlFooter = `<footer></footer>`;
 
   /**
    * @description script for allow the include in html 

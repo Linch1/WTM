@@ -21,6 +21,9 @@ export abstract class AbstractGeneralView {
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_HEADER: string = ConstViews.IdentifierPageHeader;
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_FOOTER: string = ConstViews.IdentifierPageFooter;
 
+  public readonly IDENTIFIER_PLACEHOLDER_DEFAULT_SCRIPTS: string = ConstViews.IdentifierDefaultScripts;
+  public readonly IDENTIFIER_PLACEHOLDER_DEFAULT_STYLES: string = ConstViews.IdentifierDefaultStyles;
+
   public JSON_INFORMATIONS: informationsJson = ConstViews.getViewsJsonInformations();
   public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonInformations( );
   public COMMON_DEFAULT_BUILD = ConstViews.CommonContent; // modified in wp themes and singles
@@ -108,6 +111,38 @@ export abstract class AbstractGeneralView {
   }
   setDefaultFooter( newOne: string ) {
     this.JSON_COMMON_INFORMATIONS.footer = newOne;
+    this.saveJson();
+  }
+  getDefaultScripts(): string {
+    return this.JSON_COMMON_INFORMATIONS.scripts.join('\n');
+  }
+  /**
+   * @description add a script in the default scripts
+   * @param style the script to add ( including open and close script tag )
+   */
+  addDefaultScript( script: string ){
+    if( this.JSON_COMMON_INFORMATIONS.scripts.includes( script ) ) return;
+    this.JSON_COMMON_INFORMATIONS.scripts.push( script );
+    this.saveJson();
+  }
+  setDefaultScripts( scripts: string[] ) {
+    this.JSON_COMMON_INFORMATIONS.scripts = scripts;
+    this.saveJson();
+  }
+  getDefaultStyles(): string {
+    return this.JSON_COMMON_INFORMATIONS.styles.join('\n');
+  }
+  /**
+   * @description add a style in the default styles
+   * @param style the style to add ( including open and close style tag / link tag for cdn or paths )
+   */
+  addDefaultStyle( style: string ){
+    if( this.JSON_COMMON_INFORMATIONS.styles.includes( style ) ) return;
+    this.JSON_COMMON_INFORMATIONS.styles.push( style );
+    this.saveJson();
+  }
+  setDefaultStyles( styles: string[] ) {
+    this.JSON_COMMON_INFORMATIONS.styles = styles;
     this.saveJson();
   }
   /**
@@ -273,6 +308,8 @@ export abstract class AbstractGeneralView {
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_NAME] = this.PAGE_NAME;
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_HEADER] = this.getDefaultHeader();
     params[this.IDENTIFIER_PLACEHOLDER_PAGE_FOOTER] = this.getDefaultFooter();
+    params[this.IDENTIFIER_PLACEHOLDER_DEFAULT_SCRIPTS] = this.getDefaultScripts();
+    params[this.IDENTIFIER_PLACEHOLDER_DEFAULT_STYLES] = this.getDefaultScripts();
 
     let newContent: string = defaultContent;
     newContent = Identifiers.replaceAllIdentifiersPlaceholders(
