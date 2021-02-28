@@ -369,7 +369,7 @@ export abstract class AbstractGeneralView {
   public buildIncludeRelative(parentBlockName: string, path: string): void {
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(parentBlockName))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
-    StringComposeWriter.appendBeetweenChars(
+    StringComposeWriter.appendBeetweenStrings(
       this.getPath(),
       this.getIncludeFunction(path),
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[0],
@@ -430,7 +430,7 @@ ${IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.blockName)[0]}
 ${IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.blockName)[1]}
 ${blockInfo.close}
 `;
-    StringComposeWriter.appendBeetweenChars(
+    StringComposeWriter.appendBeetweenStrings(
       this.getPath(),
       toAdd,
       IdentifierHtml.getIdentifierPairHtmlComment(blockInfo.parentBlockName)[0],
@@ -457,8 +457,8 @@ ${blockInfo.close}
       data-name="${ConstViews.IdentifierScripts}" 
       >`;
     tagStart = tagStart.replace(/\n/g,' '); // removes the \n chars
-    tagStart = tagStart.replace(/[ \t]+/g,' '); // conver sequences of white spaces to a single white space
-
+    tagStart = tagStart.replace(/[ \t]+/g,' '); // convert sequences of white spaces to a single white space
+    
     let tagEnd = `</div>`;
     let finalBlock = tagStart + scripts.join('\n') + tagEnd;
     return text.replace(

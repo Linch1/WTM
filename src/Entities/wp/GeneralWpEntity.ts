@@ -115,7 +115,7 @@ export class GeneralWpEntity<T extends {skipIfExists?: boolean;}> implements Int
     let requireFunction = WpFunctionComposer.requirePhpFile(
       StringComposeWriter.concatenatePaths(this.PARENT_DIR_PATH, this.CUSTOM_PART_NAME)
     );
-    StringComposeWriter.appendBeetweenChars(
+    StringComposeWriter.appendBeetweenStrings(
       this.themeAux.THEME_FUNCTIONS_FILE,
       requireFunction,
       IdentifierImport.getIdentifierPairJsComment(this.IDENTIFIER_NAME)[0],
