@@ -89,8 +89,8 @@ export class Project {
     let footer = this.buildVisual('footer');
     let scriptImplementer = this.buildVisual('add-scripts');
     let stylesImplementer = this.buildVisual('add-styles');
-    let addScriptsIdentifier = IdentifierHtml.getIdentifierWithAction( ConstProjects.IdentifierScripts, identifierActions.EXECUTABLE, false);
-    let addStylesIdentifier = IdentifierHtml.getIdentifierWithAction( ConstProjects.IdentifierStyles, identifierActions.EXECUTABLE, false);
+    let addScriptsIdentifier = IdentifierHtml.getIdentifier( ConstProjects.IdentifierScripts, false);
+    let addStylesIdentifier = IdentifierHtml.getIdentifierWithAction( ConstProjects.IdentifierStyles, false);
 
     if( !header.isCreated() ){
       header.writer.createVisual();
