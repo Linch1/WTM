@@ -312,7 +312,7 @@ export abstract class AbstractGeneralView {
           }
         );
       } else {
-        this.buildIncludeRelative(currentBlock, new Visual( this.PROJECT.getVisualsPath(), {name: pathToInclude} ));
+        this.buildIncludeRelative(currentBlock, new Visual( this.PROJECT.getVisualsPath(), {name: pathToInclude, projectPath: this.PROJECT.getProjectType()} ));
       }
     }
   }

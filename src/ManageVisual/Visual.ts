@@ -87,7 +87,7 @@ export class Visual {
     this.VISUAL_FOLDER = StringComposeWriter.concatenatePaths(this.VISUALS_FOLDER, this.getName());
     
     this.JSON_FILE_PATH = StringComposeWriter.concatenatePaths(
-      this.getDirPath(),
+      this.getDirPath(), // uses project type
       this.JSON_FILE_NAME
     );
     if( !FileReader.existsPath(this.JSON_FILE_PATH) && !this.getProjectType() ){
