@@ -10,6 +10,7 @@ import { IdentifierPlaceholder, Identifiers } from "../Identifiers";
 import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectTypeToExtension";
 import { ConstViews } from "../Constants/const.views";
 import { Project } from "../ManageProjects/Project";
+import { Visual } from "../ManageVisual";
 
 export abstract class AbstractGeneralView {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -17,6 +18,7 @@ export abstract class AbstractGeneralView {
   public readonly ERR_VIEW_NOT_CREATED =
     "ERR: Before calling this method create the view with the .create() method";
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
+  public readonly ERR_VISUAL_NO_EXISTS = "The passed visual doesn't exists";
 
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = ConstViews.IdentifierPageName;
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_START: string = ConstViews.IdentifierPageStart;
@@ -310,7 +312,7 @@ export abstract class AbstractGeneralView {
           }
         );
       } else {
-        this.buildIncludeRelative(currentBlock, pathToInclude);
+        this.buildIncludeRelative(currentBlock, new Visual( this.PROJECT.getVisualsPath(), {name: pathToInclude} ));
       }
     }
   }
@@ -353,11 +355,11 @@ export abstract class AbstractGeneralView {
    * @param parentBlockName
    * @param path
    */
-  public includeRelative(parentBlockName: string, path: string): void {
+  public includeRelative(parentBlockName: string, visual: Visual): void {
     if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
-    if( this.JSON_INFORMATIONS.blocks[parentBlockName].include.includes(path) ) return
-    this.buildIncludeRelative(parentBlockName, path);
-    this.JSON_INFORMATIONS.blocks[parentBlockName].include.push(path);
+    if( this.JSON_INFORMATIONS.blocks[parentBlockName].include.includes(visual.getName()) ) return;
+    this.buildIncludeRelative(parentBlockName, visual);
+    this.JSON_INFORMATIONS.blocks[parentBlockName].include.push(visual.getName());
     this.saveJson();
   }
   /**
@@ -366,12 +368,14 @@ export abstract class AbstractGeneralView {
    * @param parentBlockName
    * @param path
    */
-  public buildIncludeRelative(parentBlockName: string, path: string): void {
+  public buildIncludeRelative(parentBlockName: string, visual: Visual): void {
+    if( !visual.isCreated() ) throw new Error(this.ERR_VISUAL_NO_EXISTS);
+
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(parentBlockName))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenStrings(
       this.getPath(),
-      this.getIncludeFunction(path),
+      this.getIncludeFunction(visual.getRenderFilePath().replace( this.PROJECT.getPath(), "")), // parse path
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[1]
     );

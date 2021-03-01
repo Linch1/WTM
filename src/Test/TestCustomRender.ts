@@ -28,8 +28,8 @@ class TestCustomRender {
    
   }
   static includeFileInTemplate() {
-    view.includeRelative("BODY", "/partials/BODY");
-    view.includeRelative("PRIMO-DIV", "/partials/PRIMO-DIV");
+    //view.includeRelative("BODY", "/partials/BODY"); ignored
+    //view.includeRelative("PRIMO-DIV", "/partials/PRIMO-DIV"); ignored
   }
 
   static delete() {

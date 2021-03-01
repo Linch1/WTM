@@ -137,7 +137,7 @@ class ThemeWriter {
    */
   public renderingPageIncludeRelative( page: Single | Template, includeInfo: [ string, string ][] ){
     for ( let include of includeInfo ){
-      page.includeRelative(include[0], include[1]);
+      //page.includeRelative(include[0], include[1]); ignored
     }
   }
 
