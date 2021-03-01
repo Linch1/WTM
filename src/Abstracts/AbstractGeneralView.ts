@@ -376,7 +376,7 @@ export abstract class AbstractGeneralView {
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenStrings(
       this.getPath(),
-      this.getIncludeFunction(), // parse path
+      this.getIncludeFunction(pathToInclude), // parse path
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[1]
     );
