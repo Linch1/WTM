@@ -370,12 +370,13 @@ export abstract class AbstractGeneralView {
    */
   public buildIncludeRelative(parentBlockName: string, visual: Visual): void {
     if( !visual.isCreated() ) throw new Error(this.ERR_VISUAL_NO_EXISTS);
-
+    let pathToInclude = visual.getRenderFilePath().replace( this.PROJECT.getPath(), "")
+    pathToInclude = pathToInclude.startsWith('/') ? pathToInclude : '/' + pathToInclude;
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(parentBlockName))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenStrings(
       this.getPath(),
-      this.getIncludeFunction('/' + visual.getRenderFilePath().replace( this.PROJECT.getPath(), "")), // parse path
+      this.getIncludeFunction(), // parse path
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[1]
     );
