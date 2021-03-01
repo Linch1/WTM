@@ -375,7 +375,7 @@ export abstract class AbstractGeneralView {
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenStrings(
       this.getPath(),
-      this.getIncludeFunction(visual.getRenderFilePath().replace( this.PROJECT.getPath(), "")), // parse path
+      this.getIncludeFunction('/' + visual.getRenderFilePath().replace( this.PROJECT.getPath(), "")), // parse path
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[1]
     );
@@ -482,10 +482,10 @@ ${blockInfo.close}
     }
     let tagStart = `
       <div 
-      id="${ConstViews.IdentifierScripts}" 
+      id="${ConstViews.IdentifierStyles}" 
       data-action="${identifierActions.EXECUTABLE}" 
       data-type="${identifierType.PLACEHOLDER}" 
-      data-name="${ConstViews.IdentifierScripts}" 
+      data-name="${ConstViews.IdentifierStyles}" 
       >`;
     tagStart = tagStart.replace(/\n/g,' '); // removes the \n chars
     tagStart = tagStart.replace(/[ \t]+/g,' '); // conver sequences of white spaces to a single white space
