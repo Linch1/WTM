@@ -11,6 +11,7 @@ import { checkMapProjectTypeToExtension } from "../Checkers/check.mapProjectType
 import { ConstViews } from "../Constants/const.views";
 import { Project } from "../ManageProjects/Project";
 import { Visual } from "../ManageVisual";
+import { StringComposeReader } from "../files";
 
 export abstract class AbstractGeneralView {
   public readonly ERR_NOT_VALID_HTML_BLOCK =
@@ -370,8 +371,15 @@ export abstract class AbstractGeneralView {
    */
   public buildIncludeRelative(parentBlockName: string, visual: Visual): void {
     if( !visual.isCreated() ) throw new Error(this.ERR_VISUAL_NO_EXISTS);
-    let pathToInclude = visual.getRenderFilePath().replace( this.PROJECT.getPath(), "")
-    pathToInclude = pathToInclude.startsWith('/') ? pathToInclude : '/' + pathToInclude;
+    // here  
+    let pathToRenderFile = visual.getRenderFilePath() 
+    let renderFileName = StringComposeReader.getPathLastElem(pathToRenderFile);
+    let relativePathFromCurrentViewToRenderFile = StringComposeWriter.relativePath(
+      this.getPath(),
+      pathToRenderFile
+    );
+    let pathToInclude = StringComposeWriter.concatenatePaths(relativePathFromCurrentViewToRenderFile, renderFileName);
+
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(parentBlockName))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenStrings(
@@ -445,15 +453,25 @@ ${blockInfo.close}
   }
 
   public populateScripts( text: string ): string{
-    let scripts = [ 
-      ...this.PROJECT.depManager.getAllLibCdnScripts(), 
+    let scripts = [
       ...this.PROJECT.depManager.getAllLibScripts(),
       ...this.PROJECT.depManager.getScripts(),
       ...this.PROJECT.depManager.getVisualsScripts()
     ]
+    // parse the scripts to get a relative path from the view to the scripts
+    let viewPath = '/' + this.getPath().replace( this.PROJECT.getPath(), "" );
     for ( let i = 0; i < scripts.length; i++){
-      scripts[i] = `<script type="module" src="${scripts[i]}" ></script>`
+      let scriptPath = scripts[i]; 
+      let fileName = StringComposeReader.getPathLastElem(scriptPath);
+      let relativePathFromCurrentViewToScript = StringComposeWriter.relativePath(viewPath, scriptPath);
+      scriptPath = StringComposeWriter.concatenatePaths( relativePathFromCurrentViewToScript, fileName );
+      scripts[i] = `<script type="module" src="${scriptPath}" ></script>`
     }
+    let cdnScripts = this.PROJECT.depManager.getAllLibCdnScripts();
+    for ( let i = 0; i < cdnScripts.length; i++) cdnScripts[i] = `<script type="module" src="${cdnScripts[i]}" ></script>`
+    scripts.push( ...cdnScripts );
+
+
     let tagStart = `
       <div 
       id="${ConstViews.IdentifierScripts}" 
@@ -473,14 +491,23 @@ ${blockInfo.close}
   } 
   public populateStyles( text: string ): string{
     let styles = [ 
-      ...this.PROJECT.depManager.getAllLibCdnStyles(), 
       ...this.PROJECT.depManager.getAllLibStyles(),
       ...this.PROJECT.depManager.getStyles(),
       ...this.PROJECT.depManager.getVisualsStyles()
     ]
+    // parse the styles to get a relative path from the view to the styles
+    let viewPath = '/' + this.getPath().replace( this.PROJECT.getPath(), "" );
     for ( let i = 0; i < styles.length; i++){
-      styles[i] = `<link rel="stylesheet" href="${styles[i]}">`
+      let stylePath = styles[i]; 
+      let fileName = StringComposeReader.getPathLastElem(stylePath);
+      let relativePathFromCurrentViewToStyle = StringComposeWriter.relativePath(viewPath, stylePath);
+      stylePath = StringComposeWriter.concatenatePaths( relativePathFromCurrentViewToStyle, fileName );
+      styles[i] = `<link rel="stylesheet" href="${stylePath}">`
     }
+    let cdnStyles = this.PROJECT.depManager.getAllLibCdnStyles();
+    for ( let i = 0; i < cdnStyles.length; i++) cdnStyles[i] = `<script type="module" src="${cdnStyles[i]}" ></script>`
+    styles.push( ...cdnStyles );
+
     let tagStart = `
       <div 
       id="${ConstViews.IdentifierStyles}" 

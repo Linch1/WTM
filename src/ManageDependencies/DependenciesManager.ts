@@ -95,10 +95,9 @@ export class DependenciesManager {
     path = path.trim();
     let stylesPath = this.getAssetsStylesPath();
     let projectPath = this.getProjectPath();
-    if (!path.includes(stylesPath))
-      path = StringComposeWriter.concatenatePaths(stylesPath, path);
-    if (path.includes(projectPath)) path = path.replace(projectPath, "");
-
+    if (!path.includes(stylesPath)) path = StringComposeWriter.concatenatePaths(stylesPath, path);
+    if (path.includes(projectPath)) path = path.replace(projectPath, ""); // here
+    path = path.startsWith('/') ? path : `/${path}`;
     if (this.JSON.styles.includes(path)) return;
     this.JSON.styles.push(path);
     this.CLIENT.saveJson();
@@ -113,7 +112,8 @@ export class DependenciesManager {
     let projectPath = this.getProjectPath();
     if (!path.includes(scriptsPath))
       path = StringComposeWriter.concatenatePaths(scriptsPath, path);
-    if (path.includes(projectPath)) path = path.replace(projectPath, "");
+    if (path.includes(projectPath)) path = path.replace(projectPath, ""); // here
+    path = path.startsWith('/') ? path : `/${path}`;
 
     if (this.JSON.scripts.includes(path)) return;
     this.JSON.scripts.push(path);
@@ -211,14 +211,14 @@ export class DependenciesManager {
    * @param scriptPath
    */
   public addLibScript(libName: string, scriptPath: string) {
-    // -> this.initializeLibElem(elemName);
     if (!this.JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
     if (!scriptPath.includes(this.getProjectAssetsLibPath(libName)))
       scriptPath = StringComposeWriter.concatenatePaths(
         this.getProjectAssetsLibPath(libName),
         scriptPath
       );
-    scriptPath = scriptPath.replace(this.getProjectPath(), "");
+    scriptPath = scriptPath.replace(this.getProjectPath(), ""); // here
+    scriptPath = scriptPath.startsWith('/') ? scriptPath : `/${scriptPath}`;
     if (this.JSON.lib[libName].scripts.includes(scriptPath)) return;
 
     this.JSON.lib[libName].scripts.push(scriptPath);
@@ -238,7 +238,8 @@ export class DependenciesManager {
         this.getProjectAssetsLibPath(libName),
         stylePath
       );
-    stylePath = stylePath.replace(this.getProjectPath(), "");
+    stylePath = stylePath.replace(this.getProjectPath(), ""); // here
+    stylePath = stylePath.startsWith('/') ? stylePath : `/${stylePath}`;
     if (this.JSON.lib[libName].styles.includes(stylePath)) return;
 
     this.JSON.lib[libName].styles.push(stylePath);
