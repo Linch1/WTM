@@ -4,8 +4,8 @@ export class IncludeFunctions{
 
     static functions = {
         ejs: ( path: string, initIncludePathWithMainFolderPath: boolean = true): string => {
-            if( !initIncludePathWithMainFolderPath ) return `<%-include ("${path}", {TEMPLATE_PATH: process.env.PWD})-%>\n`;
-            else return `<%-include (TEMPLATE_PATH +"${path}", {TEMPLATE_PATH: process.env.PWD})-%>\n`;
+            if( !initIncludePathWithMainFolderPath ) return `<%-include ("${path}", {TEMPLATEPATH: process.env.PWD})-%>\n`;
+            else return `<%-include (TEMPLATEPATH +"${path}", {TEMPLATEPATH: process.env.PWD})-%>\n`;
         },
         wordpress: ( path: string, initIncludePathWithMainFolderPath: boolean = true): string => {
             if( !initIncludePathWithMainFolderPath ) return `<?php include('${path}');?>\n`
@@ -19,7 +19,7 @@ export class IncludeFunctions{
     /**
      * @description based on the passed extension it returns an include statement. Ex: 
      * - php:  *< ?php include(TEMPLATEPATH.'${path}');?>*
-     * - ejs:  *<%-include (TEMPLATE_PATH +"${path}", {TEMPLATE_PATH: process.env.PWD})-%>*
+     * - ejs:  *<%-include (TEMPLATEPATH +"${path}", {TEMPLATEPATH: process.env.PWD})-%>*
      * @param path tha path to include
      * @param extension the extension 
      * @param initIncludePathWithMainFolderPath if the included path has to start with the main template/project forlder _default: **true**_

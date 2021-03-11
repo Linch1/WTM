@@ -401,7 +401,7 @@ export abstract class AbstractGeneralView {
     } else {
       // else in the when includeed the variable containing the path to the folder will be concatenated to the path
       // ex: <?php include(TEMPLATEPATH.'${path}');?>
-      pathToInclude = renderFileName.replace( visual.getProjectPath(), "" );
+      pathToInclude = pathToRenderFile.replace( visual.getProjectPath(), "" );
       pathToInclude = pathToInclude.startsWith('/') ? pathToInclude : '/' + pathToInclude;
     }
     return pathToInclude;
@@ -479,7 +479,7 @@ ${blockInfo.close}
     viewPathInsideProject = viewPathInsideProject.startsWith('/') ? viewPathInsideProject : '/' + viewPathInsideProject;
     let fileName = StringComposeReader.getPathLastElem(styleOrCssPath);
     let relativePathFromCurrentViewToScript = StringComposeWriter.relativePath( viewPathInsideProject, styleOrCssPath);
-    let projectType = this.getProjectPath();
+    let projectType = this.getProjectType();
     let newPath: string;
     if( projectType == ProjectTypes.html){
       newPath = StringComposeWriter.concatenatePaths( relativePathFromCurrentViewToScript, fileName );
