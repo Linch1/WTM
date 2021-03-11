@@ -488,9 +488,8 @@ ${blockInfo.close}
       newPath = StringComposeWriter.concatenatePaths( relativePathFromCurrentViewToScript, fileName );
     } else {
       let styleOrCssPathInsideProject = styleOrCssPath.replace( this.PROJECT.getPath(), "" );
-      if ( projectType == ProjectTypes.ejs ) newPath = `<%= TEMPLATEPATH + '${styleOrCssPathInsideProject}' %>`;
-      else if ( projectType == ProjectTypes.wordpress ) newPath = `<?php echo TEMPLATEPATH . '${styleOrCssPathInsideProject}' ?>`;
-      else { throw new Error( this.ERR_TYPE_NOT_FOUND )}
+      newPath = IncludeFunctions.parsePath(styleOrCssPathInsideProject, projectType);
+      if( !(projectType in ProjectTypes) ) { throw new Error( this.ERR_TYPE_NOT_FOUND )}
     }
     //@ts-ignore
     return newPath;
