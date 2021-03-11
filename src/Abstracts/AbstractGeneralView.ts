@@ -371,15 +371,7 @@ export abstract class AbstractGeneralView {
    */
   public buildIncludeRelative(parentBlockName: string, visual: Visual): void {
     if( !visual.isCreated() ) throw new Error(this.ERR_VISUAL_NO_EXISTS);
-    // here  
-    let pathToRenderFile = visual.getRenderFilePath() 
-    let renderFileName = StringComposeReader.getPathLastElem(pathToRenderFile);
-    let relativePathFromCurrentViewToRenderFile = StringComposeWriter.relativePath(
-      this.getPath(),
-      pathToRenderFile
-    );
-    let pathToInclude = StringComposeWriter.concatenatePaths(relativePathFromCurrentViewToRenderFile, renderFileName);
-
+    let pathToInclude = this.getVisualPathToInclude(visual);
     if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(parentBlockName))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenStrings(
@@ -388,6 +380,31 @@ export abstract class AbstractGeneralView {
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[0],
       IdentifierHtml.getIdentifierPairHtmlComment(parentBlockName)[1]
     );
+  }
+
+  /**
+   * @description analize and returns the correcct path to include when adding the visual to a view
+   * @param visual the visualthat will be included in the view
+   * @returns the path to include in the view
+   */
+  public getVisualPathToInclude( visual: Visual ): string{
+    let pathToRenderFile = visual.getRenderFilePath() 
+    let renderFileName = StringComposeReader.getPathLastElem(pathToRenderFile);
+    let relativePathFromCurrentViewToRenderFile = StringComposeWriter.relativePath(
+      this.getPath(),
+      pathToRenderFile
+    );
+    let pathToInclude;
+    if( visual.getProjectType() == ProjectTypes.html ){
+      // use relative path if the project is html
+      pathToInclude = StringComposeWriter.concatenatePaths(relativePathFromCurrentViewToRenderFile, renderFileName);
+    } else {
+      // else in the when includeed the variable containing the path to the folder will be concatenated to the path
+      // ex: <?php include(TEMPLATEPATH.'${path}');?>
+      pathToInclude = renderFileName.replace( visual.getProjectPath(), "" );
+      pathToInclude = pathToInclude.startsWith('/') ? pathToInclude : '/' + pathToInclude;
+    }
+    return pathToInclude;
   }
 
   /**
@@ -452,19 +469,38 @@ ${blockInfo.close}
     StringComposeWriter.makePretty(this.getPath());
   }
 
+  /**
+   * @description returns the correct path to add as source when including the link or script
+   * @param styleOrCssPath the path to the css/js ( absolute path or the path starting from inside the project folder )
+   * @returns the path to add as the js/css source
+   */
+  public getStyleOrCssPathToInclude( styleOrCssPath: string ): string{
+    let viewPathInsideProject = this.getPath().replace( this.PROJECT.getPath(), "" );
+    viewPathInsideProject = viewPathInsideProject.startsWith('/') ? viewPathInsideProject : '/' + viewPathInsideProject;
+    let fileName = StringComposeReader.getPathLastElem(styleOrCssPath);
+    let relativePathFromCurrentViewToScript = StringComposeWriter.relativePath( viewPathInsideProject, styleOrCssPath);
+    let projectType = this.getProjectPath();
+    let newPath: string;
+    if( projectType == ProjectTypes.html){
+      newPath = StringComposeWriter.concatenatePaths( relativePathFromCurrentViewToScript, fileName );
+    } else {
+      let styleOrCssPathInsideProject = styleOrCssPath.replace( this.PROJECT.getPath(), "" );
+      if ( projectType == ProjectTypes.ejs ) newPath = `<%= TEMPLATEPATH + '${styleOrCssPathInsideProject}' %>`;
+      if ( projectType == ProjectTypes.wordpress ) newPath = `<?php echo TEMPLATEPATH . '${styleOrCssPathInsideProject}' ?>`;
+    }
+    //@ts-ignore
+    return newPath;
+  }
+
   public populateScripts( text: string ): string{
     let scripts = [
       ...this.PROJECT.depManager.getAllLibScripts(),
       ...this.PROJECT.depManager.getScripts(),
       ...this.PROJECT.depManager.getVisualsScripts()
     ]
-    // parse the scripts to get a relative path from the view to the scripts
-    let viewPath = '/' + this.getPath().replace( this.PROJECT.getPath(), "" );
     for ( let i = 0; i < scripts.length; i++){
       let scriptPath = scripts[i]; 
-      let fileName = StringComposeReader.getPathLastElem(scriptPath);
-      let relativePathFromCurrentViewToScript = StringComposeWriter.relativePath(viewPath, scriptPath);
-      scriptPath = StringComposeWriter.concatenatePaths( relativePathFromCurrentViewToScript, fileName );
+      scriptPath = this.getStyleOrCssPathToInclude(scriptPath);
       scripts[i] = `<script type="module" src="${scriptPath}" ></script>`
     }
     let cdnScripts = this.PROJECT.depManager.getAllLibCdnScripts();
@@ -495,13 +531,9 @@ ${blockInfo.close}
       ...this.PROJECT.depManager.getStyles(),
       ...this.PROJECT.depManager.getVisualsStyles()
     ]
-    // parse the styles to get a relative path from the view to the styles
-    let viewPath = '/' + this.getPath().replace( this.PROJECT.getPath(), "" );
     for ( let i = 0; i < styles.length; i++){
       let stylePath = styles[i]; 
-      let fileName = StringComposeReader.getPathLastElem(stylePath);
-      let relativePathFromCurrentViewToStyle = StringComposeWriter.relativePath(viewPath, stylePath);
-      stylePath = StringComposeWriter.concatenatePaths( relativePathFromCurrentViewToStyle, fileName );
+      stylePath = this.getStyleOrCssPathToInclude(stylePath);
       styles[i] = `<link rel="stylesheet" href="${stylePath}">`
     }
     let cdnStyles = this.PROJECT.depManager.getAllLibCdnStyles();
