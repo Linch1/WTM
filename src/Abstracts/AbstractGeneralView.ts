@@ -1,6 +1,6 @@
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { extensions,  identifierActions,  identifierType,  ProjectTypes } from "../Enums";
+import { extensions,  identifierActions,  identifierType,  IncludeFunctions,  ProjectTypes } from "../Enums";
 import { FileWriter } from "../files/FileWriter";
 import { informationsJson } from "../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
@@ -20,6 +20,7 @@ export abstract class AbstractGeneralView {
     "ERR: Before calling this method create the view with the .create() method";
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
   public readonly ERR_VISUAL_NO_EXISTS = "The passed visual doesn't exists";
+  public readonly ERR_TYPE_NOT_FOUND = "The passed type is not yet implemented to output a valid path";
 
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = ConstViews.IdentifierPageName;
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_START: string = ConstViews.IdentifierPageStart;
@@ -403,6 +404,8 @@ export abstract class AbstractGeneralView {
       // ex: <?php include(TEMPLATEPATH.'${path}');?>
       pathToInclude = pathToRenderFile.replace( visual.getProjectPath(), "" );
       pathToInclude = pathToInclude.startsWith('/') ? pathToInclude : '/' + pathToInclude;
+      if( !IncludeFunctions.include(pathToInclude, this.getProjectType() ).includes(IncludeFunctions.TEMPLATEPATH) )
+        throw new Error(this.ERR_TYPE_NOT_FOUND)
     }
     return pathToInclude;
   }
@@ -486,7 +489,8 @@ ${blockInfo.close}
     } else {
       let styleOrCssPathInsideProject = styleOrCssPath.replace( this.PROJECT.getPath(), "" );
       if ( projectType == ProjectTypes.ejs ) newPath = `<%= TEMPLATEPATH + '${styleOrCssPathInsideProject}' %>`;
-      if ( projectType == ProjectTypes.wordpress ) newPath = `<?php echo TEMPLATEPATH . '${styleOrCssPathInsideProject}' ?>`;
+      else if ( projectType == ProjectTypes.wordpress ) newPath = `<?php echo TEMPLATEPATH . '${styleOrCssPathInsideProject}' ?>`;
+      else { throw new Error( this.ERR_TYPE_NOT_FOUND )}
     }
     //@ts-ignore
     return newPath;

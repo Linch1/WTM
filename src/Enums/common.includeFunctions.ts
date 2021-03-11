@@ -27,4 +27,8 @@ export class IncludeFunctions{
     static include(path: string, projectType: ProjectTypes, initIncludePathWithMainFolderPath: boolean = true){
         return IncludeFunctions.functions[projectType](path, initIncludePathWithMainFolderPath);
     }
+    /**
+     * @description the variable name used to store the path to the project folder
+     */
+    static TEMPLATEPATH = 'TEMPLATEPATH'; 
 }
