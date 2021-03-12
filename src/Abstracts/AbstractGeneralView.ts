@@ -577,7 +577,7 @@ ${blockInfo.close}
   public getIncludedVisualsRecursive( currentBlock: string ): string[] {
     let blocks = this.JSON_INFORMATIONS.blocks;
     let visuals: string[] = [];
-    for( let included in blocks[currentBlock].include ){
+    for( let included of blocks[currentBlock].include ){
       if( Identifiers.checkCommentIdentifier(included) ) visuals.push( ...this.getIncludedVisualsRecursive( Identifiers.getIdentifierTypeName(included)[1] ) )
       else visuals.push( included );
     }

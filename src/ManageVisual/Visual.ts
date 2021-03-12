@@ -253,7 +253,7 @@ export class Visual {
    */
   public getVisualFiltered(): Visual | undefined{
     if( this.isCreated() ) return this;
-    else this.getFallbackVisual();
+    else return this.getFallbackVisual();
   }
   
   
