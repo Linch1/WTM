@@ -21,6 +21,7 @@ export abstract class AbstractGeneralView {
   public readonly ERR_VIEW_ALREADY_EXISTS = "ERR: The view already exists";
   public readonly ERR_VISUAL_NO_EXISTS = "The passed visual doesn't exists";
   public readonly ERR_TYPE_NOT_FOUND = "The passed type is not yet implemented to output a valid path";
+  public readonly ERR_NO_AVIABLE_VISUAL_TO_INCLUDE = "The visual is not created for the given project type and also the html type ( used as fallback ) is not present";
 
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_NAME: string = ConstViews.IdentifierPageName;
   public readonly IDENTIFIER_PLACEHOLDER_PAGE_START: string = ConstViews.IdentifierPageStart;
@@ -272,7 +273,9 @@ export abstract class AbstractGeneralView {
   }
 
   public reCreate(): void {
-
+    // check that the visuals exists before recreate ( and possible breaking ) the visual
+    this.checkIfIncludedVisualsExists();
+    // starts the recreation
     this.create(true);
     let blocks = this.getBlocks();
     this.reCreateBlocksRecursive(
@@ -314,7 +317,9 @@ export abstract class AbstractGeneralView {
           }
         );
       } else {
-        this.buildIncludeRelative(currentBlock, new Visual( this.PROJECT.getVisualsPath(), {name: pathToInclude, projectType: this.PROJECT.getProjectType()} ));
+        let visual = new Visual( this.PROJECT.getVisualsPath(), {name: pathToInclude, projectType: this.getProjectType()} ).getVisualFiltered();
+        //@ts-ignore the check that the visual is not undefined is done in this.reCreate()
+        this.buildIncludeRelative(currentBlock, visual);
       }
     }
   }
@@ -396,7 +401,7 @@ export abstract class AbstractGeneralView {
       pathToRenderFile
     );
     let pathToInclude;
-    if( visual.getProjectType() == ProjectTypes.html ){
+    if( this.getProjectType() == ProjectTypes.html ){
       // use relative path if the project is html
       pathToInclude = StringComposeWriter.concatenatePaths(relativePathFromCurrentViewToRenderFile, renderFileName);
     } else {
@@ -559,5 +564,38 @@ ${blockInfo.close}
       IdentifierPlaceholder.getIdentifierWithAction(ConstViews.IdentifierStyles, identifierActions.EXECUTABLE),
       finalBlock
     )
+  }
+
+  /**
+   * @description returns all the included visuals inside the view
+   * @returns 
+   */
+  public getIncludedVisuals(){
+    let startBlock = 'BODY';
+    return this.getIncludedVisualsRecursive( startBlock );
+  }
+  public getIncludedVisualsRecursive( currentBlock: string ): string[] {
+    let blocks = this.JSON_INFORMATIONS.blocks;
+    let visuals: string[] = [];
+    for( let included in blocks[currentBlock].include ){
+      if( Identifiers.checkCommentIdentifier(included) ) visuals.push( ...this.getIncludedVisualsRecursive( Identifiers.getIdentifierTypeName(included)[1] ) )
+      else visuals.push( included );
+    }
+    return visuals;
+  }
+
+  /**
+   * @description check if all the visuals are created for the current project type or as html ( fallback ), if not this function throws an error.
+   */
+  public checkIfIncludedVisualsExists(): void{
+    // check if all the visuals can be included correctly
+    let visualsInsideView = this.getIncludedVisuals();
+    for( let visualName of visualsInsideView ){
+      let visual = new Visual( 
+        this.PROJECT.getVisualsPath(), 
+        {name: visualName, projectType: this.getProjectType()} 
+      ).getVisualFiltered();
+      if( !visual ) throw new Error( this.ERR_NO_AVIABLE_VISUAL_TO_INCLUDE );
+    }
   }
 }
