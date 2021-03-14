@@ -193,11 +193,30 @@ export class Project {
   public getProjectPath(): string {
     return this.getPath();
   }
-
+  /**
+   * @description check if the project is created or not, returns true if yes flase if not
+   * @returns boolean
+   */
   public isCreated(): boolean {
     return FileReader.existsPath( this.PROJECT_JSON_DIR_PATH );
   }
+
+  /**
+   * @description get the url of the demo
+   * @returns 
+   */
+  public getDemoUrl(): string{
+    return this.JSON_FILE_CONTENT.demoUrl;
+  }
   
+  /**
+   * @description set the demo url
+   * @param newOne 
+   */
+  public setDemoUrl( newOne: string): void{
+    this.JSON_FILE_CONTENT.demoUrl = newOne;
+  }
+
   /**
    * @description set the path to the project views folder
    */

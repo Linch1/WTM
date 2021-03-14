@@ -5,6 +5,7 @@ export type ProjectJsonInformationsLibElem = visualJsonLib;
 export type ProjectJsonInformations = {
     name: string;
     projectType: ProjectTypes;
+    demoUrl: string;
     visualsPath: string;
     viewsPath: string;
     path: string;
