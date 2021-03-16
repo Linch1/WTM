@@ -38,8 +38,8 @@ export abstract class AbstractGeneralView {
   public JSON_COMMON_INFORMATIONS_FILE_PATH: string;
   public COMMON_DEFAULT_BUILD_FILE_PATH: string;
 
-  public JSON_INFORMATIONS: informationsJson = ConstViews.getViewsJsonInformations();
-  public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonInformations( );
+  public JSON_FILE_CONTENT: informationsJson = ConstViews.getViewsJsonContent();
+  public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonContent( );
   public COMMON_DEFAULT_BUILD = ConstViews.CommonContent; // modified in wp themes and singles
 
   /**
@@ -66,8 +66,8 @@ export abstract class AbstractGeneralView {
     this.JSON_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, `${ConstViews.JsonDirectory}/${this.PAGE_NAME.toLowerCase().split(" ").join("-")}.json`);
     this.COMMON_DEFAULT_BUILD_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, `${ConstViews.CommonContentFileName}.${checkMapProjectTypeToExtension(this.PAGE_PROJECT_TYPE)}`);
     this.JSON_COMMON_INFORMATIONS_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, ConstViews.JsonDirectory, ConstViews.CommonJsonFile);
-    this.JSON_INFORMATIONS.view.name = PAGE_NAME;
-    this.JSON_INFORMATIONS.view.projectType = this.PAGE_PROJECT_TYPE;
+    this.JSON_FILE_CONTENT.view.name = PAGE_NAME;
+    this.JSON_FILE_CONTENT.view.projectType = this.PAGE_PROJECT_TYPE;
   }
 
   /**
@@ -94,7 +94,7 @@ export abstract class AbstractGeneralView {
     );
 
     if (FileReader.existsPath(this.JSON_FILE_PATH)) {
-      this.JSON_INFORMATIONS = JSON.parse(
+      this.JSON_FILE_CONTENT = JSON.parse(
         FileReader.readFile(this.JSON_FILE_PATH)
       );
     }
@@ -182,7 +182,7 @@ export abstract class AbstractGeneralView {
   public saveJson(): void {
     FileWriter.writeFile(
       this.getPathJson(),
-      JSON.stringify(this.JSON_INFORMATIONS)
+      JSON.stringify(this.JSON_FILE_CONTENT)
     );
   }
   public saveCommonInformationsJson(): void {
@@ -190,6 +190,27 @@ export abstract class AbstractGeneralView {
       this.JSON_COMMON_INFORMATIONS_FILE_PATH,
       JSON.stringify(this.JSON_COMMON_INFORMATIONS)
     );
+  }
+  /**
+   * @description get the json that contains the default values for intialize a visual
+   * @returns 
+   */
+   static getDefaultJson(): informationsJson  {
+    return ConstViews.getViewsJsonContent()
+  }
+  /**
+   * @description get the keys of the json that contains default values for intialize a visual
+   * @returns 
+   */
+  static getDefaultJsonKeys(): string[]{
+    return Object.keys(ConstViews.getViewsJsonContent());
+  }
+
+  public getJson(){
+    return this.JSON_FILE_CONTENT;
+  }
+  public setJson( json: informationsJson ){
+    this.JSON_FILE_CONTENT = json;
   }
   /**
    * @description get the absolute path to the main file of the view
@@ -204,14 +225,14 @@ export abstract class AbstractGeneralView {
    * @description get the name of the view
    */
   public getName(): string {
-    return this.JSON_INFORMATIONS.view.name;
+    return this.JSON_FILE_CONTENT.view.name;
   }
   /**
    * @description set the name of the view
    * @param name 
    */
   public setName(name: string) {
-    this.JSON_INFORMATIONS.view.name = name;
+    this.JSON_FILE_CONTENT.view.name = name;
   }
   public getProjectPath(): string{
     return this.VIEWS_FOLDER;
@@ -220,20 +241,20 @@ export abstract class AbstractGeneralView {
    * @description get the extension of the view
    */
   public getExtension(): extensions {
-    return checkMapProjectTypeToExtension(this.JSON_INFORMATIONS.view.projectType);
+    return checkMapProjectTypeToExtension(this.JSON_FILE_CONTENT.view.projectType);
   }
   /**
    * @description set the project type of the view
    * @param type 
    */
   public setProjectType(type: ProjectTypes) {
-    this.JSON_INFORMATIONS.view.projectType = type;
+    this.JSON_FILE_CONTENT.view.projectType = type;
   }
   /**
    * @description get the project type of the view
    */
   public getProjectType(): ProjectTypes {
-    return this.JSON_INFORMATIONS.view.projectType;
+    return this.JSON_FILE_CONTENT.view.projectType;
   }
   /**
    * @description returns the view file name ( not the path ) 
@@ -255,20 +276,20 @@ export abstract class AbstractGeneralView {
    * @description get the existing view blocks
    */
   public getBlocksNames(): string[] {
-    return Object.keys(this.JSON_INFORMATIONS.blocks);
+    return Object.keys(this.JSON_FILE_CONTENT.blocks);
   }
   /**
    * @description returns the blocks object of the view
    */
   public getBlocks(): informationsJson["blocks"] {
-    return JSON.parse(JSON.stringify(this.JSON_INFORMATIONS.blocks)); 
+    return JSON.parse(JSON.stringify(this.JSON_FILE_CONTENT.blocks)); 
   }
   /**
    * @description set the blocks object to the view with the passed one
    * @param newBlocks 
    */
   public setBlocks( newBlocks: informationsJson["blocks"] ): void {
-    this.JSON_INFORMATIONS.blocks = newBlocks;
+    this.JSON_FILE_CONTENT.blocks = newBlocks;
     this.saveJson();
   }
   
@@ -289,7 +310,7 @@ export abstract class AbstractGeneralView {
   }
   /**
    * 
-   * @param blocks the blocks object of this.JSON_INFORMATIONS.
+   * @param blocks the blocks object of this.JSON_FILE_CONTENT.
    * @param currentBlock the block to analize
    * @param blockInfo informations of the custom block to add 
    * @param blockInfo.parentBlockName the parent of the block the create
@@ -354,7 +375,7 @@ export abstract class AbstractGeneralView {
     this.setName(this.PAGE_NAME);
     FileWriter.writeFile(
       this.JSON_FILE_PATH,
-      JSON.stringify(this.JSON_INFORMATIONS)
+      JSON.stringify(this.JSON_FILE_CONTENT)
     );
     FileWriter.writeFile(this.getPath(), newContent);
     this.saveJson();
@@ -367,9 +388,9 @@ export abstract class AbstractGeneralView {
    */
   public includeRelative(parentBlockName: string, visual: Visual): void {
     if (!this.isCreated()) throw new Error(this.ERR_VIEW_NOT_CREATED);
-    if( this.JSON_INFORMATIONS.blocks[parentBlockName].include.includes(visual.getName()) ) return;
+    if( this.JSON_FILE_CONTENT.blocks[parentBlockName].include.includes(visual.getName()) ) return;
     this.buildIncludeRelative(parentBlockName, visual);
-    this.JSON_INFORMATIONS.blocks[parentBlockName].include.push(visual.getName());
+    this.JSON_FILE_CONTENT.blocks[parentBlockName].include.push(visual.getName());
     this.saveJson();
   }
   /**
@@ -381,7 +402,7 @@ export abstract class AbstractGeneralView {
   public buildIncludeRelative(parentBlockName: string, visual: Visual): void {
     if( !visual.isCreated() ) throw new Error(this.ERR_VISUAL_NO_EXISTS);
     let pathToInclude = this.getVisualPathToInclude(visual);
-    if (!Object.keys(this.JSON_INFORMATIONS.blocks).includes(parentBlockName))
+    if (!Object.keys(this.JSON_FILE_CONTENT.blocks).includes(parentBlockName))
       throw new Error(this.ERR_NOT_VALID_HTML_BLOCK);
     StringComposeWriter.appendBeetweenStrings(
       this.getPath(),
@@ -432,12 +453,12 @@ export abstract class AbstractGeneralView {
     if (!this.isCreated()) { throw new Error(this.ERR_VIEW_NOT_CREATED); }
     
     this.buildAddBlock(blockInfo);
-    this.JSON_INFORMATIONS.blocks[blockInfo.parentBlockName].include.push(
+    this.JSON_FILE_CONTENT.blocks[blockInfo.parentBlockName].include.push(
       IdentifierHtml.getIdentifier(blockInfo.blockName)
     );
     blockInfo.open = blockInfo.open ? blockInfo.open : "";
     blockInfo.close = blockInfo.close ? blockInfo.close : "";
-    this.JSON_INFORMATIONS.blocks[blockInfo.blockName] = {
+    this.JSON_FILE_CONTENT.blocks[blockInfo.blockName] = {
       open: blockInfo.open,
       close: blockInfo.close,
       include: [],
@@ -458,7 +479,7 @@ export abstract class AbstractGeneralView {
    */
   public buildAddBlock(blockInfo: addBlockParams): void {
     if (
-      !Object.keys(this.JSON_INFORMATIONS.blocks).includes(
+      !Object.keys(this.JSON_FILE_CONTENT.blocks).includes(
         blockInfo.parentBlockName
       )
     ) { throw new Error(this.ERR_NOT_VALID_HTML_BLOCK); }
@@ -578,7 +599,7 @@ ${blockInfo.close}
     return this.getIncludedVisualsRecursive( startBlock );
   }
   public getIncludedVisualsRecursive( currentBlock: string ): string[] {
-    let blocks = this.JSON_INFORMATIONS.blocks;
+    let blocks = this.JSON_FILE_CONTENT.blocks;
     let visuals: string[] = [];
     for( let included of blocks[currentBlock].include ){
       if( Identifiers.checkCommentIdentifier(included) ) visuals.push( ...this.getIncludedVisualsRecursive( Identifiers.getIdentifierTypeName(included)[1] ) )

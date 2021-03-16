@@ -128,9 +128,6 @@ export class Project {
       JSON.stringify(this.JSON_FILE_CONTENT)
     );
   }
-  public getJson(){
-    return this.JSON_FILE_CONTENT;
-  }
   /**
    * @description return the name of the porject
    */
@@ -193,6 +190,28 @@ export class Project {
   public getProjectPath(): string {
     return this.getPath();
   }
+  /**
+   * @description get the json that contains the default values for intialize a visual
+   * @returns 
+   */
+   static getDefaultJson(): ProjectJsonInformations {
+    return ConstProjects.getProjectsJsonContent()
+  }
+  /**
+   * @description get the keys of the json that contains default values for intialize a visual
+   * @returns 
+   */
+  static getDefaultJsonKeys(): string[]{
+    return Object.keys(ConstProjects.getProjectsJsonContent());
+  }
+
+  public getJson(){
+    return this.JSON_FILE_CONTENT;
+  }
+  public setJson( json: ProjectJsonInformations ){
+    this.JSON_FILE_CONTENT = json;
+  }
+
   /**
    * @description check if the project is created or not, returns true if yes flase if not
    * @returns boolean

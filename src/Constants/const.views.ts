@@ -40,15 +40,15 @@ ${IdentifierPlaceholder.getIdentifier(ConstViews.IdentifierDefaultScripts, false
 ${IdentifierPlaceholder.getIdentifierWithAction(ConstViews.IdentifierScripts, identifierActions.EXECUTABLE)}
 ${IdentifierPlaceholder.getIdentifier(ConstViews.IdentifierPageEnd, false)}`; //  content used to generate a view file, this is the content of 'common.--'
   
-static JsonInformations: informationsJson = {
+static JsonContent: informationsJson = {
     blocks: { BODY: { open: "", close: "", include: [] } },
     view: { name: "", projectType: ProjectTypes.ejs },
   }; //  content inside a specific view json, this is the content of 'specificViewName.--'
 
-  static getViewsJsonInformations(): informationsJson {
-    return JSON.parse(JSON.stringify(ConstViews.JsonInformations));
+  static getViewsJsonContent(): informationsJson {
+    return JSON.parse(JSON.stringify(ConstViews.JsonContent));
   }
-  static getViewsCommonJsonInformations( ): {
+  static getViewsCommonJsonContent( ): {
     viewStart: string;
     viewEnd: string;
     scripts: string[];

@@ -127,7 +127,7 @@ class ThemeReader {
         FileReader.readFile(StringComposeWriter.concatenatePaths(path, file))
       );
       let single = this.themeAux.composer.buildSingle(json.view.name);
-      single.JSON_INFORMATIONS = json;
+      single.JSON_FILE_CONTENT = json;
       elements.push(single);
     }
     return elements;
@@ -147,7 +147,7 @@ class ThemeReader {
         FileReader.readFile(StringComposeWriter.concatenatePaths(path, file))
       );
       let template = this.themeAux.composer.buildTemplate(json.view.name);
-      template.JSON_INFORMATIONS = json;
+      template.JSON_FILE_CONTENT = json;
       elements.push(template);
     }
     return elements;
