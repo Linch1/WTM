@@ -1,6 +1,6 @@
 import { FileWriter } from "../files/FileWriter";
 import { FileReader } from "../files/FileReader";
-import { visualJsonIdentifiers } from "../Types/manageVisual.jsons";
+import { visualJson, visualJsonIdentifiers } from "../Types/manageVisual.jsons";
 import { Identifiers } from "../Identifiers/Identifiers";
 import { identifierActions, renderTypes } from "../Enums";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
@@ -65,6 +65,10 @@ export class VisualWriter {
   }
   public setProjectPath(path: string){
     this.visual.JSON_FILE_CONTENT.projectPath = path;
+    this.visual.saveJson();
+  }
+  public setJson(json: visualJson){
+    this.visual.JSON_FILE_CONTENT = json;
     this.visual.saveJson();
   }
   /**
