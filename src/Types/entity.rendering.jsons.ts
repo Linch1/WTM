@@ -18,12 +18,10 @@ export type defaultJson = {
  * - `{ BLOCK_NAME : { open: "<div .. my open tag >", close: "<div ..the close tag >"}}`
  * - Ex: `{ "BODY" { open: "", close: "" }}`
  */
-export type informationsJson = {
+export type viewJson = {
   blocks: {
     [key: string]: { open: string; close: string; include: string[] };
   };
-  view: { 
-    name: string, 
-    projectType: ProjectTypes
-  }
+  name: string;
+  projectType: ProjectTypes;
 };

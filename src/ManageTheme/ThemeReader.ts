@@ -8,7 +8,7 @@ import { pagePath } from "../Enums/entities.visual.path";
 import { customPartPath } from "../Enums/entities.wp.path";
 import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
-import { informationsJson } from "../Types/entity.rendering.jsons";
+import { viewJson } from "../Types/entity.rendering.jsons";
 import { menuMainPageParams } from "../Types/entity.wp.menuMainPage";
 import { menuSubPageParams } from "../Types/entity.wp.menuSubPage";
 import { postTypeParams } from "../Types/entity.wp.postType";
@@ -123,10 +123,10 @@ class ThemeReader {
     let path = this.themeAux.getPathInsideJsonFolder(pagePath.POST);
     let files = FileReader.getFiles(path);
     for (let file of files) {
-      let json: informationsJson = JSON.parse(
+      let json: viewJson = JSON.parse(
         FileReader.readFile(StringComposeWriter.concatenatePaths(path, file))
       );
-      let single = this.themeAux.composer.buildSingle(json.view.name);
+      let single = this.themeAux.composer.buildSingle(json.name);
       single.JSON_FILE_CONTENT = json;
       elements.push(single);
     }
@@ -143,10 +143,10 @@ class ThemeReader {
     let path = this.themeAux.getPathInsideJsonFolder(pagePath.PAGE);
     let files = FileReader.getFiles(path);
     for (let file of files) {
-      let json: informationsJson = JSON.parse(
+      let json: viewJson = JSON.parse(
         FileReader.readFile(StringComposeWriter.concatenatePaths(path, file))
       );
-      let template = this.themeAux.composer.buildTemplate(json.view.name);
+      let template = this.themeAux.composer.buildTemplate(json.name);
       template.JSON_FILE_CONTENT = json;
       elements.push(template);
     }

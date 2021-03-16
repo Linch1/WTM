@@ -2,7 +2,7 @@ import { FileReader } from "../files/FileReader";
 import { StringComposeWriter } from "../files/StringComposeWriter";
 import { extensions,  identifierActions,  identifierType,  IncludeFunctions,  ProjectTypes } from "../Enums";
 import { FileWriter } from "../files/FileWriter";
-import { informationsJson } from "../Types/entity.rendering.jsons";
+import { viewJson } from "../Types/entity.rendering.jsons";
 import { replaceAllParams } from "../Types/files.StringComposerWriter";
 import { addBlockParams } from "../Types/entity.rendering.params.addBlock";
 import { IdentifierHtml } from "../Identifiers/IdentifierHtml";
@@ -38,7 +38,7 @@ export abstract class AbstractGeneralView {
   public JSON_COMMON_INFORMATIONS_FILE_PATH: string;
   public COMMON_DEFAULT_BUILD_FILE_PATH: string;
 
-  public JSON_FILE_CONTENT: informationsJson = ConstViews.getViewsJsonContent();
+  public JSON_FILE_CONTENT: viewJson = ConstViews.getViewsJsonContent();
   public JSON_COMMON_INFORMATIONS = ConstViews.getViewsCommonJsonContent( );
   public COMMON_DEFAULT_BUILD = ConstViews.CommonContent; // modified in wp themes and singles
 
@@ -66,8 +66,8 @@ export abstract class AbstractGeneralView {
     this.JSON_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, `${ConstViews.JsonDirectory}/${this.PAGE_NAME.toLowerCase().split(" ").join("-")}.json`);
     this.COMMON_DEFAULT_BUILD_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, `${ConstViews.CommonContentFileName}.${checkMapProjectTypeToExtension(this.PAGE_PROJECT_TYPE)}`);
     this.JSON_COMMON_INFORMATIONS_FILE_PATH = StringComposeWriter.concatenatePaths(this.VIEWS_FOLDER, ConstViews.JsonDirectory, ConstViews.CommonJsonFile);
-    this.JSON_FILE_CONTENT.view.name = PAGE_NAME;
-    this.JSON_FILE_CONTENT.view.projectType = this.PAGE_PROJECT_TYPE;
+    this.JSON_FILE_CONTENT.name = PAGE_NAME;
+    this.JSON_FILE_CONTENT.projectType = this.PAGE_PROJECT_TYPE;
   }
 
   /**
@@ -195,7 +195,7 @@ export abstract class AbstractGeneralView {
    * @description get the json that contains the default values for intialize a visual
    * @returns 
    */
-   static getDefaultJson(): informationsJson  {
+   static getDefaultJson(): viewJson  {
     return ConstViews.getViewsJsonContent()
   }
   /**
@@ -209,7 +209,7 @@ export abstract class AbstractGeneralView {
   public getJson(){
     return this.JSON_FILE_CONTENT;
   }
-  public setJson( json: informationsJson ){
+  public setJson( json: viewJson ){
     this.JSON_FILE_CONTENT = json;
     this.saveJson();
   }
@@ -226,14 +226,14 @@ export abstract class AbstractGeneralView {
    * @description get the name of the view
    */
   public getName(): string {
-    return this.JSON_FILE_CONTENT.view.name;
+    return this.JSON_FILE_CONTENT.name;
   }
   /**
    * @description set the name of the view
    * @param name 
    */
   public setName(name: string) {
-    this.JSON_FILE_CONTENT.view.name = name;
+    this.JSON_FILE_CONTENT.name = name;
   }
   public getProjectPath(): string{
     return this.VIEWS_FOLDER;
@@ -242,20 +242,20 @@ export abstract class AbstractGeneralView {
    * @description get the extension of the view
    */
   public getExtension(): extensions {
-    return checkMapProjectTypeToExtension(this.JSON_FILE_CONTENT.view.projectType);
+    return checkMapProjectTypeToExtension(this.JSON_FILE_CONTENT.projectType);
   }
   /**
    * @description set the project type of the view
    * @param type 
    */
   public setProjectType(type: ProjectTypes) {
-    this.JSON_FILE_CONTENT.view.projectType = type;
+    this.JSON_FILE_CONTENT.projectType = type;
   }
   /**
    * @description get the project type of the view
    */
   public getProjectType(): ProjectTypes {
-    return this.JSON_FILE_CONTENT.view.projectType;
+    return this.JSON_FILE_CONTENT.projectType;
   }
   /**
    * @description returns the view file name ( not the path ) 
@@ -282,14 +282,14 @@ export abstract class AbstractGeneralView {
   /**
    * @description returns the blocks object of the view
    */
-  public getBlocks(): informationsJson["blocks"] {
+  public getBlocks(): viewJson["blocks"] {
     return JSON.parse(JSON.stringify(this.JSON_FILE_CONTENT.blocks)); 
   }
   /**
    * @description set the blocks object to the view with the passed one
    * @param newBlocks 
    */
-  public setBlocks( newBlocks: informationsJson["blocks"] ): void {
+  public setBlocks( newBlocks: viewJson["blocks"] ): void {
     this.JSON_FILE_CONTENT.blocks = newBlocks;
     this.saveJson();
   }
@@ -320,7 +320,7 @@ export abstract class AbstractGeneralView {
    * @param blockInfo.close how the block end
    */
   private reCreateBlocksRecursive(
-    blocks: informationsJson["blocks"], 
+    blocks: viewJson["blocks"], 
     currentBlock: string, 
     blockInfo?: addBlockParams
      ): void {

@@ -1,7 +1,7 @@
 import { identifierActions, IncludeFunctions } from "../Enums";
 import { ProjectTypes } from "../Enums/common.projectTypes";
 import { IdentifierAcf, IdentifierPlaceholder } from "../Identifiers";
-import { informationsJson } from "../Types/entity.rendering.jsons";
+import { viewJson } from "../Types/entity.rendering.jsons";
 
 /**
  * @description in this class are stored all the  values and the files names/prefixes
@@ -40,12 +40,13 @@ ${IdentifierPlaceholder.getIdentifier(ConstViews.IdentifierDefaultScripts, false
 ${IdentifierPlaceholder.getIdentifierWithAction(ConstViews.IdentifierScripts, identifierActions.EXECUTABLE)}
 ${IdentifierPlaceholder.getIdentifier(ConstViews.IdentifierPageEnd, false)}`; //  content used to generate a view file, this is the content of 'common.--'
   
-static JsonContent: informationsJson = {
+static JsonContent: viewJson = {
     blocks: { BODY: { open: "", close: "", include: [] } },
-    view: { name: "", projectType: ProjectTypes.ejs },
+    name: "", 
+    projectType: ProjectTypes.ejs 
   }; //  content inside a specific view json, this is the content of 'specificViewName.--'
 
-  static getViewsJsonContent(): informationsJson {
+  static getViewsJsonContent(): viewJson {
     return JSON.parse(JSON.stringify(ConstViews.JsonContent));
   }
   static getViewsCommonJsonContent( ): {

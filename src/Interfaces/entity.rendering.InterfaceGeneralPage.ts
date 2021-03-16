@@ -1,6 +1,6 @@
 import { pageTypes } from "../Enums/entities.visual.type";
 import { addBlockParams } from "../Types";
-import { defaultJson, informationsJson } from "../Types/entity.rendering.jsons";
+import { defaultJson, viewJson } from "../Types/entity.rendering.jsons";
 
 export interface InterfaceGeneralPage {
 
@@ -31,9 +31,7 @@ export interface InterfaceGeneralPage {
   JSON_DEFAULT_DIR_PATH: string;
   JSON_DEFAULT_FILE_PATH: string;
   JSON_DEFAULT_INFORMATIONS: defaultJson;
-  JSON_INFORMATIONS: informationsJson;
-
-    
+  JSON_INFORMATIONS: viewJson;
 
   initialize(): void;
 
