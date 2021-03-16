@@ -260,7 +260,7 @@ export class Visual {
    * @description get the json that contains the default values for intialize a visual
    * @returns 
    */
-  public getDefaultJson(): visualJson {
+   static getDefaultJson(): visualJson {
     return ConstVisuals.getVisualsJsonContent()
   }
 
@@ -268,7 +268,7 @@ export class Visual {
    * @description get the keys of the json that contains default values for intialize a visual
    * @returns 
    */
-  public getDefaultJsonKeys(): string[]{
+  static getDefaultJsonKeys(): string[]{
     return Object.keys(ConstVisuals.getVisualsJsonContent());
   }
 
