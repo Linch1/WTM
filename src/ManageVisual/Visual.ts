@@ -255,8 +255,22 @@ export class Visual {
     if( this.isCreated() ) return this;
     else return this.getFallbackVisual();
   }
-  
-  
+
+  /**
+   * @description get the json that contains the default values for intialize a visual
+   * @returns 
+   */
+  public getDefaultJson(): visualJson {
+    return ConstVisuals.getVisualsJsonContent()
+  }
+
+  /**
+   * @description get the keys of the json that contains default values for intialize a visual
+   * @returns 
+   */
+  public getDefaultJsonKeys(): string[]{
+    return Object.keys(ConstVisuals.getVisualsJsonContent());
+  }
 
   /**
    * @description initalize the lib-elem dependencies if the elem is not yet present

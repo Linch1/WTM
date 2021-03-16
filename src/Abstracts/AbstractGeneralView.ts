@@ -271,7 +271,10 @@ export abstract class AbstractGeneralView {
     this.JSON_INFORMATIONS.blocks = newBlocks;
     this.saveJson();
   }
-
+  
+  /**
+   * @description recreates the view. It prevent recreation and raises an error if the included visuals doesn't exists
+   */
   public reCreate(): void {
     // check that the visuals exists before recreate ( and possible breaking ) the visual
     this.checkIfIncludedVisualsExists();
