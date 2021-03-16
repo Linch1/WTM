@@ -210,6 +210,7 @@ export class Project {
   }
   public setJson( json: ProjectJsonInformations ){
     this.JSON_FILE_CONTENT = json;
+    this.saveJson();
   }
 
   /**

@@ -211,6 +211,7 @@ export abstract class AbstractGeneralView {
   }
   public setJson( json: informationsJson ){
     this.JSON_FILE_CONTENT = json;
+    this.saveJson();
   }
   /**
    * @description get the absolute path to the main file of the view
