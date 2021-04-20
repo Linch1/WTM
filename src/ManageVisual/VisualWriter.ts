@@ -1,12 +1,12 @@
-import { FileWriter } from "../files/FileWriter";
-import { FileReader } from "../files/FileReader";
+import { FileWriter } from "../ManageFiles/FileWriter";
+import { FileReader } from "../ManageFiles/FileReader";
 import { visualJson, visualJsonIdentifiers } from "../Types/manageVisual.jsons";
 import { Identifiers } from "../Identifiers/Identifiers";
-import { identifierActions, renderTypes } from "../Enums";
+import { identifierActions, ProjectTypes, renderTypes } from "../Enums";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
 import { ConstVisuals } from "../Constants";
 import { timeStamp } from "console";
-import { StringComposeWriter } from "../files";
+import { StringComposeWriter } from "../ManageFiles";
 import { Visual } from "./Visual";
 
 export class VisualWriter {
@@ -16,66 +16,63 @@ export class VisualWriter {
   constructor(public visual: Visual) {}
 
   /**
-   * @description create the visual directory and populate it with the main files [render.html, default.html, identifiers.json]
-   * @returns string: the path to the visual folder
+   * @description saves the visual json
    */
-  public createVisual(): string {
-    let visualPath = this.visual.getDirPath();
-    if (FileReader.existsPath(visualPath)) {
-      throw new Error(this.visual.ERR_VISUAL_ALREADY_EXISTS);
-    }
-    
-    FileWriter.createDirectory(visualPath);
-    FileWriter.createDirectory(this.visual.depManager.getAssetsPath());
-    FileWriter.createDirectory(this.visual.depManager.getAssetsScriptsPath());
-    FileWriter.createDirectory(this.visual.depManager.getAssetsStylesPath());
-    FileWriter.createDirectory(this.visual.depManager.getAssetsImgPath());
-
-    FileWriter.createFile(
-      this.visual.RENDER_FILE_PATH,
-      this.visual.INIT_RENDER_FILE_CONTENT
+  public saveJson() {
+    FileWriter.writeFile(
+      this.visual.JSON_FILE_PATH,
+      JSON.stringify(this.visual.JSON_FILE_CONTENT)
     );
-    FileWriter.createFile(
-      this.visual.DEFAULT_FILE_PATH,
-      this.visual.INIT_DEFAULT_FILE_CONTENT
-    );
-    this.visual.saveJson();
-    
-    return visualPath;
   }
+
+  /**
+   * @description initalize the lib-elem dependencies if the elem is not yet present
+   * @param elemName the name of the lib to intialize
+   */
+   public initializeLibElem(elemName: string){
+    if ( !this.visual.JSON_FILE_CONTENT.lib[elemName] ) {
+      this.visual.JSON_FILE_CONTENT.lib[elemName] = ConstVisuals.getVisualsLibElemContent();
+    }
+    this.visual.writer.saveJson();
+  }
+
   public setName(name: string){
     this.visual.JSON_FILE_CONTENT.name = name;
-    this.visual.saveJson();
+    this.visual.writer.saveJson();
+  }
+  public setProjectType(type: ProjectTypes){
+    this.visual.JSON_FILE_CONTENT.projectType = type;
+    this.visual.writer.saveJson();
   }
   public setAuthor(author: string){
     this.visual.JSON_FILE_CONTENT.author = author;
-    this.visual.saveJson();
+    this.visual.writer.saveJson();
   }
   public setAssetsAutoImport(autoImport: boolean){
     this.visual.JSON_FILE_CONTENT.assetsAutoImport = autoImport;
-    this.visual.saveJson();
+    this.visual.writer.saveJson();
   }
   public setAuthorUrl(url: string){
     this.visual.JSON_FILE_CONTENT.authorUrl = url;
-    this.visual.saveJson();
+    this.visual.writer.saveJson();
   }
   public setGithubRepo(name: string){
     this.visual.JSON_FILE_CONTENT.name = name;
-    this.visual.saveJson();
+    this.visual.writer.saveJson();
   }
   public setProjectPath(path: string){
     this.visual.JSON_FILE_CONTENT.projectPath = path;
-    this.visual.saveJson();
+    this.visual.writer.saveJson();
   }
   public setJson(json: visualJson){
     this.visual.JSON_FILE_CONTENT = json;
-    this.visual.saveJson();
+    this.visual.writer.saveJson();
   }
   /**
    * @description populate the WTM.json file of the given visual with the identifiers contained in default.##
    */
   public populateIdentifiers() {
-    if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
+    if(!this.visual.reader.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
     
     // reset the identifiers
     this.visual.JSON_FILE_CONTENT.identifiers = ConstVisuals.JsonIdentifiersContent
@@ -108,7 +105,7 @@ export class VisualWriter {
    * @param newHtml the new html to use
    */
   public editDefaultHtml(newHtml: string){
-    if(!this.visual.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
+    if(!this.visual.reader.isCreated()) throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
     FileWriter.writeFile(this.visual.DEFAULT_FILE_PATH, newHtml);
   }
 

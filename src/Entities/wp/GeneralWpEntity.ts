@@ -1,7 +1,7 @@
-import { StringComposeWriter } from "../../files/StringComposeWriter";
+import { StringComposeWriter } from "../../ManageFiles/StringComposeWriter";
 import { ThemeAux } from "../../ManageTheme/ThemeAux";
-import { FileWriter } from "../../files/FileWriter";
-import { WpFunctionComposer } from "../../files/WpFunctionComposer";
+import { FileWriter } from "../../ManageFiles/FileWriter";
+import { WpFunctionComposer } from "../../ManageFiles/WpFunctionComposer";
 import { customPartType } from "../../Enums/entities.wp.type";
 import { InterfaceWpEntity } from "../../Interfaces/entity.wp.InterfaceGeneralWpEntity";
 import { IdentifierImport } from "../../Identifiers/IdentifierImport";

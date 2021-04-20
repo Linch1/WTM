@@ -1,4 +1,4 @@
-import { FileWriter } from "../../../files/FileWriter";
+import { FileWriter } from "../../../ManageFiles/FileWriter";
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
 import { MenuMainPage } from "./MenuMainPage";
 import { MenuSubPage } from "./MenuSubPage";

@@ -17,9 +17,4 @@ export * from "./wp/menus/Menu";
 export * from "./wp/menus/MenuMainPage";
 export * from "./wp/menus/MenuSubPage";
 
-export * from "./rendering/Single";
-export * from "./rendering/Template";
-
-export * from "./rendering/BulkView";
-export * from "./rendering/View";
 

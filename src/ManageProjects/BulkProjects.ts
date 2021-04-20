@@ -1,13 +1,11 @@
 import { StringComposeWriter, FileWriter } from "..";
 import { ConstProjects } from "../Constants/const.projects";
 
-import { FileReader } from "../files";
+import { FileReader } from "../ManageFiles";
 import { ProjectJsonInformations } from "../Types/manageProject.jsonInformations";
 import { ProjectsJson } from "../Types/manageProject.jsonProjects";
 import { ProjectsCache } from "../Types/manageProject.projectsCache";
 import { Project } from "./Project";
-
-
 
 export class BulkProjects{
     public PROJECTS_CACHE: ProjectsCache = {};
@@ -22,6 +20,7 @@ export class BulkProjects{
     public PROJECTS_JSON_INFORMATIONS: ProjectsJson = {
         projectPaths: []
     }
+
     constructor( public PROJECT_DIR_PATH: string ){
         // create the dire and the file if not exists
         FileWriter.createDirectory(this.PROJECTS_JSON_DIR_PATH);
@@ -32,6 +31,7 @@ export class BulkProjects{
         );
         this.refreshProjectsCache();
     }
+
     public saveJson(){
         FileWriter.writeFile(this.PROJECTS_JSON_FILE_PATH, JSON.stringify(this.PROJECTS_JSON_INFORMATIONS));
     }

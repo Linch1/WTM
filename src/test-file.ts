@@ -1,7 +1,7 @@
 import { TestTheme } from "./Test/TestTheme";
 import { TestVisual } from "./Test/TestVisual";
 import { TestCustomRender } from "./Test/TestCustomRender";
-import { FileReader } from "./files";
+import { FileReader } from "./ManageFiles";
 
 let tree = FileReader.readFolderTree("./", [".git", "node_modules", "dist"]);
 console.log( tree )

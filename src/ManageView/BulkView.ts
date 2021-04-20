@@ -1,9 +1,9 @@
-import { checkValidExtension } from "../../Checkers/check.validExtension";
-import { ConstViews } from "../../Constants";
-import { ProjectTypes } from "../../Enums";
-import { extensions } from "../../Enums/common.extension";
-import { FileReader } from "../../files";
-import { Project } from "../../ManageProjects";
+
+import { Checker } from "../Checkers";
+import { ConstViews } from "../Constants/const.views";
+import { extensions } from "../Enums/common.extension";
+import { FileReader } from "../ManageFiles";
+import { Project } from "../ManageProjects/Project";
 import { View } from "./View";
 
 export class BulkView {
@@ -12,10 +12,10 @@ export class BulkView {
     public projectType;
     public projectPath;
     constructor(public project: Project ){
-        this.viewsPath = this.project.getViewsPath();
+        this.viewsPath = this.project.reader.getViewsPath();
         this.prefix = ConstViews.Prefix;
-        this.projectType = this.project.getProjectType();
-        this.projectPath = this.project.getPath();
+        this.projectType = this.project.reader.getProjectType();
+        this.projectPath = this.project.reader.getPath();
     }
 
     public getAllViews(): View[]{
@@ -25,7 +25,7 @@ export class BulkView {
             if(!viewFile.startsWith( this.prefix )) continue;
             let viewNameArr: string[] = viewFile.split(".");
             let extension = viewNameArr.pop() as extensions; // remove the extension from the file name
-            if(!checkValidExtension(extension)) continue; // if not valid extension skip it
+            if(!Checker.checkValidExtension(extension)) continue; // if not valid extension skip it
             viewFile = viewNameArr.join(".");
             views.push( new View( viewFile, this.project ) );
         }
@@ -34,7 +34,7 @@ export class BulkView {
 
     public reCreateAll() {
         for ( let view of this.getAllViews()){
-            view.reCreate();
+            view.writer.reCreate();
         }
     }
  

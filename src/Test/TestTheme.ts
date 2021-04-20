@@ -2,7 +2,9 @@ import { ThemeAux } from "../ManageTheme/ThemeAux";
 import { ThemeReader } from "../ManageTheme/ThemeReader";
 import { ThemeWriter } from "../ManageTheme/ThemeWriter";
 import { ThemeComposer } from "../ManageTheme/ThemeComposer";
+//@ts-ignore
 import { Single } from "../Entities/rendering/Single";
+//@ts-ignore
 import { Template } from "../Entities/rendering/Template";
 
 import { PostType } from "../Entities/wp/postTypes/PostType";

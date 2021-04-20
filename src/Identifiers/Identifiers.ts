@@ -4,7 +4,7 @@ import { ConstIdentifiers } from "../Constants/const.identifiers";
 import { extensions } from "../Enums";
 import { identifierActions } from "../Enums/identifiers.actions";
 import { identifierType } from "../Enums/identifiers.type";
-import { FileReader } from "../files/FileReader";
+import { FileReader } from "../ManageFiles/FileReader";
 import { identifiersAttributesType } from "../Types/identifiers.attributes";
 import { IdentifiersAttributesParser } from "./IdentifiersAttributesParser";
 

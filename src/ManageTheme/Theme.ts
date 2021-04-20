@@ -1,9 +1,9 @@
 import { ConstWordpressTheme } from "../Constants/wordpress/const.wp.theme";
 import { customPartType } from "../Enums/entities.wp.type";
 import { functionsJsonKeys, importsJsonKeys } from "../Enums/manageTheme.jsons";
-import { FileReader } from "../files/FileReader";
-import { FileWriter } from "../files/FileWriter";
-import { StringComposeWriter } from "../files/StringComposeWriter";
+import { FileReader } from "../ManageFiles/FileReader";
+import { FileWriter } from "../ManageFiles/FileWriter";
+import { StringComposeWriter } from "../ManageFiles/StringComposeWriter";
 import { folderObject } from "../Types";
 import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
 

@@ -6,8 +6,8 @@ import { SettingsPage } from "../Entities/wp/settingsPages/SettingsPage";
 import { WidgetArea } from "../Entities/wp/widgetAreas/WidgetArea";
 import { pagePath } from "../Enums/entities.visual.path";
 import { customPartPath } from "../Enums/entities.wp.path";
-import { FileReader } from "../files/FileReader";
-import { StringComposeWriter } from "../files/StringComposeWriter";
+import { FileReader } from "../ManageFiles/FileReader";
+import { StringComposeWriter } from "../ManageFiles/StringComposeWriter";
 import { viewJson } from "../Types/entity.rendering.jsons";
 import { menuMainPageParams } from "../Types/entity.wp.menuMainPage";
 import { menuSubPageParams } from "../Types/entity.wp.menuSubPage";
@@ -15,7 +15,9 @@ import { postTypeParams } from "../Types/entity.wp.postType";
 import { settingsPageParams } from "../Types/entity.wp.settingsPage";
 import { widgetAreaParams } from "../Types/entity.wp.widgetArea";
 import { functionsJson, importsJson } from "../Types/manageTheme.jsons";
+//@ts-ignore
 import { Single } from "../Entities/rendering/Single";
+//@ts-ignore
 import { Template } from "../Entities/rendering/Template";
 import { ThemeAux } from "./ThemeAux";
 import { ConstCommon } from "../Constants/const.common";

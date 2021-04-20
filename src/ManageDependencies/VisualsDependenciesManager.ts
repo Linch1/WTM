@@ -15,6 +15,6 @@ export class VisualsDependenciesManager extends DependenciesManager {
      */
     public copyLibDependencies( libName: string, libDep: ProjectJsonInformationsLibElem ){
         this.JSON.lib[libName] = libDep;
-        this.CLIENT.saveJson();
+        this.CLIENT.writer.saveJson();
     }
 }

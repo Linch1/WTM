@@ -1,5 +1,5 @@
 import { ProjectTypes } from "../Enums";
-import { FileReader } from "../files/FileReader";
+import { FileReader } from "../ManageFiles/FileReader";
 import { Visual } from "./Visual";
 
 export class BulkVisual {
@@ -34,8 +34,8 @@ export class BulkVisual {
         let visualsFolders = FileReader.getDirectories(this.VISUALS_FOLDER);
         for ( let visualFolder of visualsFolders){
             let visual = new Visual(this.VISUALS_FOLDER, {name: visualFolder, projectType: this.projectType});
-            if( !visual.isCreated() ){
-                let fbVisual = visual.getFallbackVisual();
+            if( !visual.reader.isCreated() ){
+                let fbVisual = visual.reader.getFallbackVisual();
                 if( fbVisual ) visual = fbVisual;
                 else continue;
             }

@@ -1,6 +1,7 @@
-import {View} from "../Entities/rendering/View";
+
 import { ProjectTypes } from "../Enums";
 import { Project } from "../ManageProjects";
+import { View } from "../ManageView/View";
 
 let view = new View( "home", new Project( "/home/pero/projects/WTM/LIB" ));
 /**
@@ -10,16 +11,16 @@ class TestCustomRender {
   constructor() {}
 
   static createView() {
-    view.create();
+    view.writer.create();
   }
   static addBlockInTemplate() {
-    view.addBlock({
+    view.writer.addBlock({
       parentBlockName: "BODY",
         blockName: "PRIMO-DIV",
         open: "<div id='ciao-PRIMO' class='come' >",
         close: "</div>",
       });
-      view.addBlock({
+      view.writer.addBlock({
         parentBlockName: "PRIMO-DIV",
         blockName: "SECONDO-DIV",
         open: "<div id='ciao-SECONDO' class='come' >",
@@ -33,7 +34,7 @@ class TestCustomRender {
   }
 
   static delete() {
-    view.delete();
+    view.writer.delete();
   }
 
 

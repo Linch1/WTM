@@ -1,8 +1,8 @@
 
-import { FileWriter } from "../files/FileWriter";
+import { FileWriter } from "../ManageFiles/FileWriter";
 import { Theme } from "./Theme";
 
-import { WpFunctionComposer } from "../files/WpFunctionComposer";
+import { WpFunctionComposer } from "../ManageFiles/WpFunctionComposer";
 
 import { PostType } from "../Entities/wp/postTypes/PostType";
 import { WidgetArea } from "../Entities/wp/widgetAreas/WidgetArea";
@@ -10,10 +10,12 @@ import { SettingsPage } from "../Entities/wp/settingsPages/SettingsPage";
 import { Menu } from "../Entities/wp/menus/Menu";
 import { ThemeAux } from "./ThemeAux";
 import { importsJsonKeys } from "../Enums";
+//@ts-ignore
 import { Single } from "../Entities/rendering/Single";
+//@ts-ignore
 import { Template } from "../Entities/rendering/Template";
 import { addBlockParams } from "../Types";
-import { StringComposeWriter } from "../files/StringComposeWriter";
+import { StringComposeWriter } from "../ManageFiles/StringComposeWriter";
 
 /**
  * This class is used to perform the write actions

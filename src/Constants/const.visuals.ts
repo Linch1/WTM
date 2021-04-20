@@ -8,10 +8,10 @@ export class ConstVisuals {
 
   static Directory = "WTM-VISUALS"; // visuals directory
   static JsonFile = "WTM.json"; // the json file name of each visual
-  static HtmlDefaultFileName = "default"; // the 'default.--' file of each visual
-  static HtmlDefaultContent = ""; // default content used to intialize the visual 'default.--' file
-  static HtmlRenderFileName = "render"; // the 'render.--' file of each visual
-  static HtmlRenderContent = ""; // default content used to intialize the visual 'render.--' file
+  static DefaultFileName = "default"; // the 'default.--' file of each visual
+  static DefaultContent = ""; // default content used to intialize the visual 'default.--' file
+  static RenderFileName = "render"; // the 'render.--' file of each visual
+  static RenderContent = ""; // default content used to intialize the visual 'render.--' file
   static AssetsDirectory = "assets"; // the 'assets' directory of each visual
   static AssetsCssDirectory = "css"; // the 'css' directory of each visual ( this folder is inside the 'assets' directory )
   static AssetsJsDirectory = "js"; // the 'js' directory of each visual ( this folder is inside the 'assets' directory )

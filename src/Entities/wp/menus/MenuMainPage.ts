@@ -1,5 +1,5 @@
-import { FileReader } from "../../../files/FileReader";
-import { FileWriter } from "../../../files/FileWriter";
+import { FileReader } from "../../../ManageFiles/FileReader";
+import { FileWriter } from "../../../ManageFiles/FileWriter";
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
 import { menuMainPageParams } from "../../../Types/entity.wp.menuMainPage";
 import { customPartType } from "../../../Enums/entities.wp.type";

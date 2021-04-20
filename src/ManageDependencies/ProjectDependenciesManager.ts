@@ -1,4 +1,4 @@
-import { FileReader, FileWriter, StringComposeWriter } from "../files";
+import { FileReader, FileWriter, StringComposeWriter } from "../ManageFiles";
 import { Project } from "../ManageProjects/Project";
 import { BulkVisual } from "../ManageVisual/BulkVisual";
 import { ProjectJsonInformations, ProjectJsonInformationsLibElem } from "../Types";
@@ -14,15 +14,6 @@ export class ProjectDependenciesManager extends DependenciesManager{
         this.PROJECT_JSON = this.JSON as ProjectJsonInformations;
     }
 
-    // alias of DependenciesManager.getProjectAssetsLibPath()
-    /**
-     * @description returns the abs path to the project lib path
-     * - if the libName is passed it returns the abs path to that specific lib
-     * @param libName 
-     */
-    public getAssetsLibPath( libName?: string ){
-        return this.getProjectAssetsLibPath( libName );
-    }
     /**
      * @description return an object that contains the visual dependencies
      */
@@ -63,7 +54,7 @@ export class ProjectDependenciesManager extends DependenciesManager{
     if(!this.PROJECT_JSON.lib[libName]) throw new Error(this.NO_LIB_FOUND);
 
     this.PROJECT_JSON.lib[libName].url = libUrl;
-    this.CLIENT.saveJson();
+    this.CLIENT.writer.saveJson();
   }
   /**
    * @description repopulate the object that contains the visuals dependencies for update it
@@ -71,20 +62,20 @@ export class ProjectDependenciesManager extends DependenciesManager{
   public refreshVisualsDependencies() {
     this.PROJECT_JSON.visualsDependencies = {}; // reset the object with the dependencies
     let projectVisuals = new BulkVisual(
-      this.CLIENT.getVisualsPath(),
-      this.CLIENT.getProjectType()
+      this.CLIENT.reader.getVisualsPath(),
+      this.CLIENT.reader.getProjectType()
     ).getAllVisualsFiltered();
     for (let visual of projectVisuals) {
-      visual.depManager.autoImportAllCssAndJs();
-      let stylesDep: string[] = visual.depManager.getStylesDependencies();
-      let scriptsDep: string[] = visual.depManager.getScriptsDependencies();
+      visual.depManager.writer.autoImportAllCssAndJs();
+      let stylesDep: string[] = visual.depManager.reader.getStylesDependencies();
+      let scriptsDep: string[] = visual.depManager.reader.getScriptsDependencies();
 
       if (stylesDep.length || scriptsDep.length) {
-        this.PROJECT_JSON.visualsDependencies[visual.getName()] = {
+        this.PROJECT_JSON.visualsDependencies[visual.reader.getName()] = {
           scripts: scriptsDep,
           styles: stylesDep,
         };
-        this.CLIENT.saveJson();
+        this.CLIENT.writer.saveJson();
       }
     }
   }
@@ -93,8 +84,8 @@ export class ProjectDependenciesManager extends DependenciesManager{
    * - works only if assetsAutoImport is set to true.
    */
   public refreshProjectDependencies(){
-    if (this.getAssetsAutoImport()) {
-      this.importAllStylesAndScripts();
+    if (this.reader.getAssetsAutoImport()) {
+      this.writer.importAllStylesAndScripts();
     }
   }
 
@@ -104,10 +95,10 @@ export class ProjectDependenciesManager extends DependenciesManager{
    * @param options 
    */
   public addLib( libName: string, options: ProjectJsonInformationsLibElem ){
-    if( this.libExists( libName ) ) throw new Error(this.LIB_ALREADY_EXISTS);
+    if( this.reader.libExists( libName ) ) throw new Error(this.LIB_ALREADY_EXISTS);
     this.PROJECT_JSON.lib[libName] = options;
-    FileWriter.createDirectory(this.getAssetsLibPath(libName));
-    this.CLIENT.saveJson();
+    FileWriter.createDirectory(this.reader.getProjectAssetsLibPath(libName));
+    this.CLIENT.writer.saveJson();
   }
   /**
    * @description returns the name of all the saved lib
@@ -123,7 +114,7 @@ export class ProjectDependenciesManager extends DependenciesManager{
    */
   public createLibFromPath( libName: string, path: string){
     if(  !FileReader.existsPath(path) ) throw new Error(this.NO_PATH_FOUND);
-    let destinationFolder = StringComposeWriter.concatenatePaths( this.getProjectAssetsLibPath(), libName );
+    let destinationFolder = StringComposeWriter.concatenatePaths( this.reader.getProjectAssetsLibPath(), libName );
     FileWriter.removeFolderRecursive( destinationFolder );
     FileWriter.createDirectory(destinationFolder);
     FileWriter.copyFolderRecursive( path, destinationFolder );

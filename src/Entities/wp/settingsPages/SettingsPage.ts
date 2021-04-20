@@ -1,6 +1,6 @@
-import { FileReader } from "../../../files/FileReader";
-import { FileWriter } from "../../../files/FileWriter";
-import { StringComposeWriter } from "../../../files/StringComposeWriter";
+import { FileReader } from "../../../ManageFiles/FileReader";
+import { FileWriter } from "../../../ManageFiles/FileWriter";
+import { StringComposeWriter } from "../../../ManageFiles/StringComposeWriter";
 import { ThemeAux } from "../../../ManageTheme/ThemeAux";
 import { settingsPageParams } from "../../../Types/entity.wp.settingsPage";
 import { customPartType } from "../../../Enums/entities.wp.type";

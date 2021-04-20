@@ -1,8 +1,8 @@
 
-import { StringComposeWriter } from "../files/StringComposeWriter";
+import { StringComposeWriter } from "../ManageFiles/StringComposeWriter";
 import { VisualWriter } from "../ManageVisual/VisualWriter";
 import { VisualReader } from "../ManageVisual/VisualReader";
-import { VisualConverter } from "../ManageVisual/VisualConverter";
+import { VisualRender } from "../ManageVisual/VisualRender";
 import { renderTypes } from "../Enums/manageVisual.renderType";
 import { BulkVisual } from "../ManageVisual/BulkVisual";
 import { ProjectTypes } from "../Enums";
@@ -14,7 +14,7 @@ let testVisual = "testVisual-php";
 let visual: Visual = new Visual(visualsFolder, { name: testVisual, projectType: ProjectTypes.wordpress});
 let visualWr: VisualWriter = visual.writer;
 let visualRd: VisualReader = visual.reader;
-let visualCv: VisualConverter= visual.converter;
+let visualCv: VisualRender= visual.render;
 
 let bulkVisual: BulkVisual = new BulkVisual(visualsFolder, ProjectTypes.wordpress);
 
@@ -31,7 +31,7 @@ class TestVisual {
   }
 
   static VisualCreate(){
-    visualWr.createVisual();
+    visual.initializer.create();
     this.log("Created the visual");
   }
   static VisualEditHtml(){

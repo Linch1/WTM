@@ -3,7 +3,7 @@ export * from "./Checkers";
 export * from "./Decorators";
 export * from "./Entities";
 export * from "./Enums";
-export * from "./files";
+export * from "./ManageFiles";
 export * from "./Identifiers";
 export * from "./Interfaces";
 export * from "./ManageProjects";

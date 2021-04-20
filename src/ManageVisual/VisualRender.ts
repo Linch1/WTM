@@ -2,14 +2,14 @@ import { Identifiers, StringComposeWriter } from "..";
 import { ConstProjects, ConstVisuals } from "../Constants";
 import { identifierActions, identifierToClass, identifierType, IncludeFunctions, ProjectTypes } from "../Enums";
 import { renderTypes } from "../Enums/manageVisual.renderType";
-import { FileReader } from "../files/FileReader";
-import { FileWriter } from "../files/FileWriter";
+import { FileReader } from "../ManageFiles/FileReader";
+import { FileWriter } from "../ManageFiles/FileWriter";
 import { Project } from "../ManageProjects";
 import { identifiersAttributesType, visualJson } from "../Types";
 import { replaceIdentifiersParams } from "../Types/files.StringComposerWriter.replaceIdentifiers";
 import { Visual } from "./Visual";
 
-class VisualConverter {
+export class VisualRender {
 
   public DEFAULT_PLACEHOLDER_IDENDIFIERS: { [key: string]: string } = { }; // populated in replaceDefaultPlaceholderIdentifiers
   
@@ -22,7 +22,7 @@ class VisualConverter {
    * then the new html obtained by this operation is wrote inside **render.##**
    */
   render(type: renderTypes, project?:Project) {
-    if (!this.visual.isCreated())
+    if (!this.visual.reader.isCreated())
       throw new Error(this.visual.ERR_VISUAL_NOT_CREATED);
     let html: string = FileReader.readFile(this.visual.DEFAULT_FILE_PATH);
     let json: visualJson = JSON.parse(
@@ -91,8 +91,8 @@ class VisualConverter {
   getVisualBasedOnType( visualTargetName: string, projectType: ProjectTypes): Visual | undefined{
     let visualTargetObjectBasedOneProjectTypeRenderPath: undefined | Visual = undefined;
 
-    visualTargetObjectBasedOneProjectTypeRenderPath = new Visual( this.visual.getVisualsPath(), { name: visualTargetName, projectType: projectType } );
-    if( !visualTargetObjectBasedOneProjectTypeRenderPath.isCreated() ) return undefined;
+    visualTargetObjectBasedOneProjectTypeRenderPath = new Visual( this.visual.reader.getVisualsPath(), { name: visualTargetName, projectType: projectType } );
+    if( !visualTargetObjectBasedOneProjectTypeRenderPath.reader.isCreated() ) return undefined;
     else return visualTargetObjectBasedOneProjectTypeRenderPath;
   }
 
@@ -105,12 +105,12 @@ class VisualConverter {
 
     let includeStatement = "";
     if(visualTarget){
-      let visualBasedOnType = this.getVisualBasedOnType(visualTarget, this.visual.getProjectType());
+      let visualBasedOnType = this.getVisualBasedOnType(visualTarget, this.visual.reader.getProjectType());
       if( visualBasedOnType ) {
-        includeStatement = IncludeFunctions.include(visualBasedOnType.getRenderFilePath(), this.visual.getProjectType(), false);
+        includeStatement = IncludeFunctions.include(visualBasedOnType.reader.getRenderFilePath(), this.visual.reader.getProjectType(), false);
       } else {
-        let visualTargetObject = new Visual( this.visual.getVisualsPath(), { name: visualTarget } );
-        includeStatement = IncludeFunctions.include(visualTargetObject.getRenderFilePath(), this.visual.getProjectType(), false);
+        let visualTargetObject = new Visual( this.visual.reader.getVisualsPath(), { name: visualTarget } );
+        includeStatement = IncludeFunctions.include(visualTargetObject.reader.getRenderFilePath(), this.visual.reader.getProjectType(), false);
       }
     }
     return includeStatement;
@@ -185,21 +185,21 @@ class VisualConverter {
     project: Project
   ): string {
     // [WTM-PLACEHOLDER-VS-ASSETS-IMAGES]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsImages] = this.visual.depManager.getAssetsImgPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsImages] = this.visual.depManager.reader.getAssetsImgPath();
     // [WTM-PLACEHOLDER-VS-ASSETS-CSS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsCss] = this.visual.depManager.getAssetsStylesPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsCss] = this.visual.depManager.reader.getAssetsStylesPath();
     // [WTM-PLACEHOLDER-VS-ASSETS-JS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsjs] = this.visual.depManager.getAssetsScriptsPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstVisuals.IdentifierPlaceholderNamePathToAssetsjs] = this.visual.depManager.reader.getAssetsScriptsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssets] = project.depManager.getAssetsPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssets] = project.depManager.reader.getAssetsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-IMAGES]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsImages] = project.depManager.getAssetsImgPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsImages] = project.depManager.reader.getAssetsImgPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-JS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsJs] = project.depManager.getAssetsScriptsPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsJs] = project.depManager.reader.getAssetsScriptsPath();
     // [WTM-PLACEHOLDER-PJ-ASSETS-CSS]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsCss] = project.depManager.getAssetsStylesPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectAssetsCss] = project.depManager.reader.getAssetsStylesPath();
     // [WTM-PLACEHOLDER-PJ-PATH]
-    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectDir] = project.getPath();
+    this.DEFAULT_PLACEHOLDER_IDENDIFIERS[ConstProjects.IdentifierPlaceholderNamePathToProjectDir] = project.reader.getPath();
 
     let identifiersNames = Object.keys(this.DEFAULT_PLACEHOLDER_IDENDIFIERS);
     for ( let identifierName of identifiersNames ){
@@ -210,4 +210,3 @@ class VisualConverter {
   }
 }
 
-export { VisualConverter };
