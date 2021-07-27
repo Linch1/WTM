@@ -1,4 +1,4 @@
-# WTM-LIB
+# WTM-LIB [ UNDER DEVELOPMENT ]
 **WTM** is a _library_ for easly manage a wordpress/ejs/html theme.
 
 #### Scope
