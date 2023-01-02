@@ -114,6 +114,13 @@ class VisualReader {
     return FileReader.readFile(this.visual.RENDER_FILE_PATH);
   }
 
+  /**
+   * @description get the json that contains the default values for intialize a newly created view json
+   * @returns 
+   */
+  static getDefaultJson(): visualJson  {
+    return ConstVisuals.getVisualsJsonContent();
+  }
   public getJson(){
     return this.visual.JSON_FILE_CONTENT;
   }

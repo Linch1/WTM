@@ -9,5 +9,6 @@ export * from "./Interfaces";
 export * from "./ManageProjects";
 export * from "./ManageTheme";
 export * from "./ManageVisual";
+export * from "./ManageView";
 export * from "./Types";
 export * from './Constants'
