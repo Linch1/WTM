@@ -11,9 +11,9 @@ import { Menu } from "../Entities/wp/menus/Menu";
 import { ThemeAux } from "./ThemeAux";
 import { importsJsonKeys } from "../Enums";
 //@ts-ignore
-import { Single } from "../Entities/rendering/Single";
+import { Single } from "../Entities/rendering/Single.ts";
 //@ts-ignore
-import { Template } from "../Entities/rendering/Template";
+import { Template } from "../Entities/rendering/Template.ts";
 import { addBlockParams } from "../Types";
 import { StringComposeWriter } from "../ManageFiles/StringComposeWriter";
 
@@ -119,7 +119,7 @@ class ThemeWriter {
    * @param template the Template or Single to create
    */
   public renderingPagePush(page: Template | Single){
-    page.create();
+    page.initalizer.create();
   }
   /**
    * @description add the given blocks to the given page

@@ -147,7 +147,7 @@ class TestTheme {
   }
 
   static deleteEntity( entity: Single | Template | PostType | WidgetArea | SettingsPage | Menu ) {
-    entity.delete();
+    //entity.writer.delete();
   }
 
   static readTheme() {

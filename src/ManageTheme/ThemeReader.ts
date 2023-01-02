@@ -156,7 +156,7 @@ class ThemeReader {
   }
   public getTemplate(name: string): Template | null {
     for (let elem of this.getTemplates()) {
-      if (elem.PAGE_NAME == name) return elem;
+      if (elem.VIEW_NAME == name) return elem;
     }
     return null;
   }
