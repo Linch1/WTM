@@ -136,7 +136,7 @@ class ThemeReader {
   }
   public getSingle(name: string): Single | null {
     for (let elem of this.getSingles()) {
-      if (elem.PAGE_NAME == name) return elem;
+      if (elem.VIEW_NAME == name) return elem;
     }
     return null;
   }
